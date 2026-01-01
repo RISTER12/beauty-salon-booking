@@ -1,4 +1,4 @@
 package by.kuzmin.beautysalonbooking.entity;
 
-public class SalonSocialMedia {
+public class SocialMedia {
 }

@@ -1,6 +1,7 @@
 package by.kuzmin.beautysalonbooking.entity;
 
 import jakarta.persistence.*;
+import lombok.*;
 import org.springframework.cglib.core.Local;
 
 import java.math.BigDecimal;
@@ -11,6 +12,16 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
+@Table(
+        name = "client"
+)
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
+@EqualsAndHashCode
+//TODO проверить
 public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

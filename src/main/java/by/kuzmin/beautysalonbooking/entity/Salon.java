@@ -22,4 +22,7 @@ public class Salon {
 
     @OneToMany(mappedBy = "salon")
     private List<Client> clients;
+
+    @OneToMany(mappedBy = "salon")
+    private List<Employee> employees;
 }

@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.List;
 
 /**
  * Сущность адреса для хранения местоположения
@@ -43,5 +44,8 @@ public class Address {
     //TODO требует явного конвертера в JPA
     @Column(name = "created_at", nullable = false)
     private OffsetDateTime createdAt;
+    //TODO проверить нужна ли вообще связь 1-M(получается так что на 1 адресс много компаний) думаю нужна связь 1-1
+    @OneToMany(mappedBy = "address")
+    private List<Company> companies;
 
 }
