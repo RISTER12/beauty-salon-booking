@@ -78,5 +78,8 @@ public class Employee {
     @OneToMany(mappedBy = "employee")
     private List<RevenueReport> revenueReports;
 
+    @OneToMany(mappedBy = "employee")
+    private List<Review> reviews;
+
 
 }

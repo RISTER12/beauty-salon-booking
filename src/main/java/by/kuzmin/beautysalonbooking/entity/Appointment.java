@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.sql.Time;
 import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
+import java.util.List;
 
 @Entity
 @Table(
@@ -72,6 +73,9 @@ public class Appointment {
     private OffsetDateTime cancelledAt;
     @Column(name = "completed_at")
     private OffsetDateTime completedAt;
+
+    @OneToMany(mappedBy = "appointment")
+    private List<Review> reviews;
 
 
 }

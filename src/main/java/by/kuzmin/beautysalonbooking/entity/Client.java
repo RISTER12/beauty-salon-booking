@@ -97,5 +97,8 @@ public class Client {
     @OneToMany(mappedBy = "client")
     private List<Notification> notifications;
 
+    @OneToMany(mappedBy = "client")
+    private List<Review> reviews;
+
 
 }
