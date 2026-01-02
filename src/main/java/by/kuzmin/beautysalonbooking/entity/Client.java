@@ -94,4 +94,8 @@ public class Client {
     @Column(name = "updated_at")
     private OffsetDateTime updated_at;
 
+    @OneToMany(mappedBy = "client")
+    private List<Notification> notifications;
+
+
 }
