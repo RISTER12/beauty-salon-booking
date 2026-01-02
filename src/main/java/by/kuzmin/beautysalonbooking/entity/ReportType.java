@@ -7,7 +7,7 @@ import java.util.List;
 
 @Entity
 @Table(
-        name = "salon"
+        name = "report_type"
 )
 @Getter
 @Setter
@@ -15,17 +15,15 @@ import java.util.List;
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode
-public class Salon {
+//TODO првоерить
+public class ReportType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(name = "type_name")
+    private String typeName;
+    private String description;
 
-    @OneToMany(mappedBy = "salon")
-    private List<Client> clients;
-
-    @OneToMany(mappedBy = "salon")
-    private List<Employee> employees;
-
-    @OneToMany(mappedBy = "salon")
+    @OneToMany(mappedBy = "reportType")
     private List<RevenueReport> revenueReports;
 }
