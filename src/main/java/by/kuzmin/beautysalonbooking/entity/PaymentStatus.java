@@ -7,7 +7,7 @@ import java.util.List;
 
 @Entity
 @Table(
-        name = "payment_method"
+        name = "payment_status"
 )
 @Getter
 @Setter
@@ -16,14 +16,14 @@ import java.util.List;
 @ToString
 @EqualsAndHashCode
 //TODO проверить
-public class PaymentMethod {
+public class PaymentStatus {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "method_name")
-    private String methodName;
+    @Column(name = "status_name")
+    private String statusName;
 
-    @OneToMany(mappedBy = "paymentMethod")
+    @OneToMany(mappedBy = "paymentStatus")
     private List<Payment> payments;
 }
