@@ -80,6 +80,12 @@ public class Employee {
 
     @OneToMany(mappedBy = "employee")
     private List<Review> reviews;
+    @OneToMany(mappedBy = "employee")
+    private List<Employee> employees;
 
+    @OneToMany(mappedBy = "employee")
+    private List<SocialMedia> socialMediaList;
 
+    @OneToMany(mappedBy = "employee")
+    private List<Timeslot> timeslots;
 }

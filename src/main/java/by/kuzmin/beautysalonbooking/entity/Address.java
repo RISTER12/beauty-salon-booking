@@ -48,4 +48,7 @@ public class Address {
     @OneToMany(mappedBy = "address")
     private List<Company> companies;
 
+    @OneToOne(mappedBy = "address")
+    private Salon salon;
+
 }

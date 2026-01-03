@@ -100,5 +100,6 @@ public class Client {
     @OneToMany(mappedBy = "client")
     private List<Review> reviews;
 
-
+    @OneToMany(mappedBy = "client")
+    private List<SocialMedia> socialMediaList;
 }

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 
 @Entity
 @Table(
@@ -38,4 +39,9 @@ public class Company {
     @ManyToOne
     @JoinColumn(name = "company_address_id")
     private Address address;
+    @OneToMany(mappedBy = "company")
+    private List<Salon> salons;
+
+    @OneToMany(mappedBy = "company")
+    private List<SocialMedia> socialMediaList;
 }

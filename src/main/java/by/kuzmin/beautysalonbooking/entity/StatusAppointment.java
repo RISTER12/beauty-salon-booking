@@ -19,6 +19,9 @@ public class StatusAppointment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(name = "status_name")
+    private String statusName;
+
     @OneToMany(mappedBy = "statusAppointment")
     private List<Appointment> appointments;
 }

@@ -77,5 +77,6 @@ public class Appointment {
     @OneToMany(mappedBy = "appointment")
     private List<Review> reviews;
 
-
+    @OneToMany(mappedBy = "appointment")
+    private List<Timeslot> timeslots;
 }

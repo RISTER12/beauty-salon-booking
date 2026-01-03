@@ -20,4 +20,9 @@ public class SalonStatus {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @OneToMany(mappedBy = "salonStatus")
+    private List<Salon> salons;
+
+    private String status;
+
 }

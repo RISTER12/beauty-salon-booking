@@ -19,7 +19,7 @@ public class StatusEmployee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    private String status;
     @OneToMany(mappedBy = "statusEmployee")
     private List<Employee> employees;
 }
