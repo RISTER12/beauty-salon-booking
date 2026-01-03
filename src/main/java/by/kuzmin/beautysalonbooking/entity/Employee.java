@@ -3,7 +3,6 @@ package by.kuzmin.beautysalonbooking.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.annotations.Type;
 import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
@@ -21,9 +20,9 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = false)
 //TODO проверить
-public class Employee {
+public class Employee extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -58,8 +57,8 @@ public class Employee {
     @Column(name = "portfolio_video_urls")
     private ArrayList<String> portfolioVideoUrls;
     @ManyToOne
-    @JoinColumn(name = "status_employee_id")
-    private StatusEmployee statusEmployee;
+    @JoinColumn(name = "employee_status_id")
+    private EmployeeStatus employeeStatus;
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb", name = "work_schedule")
     private Map<String, Object> workSchedule;
@@ -67,10 +66,6 @@ public class Employee {
     private BigDecimal averageRating;
     @Column(name = "is_viible_on_website")
     private boolean isVisibleOnWebsite;
-    @Column(name = "created_at")
-    private OffsetDateTime createdAt;
-    @Column(name = "updated_at")
-    private OffsetDateTime updatedAt;
 
     @OneToMany(mappedBy = "employee")
     private List<EmployeeService> employeeServices;

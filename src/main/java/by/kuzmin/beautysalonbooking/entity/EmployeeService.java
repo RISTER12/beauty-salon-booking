@@ -15,9 +15,9 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = false)
 //TODO проверить
-public class EmployeeService {
+public class EmployeeService extends BaseEntity {
     @EmbeddedId
     private EmployeeServiceId id;
 

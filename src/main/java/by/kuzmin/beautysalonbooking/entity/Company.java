@@ -15,9 +15,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = false)
 //TODO проверить
-public class Company {
+public class Company extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -32,10 +32,7 @@ public class Company {
     private String taxNumber;
     @Column(name = "registration_number")
     private String registrationNumber;
-    @Column(name = "created_at")
-    private OffsetDateTime createAt;
-    @Column(name = "updated_at")
-    private OffsetDateTime updatedAt;
+
     @ManyToOne
     @JoinColumn(name = "company_address_id")
     private Address address;

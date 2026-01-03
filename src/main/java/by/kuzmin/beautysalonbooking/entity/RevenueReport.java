@@ -17,9 +17,9 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = false)
 //TODO проверить
-public class RevenueReport {
+public class RevenueReport extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -61,10 +61,6 @@ public class RevenueReport {
     private BigDecimal averageCheck;
     @Column(name = "average_rating")
     private BigDecimal averageRating;
-    @Column(name = "created_at")
-    private OffsetDateTime createdAt;
-    @Column(name = "updated_at")
-    private OffsetDateTime updatedAt;
 
 
 

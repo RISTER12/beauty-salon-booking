@@ -7,19 +7,20 @@ import java.util.List;
 
 @Entity
 @Table(
-        name = "status_employee"
+        name = "employee_status"
 )
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@EqualsAndHashCode
-public class StatusEmployee {
+@EqualsAndHashCode(callSuper = false)
+public class EmployeeStatus extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String status;
-    @OneToMany(mappedBy = "statusEmployee")
+    @Column(name = "status_name")
+    private String statusName;
+    @OneToMany(mappedBy = "employeeStatus")
     private List<Employee> employees;
 }

@@ -15,8 +15,8 @@ import java.time.OffsetDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@EqualsAndHashCode
-public class Timeslot {
+@EqualsAndHashCode(callSuper = false)
+public class Timeslot extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -45,9 +45,4 @@ public class Timeslot {
     @ManyToOne
     @JoinColumn(name = "appointment_id")
     private Appointment appointment;
-
-    @Column(name = "created_at")
-    private OffsetDateTime createdAt;
-    @Column(name = "updated_at")
-    private OffsetDateTime updatedAt;
 }

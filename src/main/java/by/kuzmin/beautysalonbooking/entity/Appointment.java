@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.sql.Time;
 import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -18,9 +17,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = false)
 //TODO нет проверки на null значения полей и не везде где надо указано nullable = false
-public class Appointment {
+public class Appointment extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -34,8 +33,8 @@ public class Appointment {
     private ZonedDateTime endTime;
 
     @ManyToOne
-    @JoinColumn(name = "status_appointment_id", nullable = false)
-    private StatusAppointment statusAppointment;
+    @JoinColumn(name = "appointment_status_id", nullable = false)
+    private AppointmentStatus appointmentStatus;
 
     @Column(name = "amount_without_discount", nullable = false)
     private BigDecimal amountWithoutDiscount;
@@ -65,10 +64,6 @@ public class Appointment {
     @JoinColumn(name = "promotion_id")
     private Promotion promotion;
 
-    @Column(name = "created_at")
-    private OffsetDateTime createdAt;
-    @Column(name = "updated_at")
-    private OffsetDateTime updatedAt;
     @Column(name = "cancelled_At")
     private OffsetDateTime cancelledAt;
     @Column(name = "completed_at")

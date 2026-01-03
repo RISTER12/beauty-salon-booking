@@ -14,15 +14,15 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@EqualsAndHashCode
-public class SalonStatus {
+@EqualsAndHashCode(callSuper = false)
+public class SalonStatus extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToMany(mappedBy = "salonStatus")
     private List<Salon> salons;
-
-    private String status;
+    @Column(name = "status_name")
+    private String statusName;
 
 }

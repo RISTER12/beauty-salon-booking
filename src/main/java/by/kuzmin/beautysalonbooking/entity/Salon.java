@@ -21,8 +21,8 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@EqualsAndHashCode
-public class Salon {
+@EqualsAndHashCode(callSuper = false)
+public class Salon extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -63,10 +63,6 @@ public class Salon {
     @ManyToOne
     @JoinColumn(name = "company_id")
     private Company company;
-    @Column(name = "created_at")
-    private OffsetDateTime createdAt;
-    @Column(name = "updated_at")
-    private OffsetDateTime updatedAt;
 
     @OneToMany(mappedBy = "salon")
     private List<Service> services;

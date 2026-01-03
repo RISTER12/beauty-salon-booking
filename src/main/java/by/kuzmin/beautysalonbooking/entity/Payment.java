@@ -18,11 +18,11 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = false)
 //TODO проверить
 
 //TODO тут не реализовано: external_id это id во внешней системе, gateway_transaction_id
-public class Payment {
+public class Payment extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -43,10 +43,5 @@ public class Payment {
     @Column(columnDefinition = "jsonb", name = "gateway_response")
     private Map<String, Object> gatewayResponse;
     private String receipt;
-    @Column(name = "created_at")
-    private OffsetDateTime createdAt;
-    @Column(name = "updated_at")
-    private OffsetDateTime updatedAt;
-
 
 }

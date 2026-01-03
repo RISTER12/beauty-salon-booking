@@ -20,9 +20,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = false)
 //TODO проверить
-public class Client {
+public class Client extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -87,12 +87,6 @@ public class Client {
 
     @Column(name = "is_verified")
     private boolean isVerified;
-
-    @Column(name = "created_at")
-    private OffsetDateTime createdAt;
-
-    @Column(name = "updated_at")
-    private OffsetDateTime updated_at;
 
     @OneToMany(mappedBy = "client")
     private List<Notification> notifications;
