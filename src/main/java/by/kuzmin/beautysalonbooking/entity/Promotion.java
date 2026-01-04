@@ -20,6 +20,7 @@ import java.util.List;
 @ToString
 @EqualsAndHashCode(callSuper = false)
 //TODO проверить
+//TODO ManyToMany с service и salon
 public class Promotion extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,12 +37,8 @@ public class Promotion extends BaseEntity {
     private int discountCount;
     @Column(name = "min_order_amount")
     private BigDecimal minOrderAmount;
-    @Column(name = "applicable_service_ids")
-    private ArrayList<Long> applicableServiceIds;
     @Column(name = "applicable_category_ids")
     private ArrayList<Long> applicableCategoryIds;
-    @Column(name = "applicable_salon_ids")
-    private ArrayList<Long> applicableSalonIds;
     @Column(name = "usage_limit")
     private Long usageLimit;
     @Column(name = "usage_limit_per_client")
@@ -58,4 +55,6 @@ public class Promotion extends BaseEntity {
 
     @OneToMany(mappedBy = "promotion")
     private List<Appointment> appointments;
+
+
 }

@@ -50,5 +50,6 @@ public class Service extends BaseEntity {
     @OneToMany(mappedBy = "service")
     private List<EmployeeService> employeeServices;
 
-
+    @OneToMany(mappedBy = "service")
+    private List<AppointmentService> appointmentServices;
 }

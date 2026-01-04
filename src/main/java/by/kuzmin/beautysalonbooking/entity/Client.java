@@ -69,10 +69,10 @@ public class Client extends BaseEntity{
 
     @ManyToOne
     @JoinColumn(name = "referred_by_client_id")
-    private Client parentClient;
+    private Client referredBy;
 
-    @OneToMany(mappedBy = "parentClient")
-    private List<Client> clients;
+    @OneToMany(mappedBy = "referredBy")
+    private List<Client> referrals;
 
     private String notes;
     private String allergies;

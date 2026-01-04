@@ -20,7 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode(callSuper = false)
-//TODO нет проверки на null значения полей и не везде где надо указано nullable = false
+//TODO Проверено, осталось: исключения в аннотации, nullable = false
 public class Address extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,12 +41,9 @@ public class Address extends BaseEntity{
     @Column(name = "map_url")
     private String mapUrl;
     private String description;
-    //TODO требует явного конвертера в JPA
-    @Column(name = "created_at", nullable = false)
-    private OffsetDateTime createdAt;
-    //TODO проверить нужна ли вообще связь 1-M(получается так что на 1 адресс много компаний) думаю нужна связь 1-1
-    @OneToMany(mappedBy = "address")
-    private List<Company> companies;
+
+    @OneToOne(mappedBy = "address")
+    private Company company;
 
     @OneToOne(mappedBy = "address")
     private Salon salon;

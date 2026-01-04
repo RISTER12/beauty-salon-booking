@@ -25,12 +25,12 @@ public class Appointment extends BaseEntity{
     private Long id;
     @ManyToOne
     @JoinColumn(name = "client_id", nullable = false)
-    private Client clientId;
+    private Client client;
 
     @Column(name = "start_time", nullable = false)
-    private ZonedDateTime startTime;
+    private OffsetDateTime startTime;
     @Column(name = "end_time", nullable = false)
-    private ZonedDateTime endTime;
+    private OffsetDateTime endTime;
 
     @ManyToOne
     @JoinColumn(name = "appointment_status_id", nullable = false)
@@ -45,9 +45,8 @@ public class Appointment extends BaseEntity{
     @Column(name = "prepayment_amount")
     private BigDecimal prepaymentAmount;
 
-    @OneToOne
-    @JoinColumn(name = "payment_id")
-    private Payment payment;
+    @OneToMany(mappedBy = "appointment")
+    private List<Payment> payments;
 
     @Column(name = "client_notes")
     private String clientNotes;
@@ -74,4 +73,7 @@ public class Appointment extends BaseEntity{
 
     @OneToMany(mappedBy = "appointment")
     private List<Timeslot> timeslots;
+
+    @OneToMany(mappedBy = "appointment")
+    private List<AppointmentService> appointmentServices;
 }

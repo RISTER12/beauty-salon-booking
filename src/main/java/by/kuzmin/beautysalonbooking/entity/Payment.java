@@ -27,7 +27,8 @@ public class Payment extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(mappedBy = "payment")
+    @ManyToOne
+    @JoinColumn(name = "appointment_id")
     private Appointment appointment;
 
     private BigDecimal amount;

@@ -26,23 +26,24 @@ public class SocialMedia extends BaseEntity {
 
     private String value;
     private String url;
+    //TODO нужен ли вообще owner_type если я добавил 4 поля для всех видов сущностей
     @Column(name = "owner_type")
     private String ownerType;
 
     @ManyToOne
-    @JoinColumn(name = "owner_id")
+    @JoinColumn(name = "client_id")
     private Client client;
 
     @ManyToOne
-    @JoinColumn(name = "owner_id")
+    @JoinColumn(name = "employee_id")
     private Employee employee;
 
     @ManyToOne
-    @JoinColumn(name = "owner_id")
+    @JoinColumn(name = "salon_id")
     private Salon salon;
 
     @ManyToOne
-    @JoinColumn(name = "owner_id")
+    @JoinColumn(name = "company_id")
     private Company company;
 
     @Column(name = "is_primary")

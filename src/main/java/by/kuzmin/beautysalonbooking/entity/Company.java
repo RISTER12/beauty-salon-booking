@@ -33,9 +33,10 @@ public class Company extends BaseEntity{
     @Column(name = "registration_number")
     private String registrationNumber;
 
-    @ManyToOne
-    @JoinColumn(name = "company_address_id")
+    @OneToOne
+    @JoinColumn(name = "address_id")
     private Address address;
+
     @OneToMany(mappedBy = "company")
     private List<Salon> salons;
 
