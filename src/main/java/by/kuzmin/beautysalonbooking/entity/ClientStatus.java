@@ -15,13 +15,13 @@ import java.util.List;
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode(callSuper = false)
-//TODO проверить
+//TODO нет проверки на null значения полей и не везде где надо указано nullable = false
 public class ClientStatus extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String status;
     @OneToMany(mappedBy = "clientStatus")
-    private List<Client> clients;
+    private List<Client> clientList;
 
 }

@@ -21,14 +21,14 @@ import java.util.Map;
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode(callSuper = false)
-//TODO проверить
+//TODO нет проверки на null значения полей и не везде где надо указано nullable = false
 public class Employee extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToMany(mappedBy = "employee")
-    private List<Client> clients;
+    private List<Client> clientList;
 
     @ManyToOne
     @JoinColumn(name = "salon_id")
@@ -43,19 +43,20 @@ public class Employee extends BaseEntity {
     @Column(name = "job_title")
     private String jobTitle;
     @Column(name = "experience_years")
-    private String experienceYears;
-    //TODO проверить правильно ли хранить сертификаты в виде текста
-    private ArrayList<String> certifications;
-    //TODO проверить правильно ли хранить награды в виде текста
-    private ArrayList<String> awards;
-    @Column(name = "photo_url")
+    private Long experienceYears;
+    @JdbcTypeCode(SqlTypes.ARRAY)
+    @Column(columnDefinition = "text[]", name = "certifications")
+    private List<String> certificationList;
+    @JdbcTypeCode(SqlTypes.ARRAY)
+    @Column(columnDefinition = "text[]", name = "awards")
+    private List<String> awardList;
     private String photoUrl;
-    //TODO проверить правильно ли хранить портфолио в виде текста
-    @Column(name = "portfolio_photos_urls")
-    private ArrayList<String> portfolioPhotosUrls;
-    //TODO проверить правильно ли хранить портфолио в виде текста
-    @Column(name = "portfolio_video_urls")
-    private ArrayList<String> portfolioVideoUrls;
+    @JdbcTypeCode(SqlTypes.ARRAY)
+    @Column(columnDefinition = "text[]", name = "portfolio_photos_urls")
+    private List<String> portfolioPhotosUrlList;
+    @JdbcTypeCode(SqlTypes.ARRAY)
+    @Column(columnDefinition = "text[]", name = "portfolio_video_urls")
+    private List<String> portfolioVideoUrlList;
     @ManyToOne
     @JoinColumn(name = "employee_status_id")
     private EmployeeStatus employeeStatus;
@@ -64,23 +65,21 @@ public class Employee extends BaseEntity {
     private Map<String, Object> workSchedule;
     @Column(name = "average_rating")
     private BigDecimal averageRating;
-    @Column(name = "is_viible_on_website")
+    @Column(name = "is_visible_on_website")
     private boolean isVisibleOnWebsite;
 
     @OneToMany(mappedBy = "employee")
-    private List<EmployeeService> employeeServices;
+    private List<EmployeeService> employeeServiceList;
 
     @OneToMany(mappedBy = "employee")
-    private List<RevenueReport> revenueReports;
+    private List<RevenueReport> revenueReportList;
 
     @OneToMany(mappedBy = "employee")
-    private List<Review> reviews;
-    @OneToMany(mappedBy = "employee")
-    private List<Employee> employees;
+    private List<Employee> employeeList;
 
     @OneToMany(mappedBy = "employee")
     private List<SocialMedia> socialMediaList;
 
     @OneToMany(mappedBy = "employee")
-    private List<Timeslot> timeslots;
+    private List<Timeslot> timeslotList;
 }

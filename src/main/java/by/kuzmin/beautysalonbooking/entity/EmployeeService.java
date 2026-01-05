@@ -16,7 +16,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode(callSuper = false)
-//TODO проверить
+//TODO нет проверки на null значения полей и не везде где надо указано nullable = false
 public class EmployeeService extends BaseEntity {
     @EmbeddedId
     private EmployeeServiceId id;

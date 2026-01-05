@@ -5,7 +5,6 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
-import java.time.ZonedDateTime;
 import java.util.List;
 
 @Entity
@@ -46,12 +45,12 @@ public class Appointment extends BaseEntity{
     private BigDecimal prepaymentAmount;
 
     @OneToMany(mappedBy = "appointment")
-    private List<Payment> payments;
+    private List<Payment> paymentList;
 
-    @Column(name = "client_notes")
-    private String clientNotes;
-    @Column(name = "employee_notes")
-    private String employeeNotes;
+    @Column(name = "client_note")
+    private String clientNote;
+    @Column(name = "employee_note")
+    private String employeeNote;
     @Column(name = "cancellation_reason")
     private String cancellationReason;
 
@@ -63,17 +62,22 @@ public class Appointment extends BaseEntity{
     @JoinColumn(name = "promotion_id")
     private Promotion promotion;
 
-    @Column(name = "cancelled_At")
+    @Column(name = "cancelled_at")
     private OffsetDateTime cancelledAt;
     @Column(name = "completed_at")
     private OffsetDateTime completedAt;
 
     @OneToMany(mappedBy = "appointment")
-    private List<Review> reviews;
+    private List<Review> reviewList;
 
     @OneToMany(mappedBy = "appointment")
-    private List<Timeslot> timeslots;
+    private List<Timeslot> timeslotList;
 
-    @OneToMany(mappedBy = "appointment")
-    private List<AppointmentService> appointmentServices;
+    @ManyToMany
+    @JoinTable(
+            name = "appointment_service",
+            joinColumns = @JoinColumn(name = "appointment_id"),
+            inverseJoinColumns = @JoinColumn(name = "service_id")
+    )
+    private List<Service> serviceList;
 }

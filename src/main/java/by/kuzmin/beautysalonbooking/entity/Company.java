@@ -16,13 +16,13 @@ import java.util.List;
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode(callSuper = false)
-//TODO проверить
+//TODO нет проверки на null значения полей и не везде где надо указано nullable = false
 public class Company extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "display_name")
-    private String displayName;
+    @Column(name = "company_name", nullable = false)
+    private String companyName;
     @Column(name = "company_legal_name")
     private String companyLegalName;
     private String description;
@@ -33,12 +33,12 @@ public class Company extends BaseEntity{
     @Column(name = "registration_number")
     private String registrationNumber;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "address_id")
     private Address address;
 
     @OneToMany(mappedBy = "company")
-    private List<Salon> salons;
+    private List<Salon> salonList;
 
     @OneToMany(mappedBy = "company")
     private List<SocialMedia> socialMediaList;

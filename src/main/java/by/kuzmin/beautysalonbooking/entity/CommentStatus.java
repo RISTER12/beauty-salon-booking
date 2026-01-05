@@ -15,14 +15,14 @@ import java.util.List;
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode(callSuper = false)
-//TODO проверить
+//TODO нет проверки на null значения полей и не везде где надо указано nullable = false
 public class CommentStatus extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "status_name")
+    @Column(name = "status_name", nullable = false)
     private String statusName;
 
     @OneToMany(mappedBy = "commentStatus")
-    private List<Review> reviews;
+    private List<Review> reviewList;
 }

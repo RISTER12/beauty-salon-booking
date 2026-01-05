@@ -13,6 +13,7 @@ import java.time.OffsetDateTime;
 @Getter
 @Setter
 @MappedSuperclass
+//TODO нет проверки на null значения полей и не везде где надо указано nullable = false
 public class BaseEntity implements Serializable {
 
     private String createdBy;

@@ -15,6 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode(callSuper = false)
+//TODO нет проверки на null значения полей и не везде где надо указано nullable = false
 public class SocialMedia extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,12 +24,9 @@ public class SocialMedia extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "social_media_type_id")
     private SocialMediaType socialMediaType;
-
+    @Column(nullable = false)
     private String value;
     private String url;
-    //TODO нужен ли вообще owner_type если я добавил 4 поля для всех видов сущностей
-    @Column(name = "owner_type")
-    private String ownerType;
 
     @ManyToOne
     @JoinColumn(name = "client_id")

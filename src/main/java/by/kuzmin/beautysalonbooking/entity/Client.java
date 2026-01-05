@@ -21,14 +21,14 @@ import java.util.List;
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode(callSuper = false)
-//TODO проверить
+//TODO нет проверки на null значения полей и не везде где надо указано nullable = false
 public class Client extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToMany(mappedBy = "client")
-    private List<Appointment> appointments;
+    private List<Appointment> appointmentList;
 
     @Column(name = "first_name", nullable = false)
     private String firstName;
@@ -41,12 +41,14 @@ public class Client extends BaseEntity{
 
     @Column(name = "birth_date")
     private LocalDate birthDate;
-    //TODO может надо сделать гендер отдельным справочником или мб массивом
-    private String gender;
+
+    @ManyToOne
+    @JoinColumn(name = "gender_id")
+    private Gender gender;
 
     @ManyToOne
     @JoinColumn(name = "preferred_salon_id")
-    private Salon salon;
+    private Salon preferredSalon;
 
     @ManyToOne
     @JoinColumn(name = "preferred_employee_id")
@@ -60,8 +62,11 @@ public class Client extends BaseEntity{
 
     @Column(name = "first_visit_date")
     private LocalDate firstVisitDate;
-    //TODO проверить может надо сделать как словарь с примерным содержимым: "Интернет, от друзей и еще что-то"
-    private String source;
+
+    @ManyToOne
+    @JoinColumn(name = "source_id")
+    private Source source;
+
     @Column(name = "referral_code")
     private String referralCode;
     @Column(name = "referral_balance")
@@ -72,7 +77,7 @@ public class Client extends BaseEntity{
     private Client referredBy;
 
     @OneToMany(mappedBy = "referredBy")
-    private List<Client> referrals;
+    private List<Client> referralList;
 
     private String notes;
     private String allergies;
@@ -86,7 +91,7 @@ public class Client extends BaseEntity{
     private boolean isSubscribedToNewsletter;
 
     @Column(name = "is_verified")
-    private boolean isVerified;
+    private Boolean isVerified;
 
     @OneToMany(mappedBy = "client")
     private List<Notification> notifications;

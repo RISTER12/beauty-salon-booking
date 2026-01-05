@@ -19,14 +19,15 @@ import java.util.Map;
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode(callSuper = false)
-//TODO проверить
-
-//TODO тут не реализовано: external_id это id во внешней системе, gateway_transaction_id
+//TODO нет проверки на null значения полей и не везде где надо указано nullable = false
 public class Payment extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @Column(name = "external_id")
+    private Long externalId;
+    @Column(name = "gateway_transaction_id")
+    private String gatewayTransactionId;
     @ManyToOne
     @JoinColumn(name = "appointment_id")
     private Appointment appointment;

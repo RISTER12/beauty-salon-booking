@@ -42,10 +42,10 @@ public class Address extends BaseEntity{
     private String mapUrl;
     private String description;
 
-    @OneToOne(mappedBy = "address")
-    private Company company;
+    @OneToMany(mappedBy = "address")
+    private List<Company> companyList;
 
-    @OneToOne(mappedBy = "address")
-    private Salon salon;
+    @OneToMany(mappedBy = "address")
+    private List<Salon> salonList;
 
 }

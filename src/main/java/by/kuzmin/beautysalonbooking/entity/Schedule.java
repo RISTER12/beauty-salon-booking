@@ -17,17 +17,17 @@ import java.time.OffsetDateTime;
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode(callSuper = false)
-//TODO разобраться с startTime endTime может надо использовать OffsetTime
+//TODO нет проверки на null значения полей
 public class Schedule extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private LocalDate date;
-    @Column(name = "start_time")
+    @Column(name = "start_time", nullable = false)
     private OffsetDateTime startTime;
-    @Column(name = "end_time")
+    @Column(name = "end_time", nullable = false)
     private OffsetDateTime endTime;
+    @Column(nullable = false)
     private BigDecimal hours;
 
     @ManyToOne

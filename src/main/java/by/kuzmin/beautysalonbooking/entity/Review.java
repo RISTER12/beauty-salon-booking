@@ -15,7 +15,7 @@ import java.time.OffsetDateTime;
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode(callSuper = false)
-//TODO не забыть о том что comment_status_id уже есть
+//TODO нет проверки на null значения полей и не везде где надо указано nullable = false
 public class Review extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,9 +32,6 @@ public class Review extends BaseEntity {
     @JoinColumn(name = "client_id")
     private Client client;
 
-    @ManyToOne
-    @JoinColumn(name = "employee_id")
-    private Employee employee;
     //Рейтинг от 1 до 5
     @Column(name = "rating_overall")
     private byte ratingOverall;
@@ -70,12 +67,11 @@ public class Review extends BaseEntity {
     @Column(name = "moderation_nodes")
     private String moderationNodes;
     // Показывать ли комментарий на главной странице
-    //TODO проверить надо ли использовать объекст Boolean
     @Column(name = "is_features")
-    private boolean isFeatures;
+    private Boolean isFeatures;
 
     @Column(name = "is_anonymous")
-    private boolean isAnonymous;
+    private Boolean isAnonymous;
 
 
 }

@@ -18,7 +18,7 @@ import java.util.Date;
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode(callSuper = false)
-//TODO проверить
+//TODO нет проверки на null значения полей и не везде где надо указано nullable = false
 public class RevenueReport extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,7 +46,7 @@ public class RevenueReport extends BaseEntity {
     @Column(name = "total_revenue")
     private BigDecimal totalRevenue;
     @Column(name = "net_revenue")
-    private BigDecimal net_revenue;
+    private BigDecimal netRevenue;
     @Column(name = "total_appointments")
     private Long totalAppointments;
     @Column(name = "completed_appointments")
@@ -61,9 +61,4 @@ public class RevenueReport extends BaseEntity {
     private BigDecimal averageCheck;
     @Column(name = "average_rating")
     private BigDecimal averageRating;
-
-
-
-
-
 }

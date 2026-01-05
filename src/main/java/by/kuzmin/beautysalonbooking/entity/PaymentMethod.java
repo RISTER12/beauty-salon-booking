@@ -15,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode(callSuper = false)
-//TODO проверить
+//TODO нет проверки на null значения полей и не везде где надо указано nullable = false
 public class PaymentMethod extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,5 +25,5 @@ public class PaymentMethod extends BaseEntity {
     private String methodName;
 
     @OneToMany(mappedBy = "paymentMethod")
-    private List<Payment> payments;
+    private List<Payment> paymentList;
 }

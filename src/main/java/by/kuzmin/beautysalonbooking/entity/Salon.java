@@ -22,39 +22,45 @@ import java.util.Map;
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode(callSuper = false)
+//TODO нет проверки на null значения полей и не везде где надо указано nullable = false
 public class Salon extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "salon")
-    private List<Client> clients;
+    @OneToMany(mappedBy = "preferredSalon")
+    private List<Client> preferredClientList;
 
     @OneToMany(mappedBy = "salon")
-    private List<Employee> employees;
+    private List<Employee> employeeList;
 
     @OneToMany(mappedBy = "salon")
-    private List<RevenueReport> revenueReports;
+    private List<RevenueReport> revenueReportList;
 
     @Column(name = "salon_name")
     private String salonName;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "address_id")
     private Address address;
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb",name = "working_hours")
     private Map<String, Object> workingHours;
-
-    private ArrayList<String> amenities;
-    private ArrayList<String> photos;
-    @Column(name = "interior_photos")
-    private ArrayList<String> interiorPhotos;
-    @Column(name = "video_url")
-    private ArrayList<String> videoUrl;
+    @JdbcTypeCode(SqlTypes.ARRAY)
+    @Column(columnDefinition = "text[]", name = "amenities")
+    private List<String> amenitiesList;
+    @JdbcTypeCode(SqlTypes.ARRAY)
+    @Column(columnDefinition = "text[]", name = "photos")
+    private List<String> photoList;
+    @JdbcTypeCode(SqlTypes.ARRAY)
+    @Column(columnDefinition = "text[]", name = "interior_photos")
+    private List<String> interiorPhotoList;
+    @JdbcTypeCode(SqlTypes.ARRAY)
+    @Column(columnDefinition = "text[]", name = "video_urls")
+    private List<String> videoUrlList;
     @Column(name = "total_area")
     private BigDecimal totalArea;
     @ManyToOne
-    @JoinColumn(name = "status_is")
+    @JoinColumn(name = "status_id")
     private SalonStatus salonStatus;
     @Column(name = "is_booking_available")
     private boolean isBookingAvailable;
@@ -65,12 +71,14 @@ public class Salon extends BaseEntity {
     private Company company;
 
     @OneToMany(mappedBy = "salon")
-    private List<Service> services;
+    private List<Service> serviceList;
 
     @OneToMany(mappedBy = "salon")
     private List<SocialMedia> socialMediaList;
 
     @OneToMany(mappedBy = "salon")
-    private List<Timeslot> timeslots;
+    private List<Timeslot> timeslotList;
 
+    @ManyToMany(mappedBy = "salonList")
+    private List<Promotion> promotionList;
 }

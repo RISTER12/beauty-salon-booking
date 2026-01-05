@@ -2,6 +2,8 @@ package by.kuzmin.beautysalonbooking.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
@@ -19,13 +21,14 @@ import java.util.List;
 @ToString
 @EqualsAndHashCode(callSuper = false)
 //TODO проверить
+//TODO нет проверки на null значения полей и не везде где надо указано nullable = false
 public class Service extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "category_id", nullable = false)
     private ServiceCategory serviceCategory;
 
     private String name;
@@ -40,16 +43,20 @@ public class Service extends BaseEntity {
     private BigDecimal maxPrice;
     @Column(name = "price_range_description")
     private String priceRangeDescription;
-    @Column(name = "photo_urls")
-    private ArrayList<String> photoUrls;
+    @JdbcTypeCode(SqlTypes.ARRAY)
+    @Column(columnDefinition = "text[]", name = "photo_urls")
+    private List<String> photoUrlList;
 
     @ManyToOne
     @JoinColumn(name = "salon_id")
     private Salon salon;
 
     @OneToMany(mappedBy = "service")
-    private List<EmployeeService> employeeServices;
+    private List<EmployeeService> employeeServiceList;
 
-    @OneToMany(mappedBy = "service")
-    private List<AppointmentService> appointmentServices;
+    @ManyToMany(mappedBy = "serviceList")
+    private List<Appointment> appointmentList;
+
+    @ManyToMany(mappedBy = "serviceList")
+    private List<Promotion> promotionList;
 }
