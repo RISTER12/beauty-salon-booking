@@ -13,10 +13,14 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-@EqualsAndHashCode(callSuper = false)
+@ToString(exclude = {
+        "appointmentList"
+})
+@EqualsAndHashCode(callSuper = false, exclude = {
+        "appointmentList"
+})
 //TODO нет проверки на null значения полей и не везде где надо указано nullable = false
-public class CancellationInitiated extends BaseEntity{
+public class CancellationInitiated extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

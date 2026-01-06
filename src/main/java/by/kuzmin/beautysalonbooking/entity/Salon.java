@@ -20,8 +20,19 @@ import java.util.Map;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-@EqualsAndHashCode(callSuper = false)
+@ToString(exclude = {
+        "preferredClientList", "employeeList", "revenueReportList",
+        "serviceList", "socialMediaList", "timeslotList",
+        "promotionList", "workingHours", "amenitiesList",
+        "photoUrlList", "interiorPhotoList", "videoUrlList",
+})
+@EqualsAndHashCode(callSuper = false, exclude = {
+        "preferredClientList", "employeeList", "revenueReportList",
+        "serviceList", "socialMediaList", "timeslotList",
+        "promotionList",
+        "workingHours", "amenitiesList",
+        "photoUrlList", "interiorPhotoList", "videoUrlList",
+})
 //TODO нет проверки на null значения полей и не везде где надо указано nullable = false
 public class Salon extends BaseEntity {
     @Id
@@ -43,14 +54,14 @@ public class Salon extends BaseEntity {
     @JoinColumn(name = "address_id")
     private Address address;
     @JdbcTypeCode(SqlTypes.JSON)
-    @Column(columnDefinition = "jsonb",name = "working_hours")
+    @Column(columnDefinition = "jsonb", name = "working_hours")
     private Map<String, Object> workingHours;
     @JdbcTypeCode(SqlTypes.ARRAY)
     @Column(columnDefinition = "text[]", name = "amenities")
     private List<String> amenitiesList;
     @JdbcTypeCode(SqlTypes.ARRAY)
-    @Column(columnDefinition = "text[]", name = "photos")
-    private List<String> photoList;
+    @Column(columnDefinition = "text[]", name = "photo_urls")
+    private List<String> photoUrlList;
     @JdbcTypeCode(SqlTypes.ARRAY)
     @Column(columnDefinition = "text[]", name = "interior_photos")
     private List<String> interiorPhotoList;

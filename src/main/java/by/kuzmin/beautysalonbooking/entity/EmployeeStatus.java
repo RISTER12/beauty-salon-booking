@@ -22,6 +22,4 @@ public class EmployeeStatus extends BaseEntity {
     private Long id;
     @Column(name = "status_name")
     private String statusName;
-    @OneToMany(mappedBy = "employeeStatus")
-    private List<Employee> employeeList;
 }

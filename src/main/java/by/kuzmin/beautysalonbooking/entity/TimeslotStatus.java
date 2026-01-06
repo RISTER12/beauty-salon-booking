@@ -23,7 +23,4 @@ public class TimeslotStatus extends BaseEntity {
 
     @Column(name = "status_name", nullable = false)
     private String statusName;
-
-    @OneToMany(mappedBy = "timeslotStatus")
-    private List<Timeslot> timeslotList;
 }

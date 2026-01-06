@@ -18,10 +18,12 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-@EqualsAndHashCode(callSuper = false)
-//TODO проверить
-//TODO ManyToMany с service и salon
+@ToString(exclude = {
+        "appointments", "serviceList", "salonList"
+})
+@EqualsAndHashCode(callSuper = false, exclude = {
+        "appointments", "serviceList", "salonList"
+})
 //TODO нет проверки на null значения полей и не везде где надо указано nullable = false
 public class Promotion extends BaseEntity {
     @Id
@@ -62,7 +64,7 @@ public class Promotion extends BaseEntity {
             inverseJoinColumns = @JoinColumn(name = "service_id")
     )
     private List<Service> serviceList;
-    //TODO проверить сязь м-м
+    //TODO проверить связь м-м
     @ManyToMany
     @JoinTable(
             name = "promotion_salon",

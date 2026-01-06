@@ -20,10 +20,6 @@ public class SalonStatus extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @OneToMany(mappedBy = "salonStatus")
-    private List<Salon> salonList;
-
     @Column(name = "status_name", nullable = false)
     private String statusName;
 

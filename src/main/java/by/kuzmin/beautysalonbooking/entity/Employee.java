@@ -4,10 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
-
 import java.math.BigDecimal;
-import java.time.OffsetDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -19,8 +16,16 @@ import java.util.Map;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-@EqualsAndHashCode(callSuper = false)
+@ToString(exclude = {
+        "clientList", "employeeServiceList", "revenueReportList",
+        "employeeList", "socialMediaList", "timeslotList",
+        "workSchedule", "portfolioPhotosUrlList", "portfolioVideoUrlList"
+})
+@EqualsAndHashCode(callSuper = false, exclude = {
+        "clientList", "employeeServiceList", "revenueReportList",
+        "employeeList", "socialMediaList", "timeslotList",
+        "workSchedule", "portfolioPhotosUrlList", "portfolioVideoUrlList"
+})
 //TODO нет проверки на null значения полей и не везде где надо указано nullable = false
 public class Employee extends BaseEntity {
     @Id
@@ -60,9 +65,6 @@ public class Employee extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "employee_status_id")
     private EmployeeStatus employeeStatus;
-    @JdbcTypeCode(SqlTypes.JSON)
-    @Column(columnDefinition = "jsonb", name = "work_schedule")
-    private Map<String, Object> workSchedule;
     @Column(name = "average_rating")
     private BigDecimal averageRating;
     @Column(name = "is_visible_on_website")

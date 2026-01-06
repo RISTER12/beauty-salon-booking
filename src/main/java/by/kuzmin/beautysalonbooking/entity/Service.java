@@ -18,8 +18,12 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-@EqualsAndHashCode(callSuper = false)
+@ToString(exclude = {
+        "promotionList"
+})
+@EqualsAndHashCode(callSuper = false, exclude = {
+        "promotionList"
+})
 //TODO проверить
 //TODO нет проверки на null значения полей и не везде где надо указано nullable = false
 public class Service extends BaseEntity {
@@ -53,10 +57,7 @@ public class Service extends BaseEntity {
 
     @OneToMany(mappedBy = "service")
     private List<EmployeeService> employeeServiceList;
-
-    @ManyToMany(mappedBy = "serviceList")
-    private List<Appointment> appointmentList;
-
+    //TODO разобраться с toString и equals...
     @ManyToMany(mappedBy = "serviceList")
     private List<Promotion> promotionList;
 }

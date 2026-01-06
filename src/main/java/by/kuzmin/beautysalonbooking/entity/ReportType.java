@@ -23,7 +23,4 @@ public class ReportType extends BaseEntity {
     @Column(name = "type_name", nullable = false)
     private String typeName;
     private String description;
-
-    @OneToMany(mappedBy = "reportType")
-    private List<RevenueReport> revenueReportList;
 }

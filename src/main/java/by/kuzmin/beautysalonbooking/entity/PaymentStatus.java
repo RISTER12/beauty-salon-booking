@@ -23,7 +23,4 @@ public class PaymentStatus extends BaseEntity {
 
     @Column(name = "status_name", nullable = false)
     private String statusName;
-
-    @OneToMany(mappedBy = "paymentStatus")
-    private List<Payment> paymentList;
 }

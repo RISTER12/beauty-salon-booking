@@ -23,7 +23,4 @@ public class PaymentMethod extends BaseEntity {
 
     @Column(name = "method_name")
     private String methodName;
-
-    @OneToMany(mappedBy = "paymentMethod")
-    private List<Payment> paymentList;
 }

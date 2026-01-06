@@ -64,8 +64,8 @@ public class Review extends BaseEntity {
     @Column(name = "moderated_at")
     private OffsetDateTime moderatedAt;
 
-    @Column(name = "moderation_nodes")
-    private String moderationNodes;
+    @Column(name = "moderation_node")
+    private String moderationNode;
     // Показывать ли комментарий на главной странице
     @Column(name = "is_features")
     private Boolean isFeatures;

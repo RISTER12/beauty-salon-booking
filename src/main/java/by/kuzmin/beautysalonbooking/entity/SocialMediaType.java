@@ -20,9 +20,6 @@ public class SocialMediaType extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @OneToMany(mappedBy = "socialMediaType")
-    private List<SocialMedia> socialMediaList;
     @Column(nullable = false)
     private String name;
     @Column(name = "base_url", nullable = false)

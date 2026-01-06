@@ -14,10 +14,14 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-@EqualsAndHashCode(callSuper = false)
+@ToString(exclude = {
+        "salonList", "socialMediaList"
+})
+@EqualsAndHashCode(callSuper = false, exclude = {
+        "salonList", "socialMediaList", "address"
+})
 //TODO нет проверки на null значения полей и не везде где надо указано nullable = false
-public class Company extends BaseEntity{
+public class Company extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

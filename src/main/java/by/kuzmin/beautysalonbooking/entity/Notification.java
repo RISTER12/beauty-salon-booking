@@ -16,8 +16,12 @@ import java.util.Map;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-@EqualsAndHashCode(callSuper = false)
+@ToString(exclude = {
+        "metadata"
+})
+@EqualsAndHashCode(callSuper = false, exclude = {
+        "metadata"
+})
 //TODO нет проверки на null значения полей и не везде где надо указано nullable = false
 public class Notification extends BaseEntity {
     @Id

@@ -14,8 +14,12 @@ import java.math.BigDecimal;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-@EqualsAndHashCode(callSuper = false)
+@ToString(exclude = {
+        "employee", "service"
+})
+@EqualsAndHashCode(callSuper = false, exclude = {
+        "employee", "service"
+})
 //TODO нет проверки на null значения полей и не везде где надо указано nullable = false
 public class EmployeeService extends BaseEntity {
     @EmbeddedId

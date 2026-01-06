@@ -13,10 +13,14 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-@EqualsAndHashCode(callSuper = false)
+@ToString(exclude = {
+        "reviewList"
+})
+@EqualsAndHashCode(callSuper = false, exclude = {
+        "reviewList"
+})
 //TODO нет проверки на null значения полей и не везде где надо указано nullable = false
-public class CommentStatus extends BaseEntity{
+public class CommentStatus extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

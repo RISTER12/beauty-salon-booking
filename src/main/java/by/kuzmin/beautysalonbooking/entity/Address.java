@@ -21,7 +21,7 @@ import java.util.List;
 @ToString
 @EqualsAndHashCode(callSuper = false)
 //TODO Проверено, осталось: исключения в аннотации, nullable = false
-public class Address extends BaseEntity{
+public class Address extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -41,11 +41,4 @@ public class Address extends BaseEntity{
     @Column(name = "map_url")
     private String mapUrl;
     private String description;
-
-    @OneToMany(mappedBy = "address")
-    private List<Company> companyList;
-
-    @OneToMany(mappedBy = "address")
-    private List<Salon> salonList;
-
 }

@@ -13,8 +13,12 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-@EqualsAndHashCode(callSuper = false)
+@ToString(exclude = {
+        "notificationList"
+})
+@EqualsAndHashCode(callSuper = false, exclude = {
+        "notificationList"
+})
 //TODO нет проверки на null значения полей и не везде где надо указано nullable = false
 public class NotificationStatus extends BaseEntity {
     @Id

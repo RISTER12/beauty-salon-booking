@@ -17,8 +17,12 @@ import java.util.Map;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-@EqualsAndHashCode(callSuper = false)
+@ToString(exclude = {
+        "gatewayResponse"
+})
+@EqualsAndHashCode(callSuper = false, exclude = {
+        "gatewayResponse"
+})
 //TODO нет проверки на null значения полей и не везде где надо указано nullable = false
 public class Payment extends BaseEntity {
     @Id

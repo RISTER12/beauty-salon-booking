@@ -14,14 +14,11 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@EqualsAndHashCode
-public class Source {
+@EqualsAndHashCode(callSuper = false)
+public class Source extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "name", unique = true)
     private String name;
-
-    @OneToMany(mappedBy = "source")
-    private List<Client> clientList;
 }

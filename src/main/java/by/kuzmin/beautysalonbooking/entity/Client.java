@@ -19,10 +19,14 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-@EqualsAndHashCode(callSuper = false)
+@ToString(exclude = {
+        "appointmentList", "notifications", "reviews", "socialMediaList"
+})
+@EqualsAndHashCode(callSuper = false, exclude = {
+        "appointmentList", "notifications", "reviews", "socialMediaList"
+})
 //TODO нет проверки на null значения полей и не везде где надо указано nullable = false
-public class Client extends BaseEntity{
+public class Client extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -75,9 +79,6 @@ public class Client extends BaseEntity{
     @ManyToOne
     @JoinColumn(name = "referred_by_client_id")
     private Client referredBy;
-
-    @OneToMany(mappedBy = "referredBy")
-    private List<Client> referralList;
 
     private String notes;
     private String allergies;
