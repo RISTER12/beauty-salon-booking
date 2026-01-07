@@ -39,15 +39,15 @@ public class Employee extends BaseEntity {
     @JoinColumn(name = "salon_id")
     private Salon salon;
 
-    @Column(name = "first_name")
+    @Column(name = "first_name", nullable = false)
     private String firstName;
-    @Column(name = "last_name")
+    @Column(name = "last_name", nullable = false)
     private String lastName;
     @Column(name = "middle_name")
     private String middleName;
-    @Column(name = "job_title")
+    @Column(name = "job_title", nullable = false)
     private String jobTitle;
-    @Column(name = "experience_years")
+    @Column(name = "experience_years", nullable = false)
     private Long experienceYears;
     @JdbcTypeCode(SqlTypes.ARRAY)
     @Column(columnDefinition = "text[]", name = "certifications")
@@ -63,12 +63,12 @@ public class Employee extends BaseEntity {
     @Column(columnDefinition = "text[]", name = "portfolio_video_urls")
     private List<String> portfolioVideoUrlList;
     @ManyToOne
-    @JoinColumn(name = "employee_status_id")
+    @JoinColumn(name = "employee_status_id", nullable = false)
     private EmployeeStatus employeeStatus;
     @Column(name = "average_rating")
     private BigDecimal averageRating;
-    @Column(name = "is_visible_on_website")
-    private boolean isVisibleOnWebsite;
+    @Column(name = "is_visible_on_website", nullable = false)
+    private boolean isVisibleOnWebsite = false;
 
     @OneToMany(mappedBy = "employee")
     private List<EmployeeService> employeeServiceList;

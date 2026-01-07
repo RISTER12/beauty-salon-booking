@@ -21,6 +21,6 @@ public class PaymentMethod extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "method_name")
+    @Column(name = "method_name", nullable = false)
     private String methodName;
 }

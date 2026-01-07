@@ -58,8 +58,8 @@ public class Client extends BaseEntity {
     @JoinColumn(name = "preferred_employee_id")
     private Employee employee;
 
-    @Column(name = "total_visits")
-    private Long totalVisits;
+    @Column(name = "total_visits", nullable = false)
+    private Long totalVisits = 0L;
 
     @Column(name = "last_visit_date")
     private LocalDate lastVisitDate;
@@ -88,10 +88,9 @@ public class Client extends BaseEntity {
     @JoinColumn(name = "status_id")
     private ClientStatus clientStatus;
 
-    @Column(name = "is_subscribed_to_newsletter")
-    private boolean isSubscribedToNewsletter;
-
-    @Column(name = "is_verified")
+    @Column(name = "is_subscribed_to_newsletter", nullable = false)
+    private boolean isSubscribedToNewsletter = false;
+    @Column(name = "is_verified", nullable = false)
     private Boolean isVerified;
 
     @OneToMany(mappedBy = "client")

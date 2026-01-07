@@ -28,12 +28,12 @@ public class RevenueReport extends BaseEntity {
     @JoinColumn(name = "report_type_id")
     private ReportType reportType;
 
-    @Column(name = "period_start_date")
+    @Column(name = "period_start_date", nullable = false)
     private LocalDate periodStartDate;
-    @Column(name = "period_end_date")
+    @Column(name = "period_end_date", nullable = false)
     private LocalDate periodEndDate;
-    @Column(name = "generated_date")
-    private LocalDate generatedDate;
+    @Column(name = "generated_date", nullable = false)
+    private LocalDate generatedDate = LocalDate.now();
 
     @ManyToOne
     @JoinColumn(name = "salon_id")

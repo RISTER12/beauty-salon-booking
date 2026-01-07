@@ -33,9 +33,9 @@ public class Payment extends BaseEntity {
     @Column(name = "gateway_transaction_id")
     private String gatewayTransactionId;
     @ManyToOne
-    @JoinColumn(name = "appointment_id")
+    @JoinColumn(name = "appointment_id", nullable = false)
     private Appointment appointment;
-
+    @Column(nullable = false)
     private BigDecimal amount;
     @ManyToOne
     @JoinColumn(name = "payment_method_id")
@@ -48,6 +48,7 @@ public class Payment extends BaseEntity {
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb", name = "gateway_response")
     private Map<String, Object> gatewayResponse;
+    @Column(nullable = false)
     private String receipt;
 
 }

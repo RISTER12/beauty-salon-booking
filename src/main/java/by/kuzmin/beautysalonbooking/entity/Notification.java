@@ -29,16 +29,16 @@ public class Notification extends BaseEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "client_id")
+    @JoinColumn(name = "client_id", nullable = false)
     private Client client;
 
     @ManyToOne
-    @JoinColumn(name = "notification_status_id")
+    @JoinColumn(name = "notification_status_id", nullable = false)
     private NotificationStatus notificationStatus;
-
+    @Column(nullable = false)
     private String message;
 
     @JdbcTypeCode(SqlTypes.JSON)
-    @Column(columnDefinition = "jsonb")
+    @Column(columnDefinition = "jsonb", nullable = false)
     private Map<String, Object> metadata;
 }

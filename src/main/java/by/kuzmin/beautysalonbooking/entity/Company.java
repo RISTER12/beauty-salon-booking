@@ -27,18 +27,18 @@ public class Company extends BaseEntity {
     private Long id;
     @Column(name = "company_name", nullable = false)
     private String companyName;
-    @Column(name = "company_legal_name")
+    @Column(name = "company_legal_name", nullable = false)
     private String companyLegalName;
     private String description;
     @Column(name = "short_description")
     private String shortDescription;
-    @Column(name = "tax_number")
+    @Column(name = "tax_number", nullable = false)
     private String taxNumber;
-    @Column(name = "registration_number")
+    @Column(name = "registration_number", nullable = false)
     private String registrationNumber;
 
     @ManyToOne
-    @JoinColumn(name = "address_id")
+    @JoinColumn(name = "address_id", nullable = false)
     private Address address;
 
     @OneToMany(mappedBy = "company")

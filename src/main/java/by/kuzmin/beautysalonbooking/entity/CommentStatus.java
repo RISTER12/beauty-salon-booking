@@ -13,12 +13,8 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = {
-        "reviewList"
-})
-@EqualsAndHashCode(callSuper = false, exclude = {
-        "reviewList"
-})
+@ToString
+@EqualsAndHashCode(callSuper = false)
 //TODO нет проверки на null значения полей и не везде где надо указано nullable = false
 public class CommentStatus extends BaseEntity {
     @Id
@@ -26,7 +22,4 @@ public class CommentStatus extends BaseEntity {
     private Long id;
     @Column(name = "status_name", nullable = false)
     private String statusName;
-
-    @OneToMany(mappedBy = "commentStatus")
-    private List<Review> reviewList;
 }

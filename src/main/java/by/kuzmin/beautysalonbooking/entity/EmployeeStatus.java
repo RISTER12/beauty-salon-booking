@@ -20,6 +20,6 @@ public class EmployeeStatus extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "status_name")
+    @Column(name = "status_name", nullable = false)
     private String statusName;
 }

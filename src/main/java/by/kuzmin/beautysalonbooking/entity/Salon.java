@@ -21,16 +21,15 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(exclude = {
-        "preferredClientList", "employeeList", "revenueReportList",
+        "employeeList", "revenueReportList",
         "serviceList", "socialMediaList", "timeslotList",
         "promotionList", "workingHours", "amenitiesList",
         "photoUrlList", "interiorPhotoList", "videoUrlList",
 })
 @EqualsAndHashCode(callSuper = false, exclude = {
-        "preferredClientList", "employeeList", "revenueReportList",
+        "employeeList", "revenueReportList",
         "serviceList", "socialMediaList", "timeslotList",
-        "promotionList",
-        "workingHours", "amenitiesList",
+        "promotionList", "workingHours", "amenitiesList",
         "photoUrlList", "interiorPhotoList", "videoUrlList",
 })
 //TODO нет проверки на null значения полей и не везде где надо указано nullable = false
@@ -39,22 +38,19 @@ public class Salon extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "preferredSalon")
-    private List<Client> preferredClientList;
-
     @OneToMany(mappedBy = "salon")
     private List<Employee> employeeList;
 
     @OneToMany(mappedBy = "salon")
     private List<RevenueReport> revenueReportList;
 
-    @Column(name = "salon_name")
+    @Column(name = "salon_name", nullable = false)
     private String salonName;
     @ManyToOne
-    @JoinColumn(name = "address_id")
+    @JoinColumn(name = "address_id", nullable = false)
     private Address address;
     @JdbcTypeCode(SqlTypes.JSON)
-    @Column(columnDefinition = "jsonb", name = "working_hours")
+    @Column(columnDefinition = "jsonb", name = "working_hours", nullable = false)
     private Map<String, Object> workingHours;
     @JdbcTypeCode(SqlTypes.ARRAY)
     @Column(columnDefinition = "text[]", name = "amenities")
@@ -71,14 +67,14 @@ public class Salon extends BaseEntity {
     @Column(name = "total_area")
     private BigDecimal totalArea;
     @ManyToOne
-    @JoinColumn(name = "status_id")
+    @JoinColumn(name = "status_id", nullable = false)
     private SalonStatus salonStatus;
-    @Column(name = "is_booking_available")
+    @Column(name = "is_booking_available", nullable = false)
     private boolean isBookingAvailable;
-    @Column(name = "is_visible_on_website")
+    @Column(name = "is_visible_on_website", nullable = false)
     private boolean isVisibleOnWebsite;
     @ManyToOne
-    @JoinColumn(name = "company_id")
+    @JoinColumn(name = "company_id", nullable = false)
     private Company company;
 
     @OneToMany(mappedBy = "salon")

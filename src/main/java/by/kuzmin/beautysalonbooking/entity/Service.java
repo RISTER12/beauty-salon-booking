@@ -24,7 +24,6 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = false, exclude = {
         "promotionList"
 })
-//TODO проверить
 //TODO нет проверки на null значения полей и не везде где надо указано nullable = false
 public class Service extends BaseEntity {
     @Id
@@ -34,16 +33,16 @@ public class Service extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private ServiceCategory serviceCategory;
-
+    @Column(nullable = false)
     private String name;
     @Column(name = "short_name")
     private String shortName;
     private String description;
     @Column(name = "short_description")
     private String shortDescription;
-    @Column(name = "min_price")
+    @Column(name = "min_price", nullable = false)
     private BigDecimal minPrice;
-    @Column(name = "max_price")
+    @Column(name = "max_price", nullable = false)
     private BigDecimal maxPrice;
     @Column(name = "price_range_description")
     private String priceRangeDescription;
@@ -52,12 +51,11 @@ public class Service extends BaseEntity {
     private List<String> photoUrlList;
 
     @ManyToOne
-    @JoinColumn(name = "salon_id")
+    @JoinColumn(name = "salon_id", nullable = false)
     private Salon salon;
 
     @OneToMany(mappedBy = "service")
     private List<EmployeeService> employeeServiceList;
-    //TODO разобраться с toString и equals...
     @ManyToMany(mappedBy = "serviceList")
     private List<Promotion> promotionList;
 }

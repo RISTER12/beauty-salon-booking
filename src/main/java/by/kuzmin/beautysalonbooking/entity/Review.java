@@ -21,7 +21,7 @@ public class Review extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    @JoinColumn(name = "comment_status_id")
+    @JoinColumn(name = "comment_status_id", nullable = false)
     private CommentStatus commentStatus;
 
     @ManyToOne
@@ -29,11 +29,11 @@ public class Review extends BaseEntity {
     private Appointment appointment;
 
     @ManyToOne
-    @JoinColumn(name = "client_id")
+    @JoinColumn(name = "client_id", nullable = false)
     private Client client;
 
     //Рейтинг от 1 до 5
-    @Column(name = "rating_overall")
+    @Column(name = "rating_overall", nullable = false)
     private byte ratingOverall;
     @Column(name = "rating_service")
     private byte ratingService;
@@ -67,11 +67,11 @@ public class Review extends BaseEntity {
     @Column(name = "moderation_node")
     private String moderationNode;
     // Показывать ли комментарий на главной странице
-    @Column(name = "is_features")
-    private Boolean isFeatures;
+    @Column(name = "is_features", nullable = false)
+    private Boolean isFeatures = false;
 
-    @Column(name = "is_anonymous")
-    private Boolean isAnonymous;
+    @Column(name = "is_anonymous", nullable = false)
+    private Boolean isAnonymous = false;
 
 
 }

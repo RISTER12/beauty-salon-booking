@@ -31,7 +31,7 @@ public class Schedule extends BaseEntity {
     private BigDecimal hours;
 
     @ManyToOne
-    @JoinColumn(name = "employee_id")
+    @JoinColumn(name = "employee_id", nullable = false)
     private Employee employee;
 
 }

@@ -24,7 +24,8 @@ public class ClientStatus extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String status;
+    @Column(name = "status_name", nullable = false)
+    private String statusName;
     @OneToMany(mappedBy = "clientStatus")
     private List<Client> clientList;
 

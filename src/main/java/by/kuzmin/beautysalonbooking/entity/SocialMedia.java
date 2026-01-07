@@ -22,10 +22,11 @@ public class SocialMedia extends BaseEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "social_media_type_id")
+    @JoinColumn(name = "social_media_type_id", nullable = false)
     private SocialMediaType socialMediaType;
     @Column(nullable = false)
     private String value;
+    @Column(nullable = false)
     private String url;
 
     @ManyToOne
@@ -44,12 +45,8 @@ public class SocialMedia extends BaseEntity {
     @JoinColumn(name = "company_id")
     private Company company;
 
-    @Column(name = "is_primary")
-    private boolean isPrimary;
-
-    @Column(name = "is_visible")
-    private boolean isVisible;
-
-    @Column(name = "is_notification_channel")
-    private boolean isNotificationChannel;
+    @Column(name = "is_primary", nullable = false)
+    private boolean isPrimary = false;
+    @Column(name = "is_notification_channel", nullable = false)
+    private boolean isNotificationChannel = false;
 }

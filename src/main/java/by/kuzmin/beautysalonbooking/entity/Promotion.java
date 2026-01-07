@@ -24,7 +24,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = false, exclude = {
         "appointments", "serviceList", "salonList"
 })
-//TODO нет проверки на null значения полей и не везде где надо указано nullable = false
+//TODO нет проверки на null значения полей
 public class Promotion extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,18 +45,17 @@ public class Promotion extends BaseEntity {
     private Long usageLimit;
     @Column(name = "usage_limit_per_client")
     private Long usageLimitPerClient;
-    @Column(name = "start_date")
+    @Column(name = "start_date", nullable = false)
     private LocalDate startDate;
     @Column(name = "end_date")
     private LocalDate endDate;
-    @Column(name = "used_count")
-    private Long usedCount;
-    @Column(name = "is_active")
+    @Column(name = "used_count", nullable = false)
+    private Long usedCount = 0L;
+    @Column(name = "is_active", nullable = false)
     private Boolean isActive;
 
     @OneToMany(mappedBy = "promotion")
     private List<Appointment> appointments;
-    //TODO проверить
     @ManyToMany
     @JoinTable(
             name = "promotion_service",
@@ -64,7 +63,6 @@ public class Promotion extends BaseEntity {
             inverseJoinColumns = @JoinColumn(name = "service_id")
     )
     private List<Service> serviceList;
-    //TODO проверить связь м-м
     @ManyToMany
     @JoinTable(
             name = "promotion_salon",
