@@ -7,7 +7,7 @@ import java.util.List;
 
 @Entity
 @Table(
-        name = "cancellation_initiated"
+        name = "cancellation_role"
 )
 @Getter
 @Setter
@@ -19,15 +19,14 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = false, exclude = {
         "appointmentList"
 })
-//TODO нет проверки на null значения полей и не везде где надо указано nullable = false
-public class CancellationInitiated extends BaseEntity {
+public class CancellationRole extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "person_name", nullable = false)
-    private String personName;
+    @Column(name = "role_name", nullable = false, unique = true)
+    private String roleName;
 
-    @OneToMany(mappedBy = "cancellationInitiated")
+    @OneToMany(mappedBy = "cancellationRole")
     private List<Appointment> appointmentList;
 }

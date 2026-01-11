@@ -25,7 +25,6 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = false, exclude = {
         "appointmentList", "notifications", "reviews", "socialMediaList"
 })
-//TODO нет проверки на null значения полей и не везде где надо указано nullable = false
 public class Client extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -71,7 +70,7 @@ public class Client extends BaseEntity {
     @JoinColumn(name = "source_id")
     private Source source;
 
-    @Column(name = "referral_code")
+    @Column(name = "referral_code", nullable = false)
     private String referralCode;
     @Column(name = "referral_balance")
     private BigDecimal referralBalance;

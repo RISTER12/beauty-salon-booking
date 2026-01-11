@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: idx-timeslot-date-range
+      author: Il'ia Kuz'min
+      changes:
+        - createIndex:
+            indexName: idx_timeslot_date_range
+            tableName: timeslot
+            columns:
+              - column:
+                  name: start_time
+              - column:
+                  name: end_time
+      rollback:
+        - dropIndex:
+            indexName: idx_timeslot_date_range
+            tableName: timeslot

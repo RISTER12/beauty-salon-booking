@@ -1,0 +1,112 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-appointment-table
+      author: Il'ia Kuz'min
+      preConditions:
+        - not:
+            tableExists:
+              tableName: appointment
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            tableName: appointment
+            remarks: "Записи на приём"
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_appointment
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: created_at
+                  type: TIMESTAMP WITH TIME ZONE
+              - column:
+                  constraints:
+                    nullable: false
+                  name: updated_at
+                  type: TIMESTAMP WITH TIME ZONE
+              - column:
+                  constraints:
+                    nullable: false
+                  name: client_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: start_time
+                  type: timestamp
+                  remarks: "Начало оказания первой услуги"
+              - column:
+                  constraints:
+                    nullable: false
+                  name: end_time
+                  type: timestamp
+                  remarks: "Конец оказания последней услуги"
+              - column:
+                  constraints:
+                    nullable: false
+                  name: appointment_status_id
+                  type: BIGINT
+                  remarks: "Статус записи, в работе или отменена"
+              - column:
+                  constraints:
+                    nullable: false
+                  name: amount_without_discount
+                  type: DECIMAL
+                  remarks: "Общая сумма без учета скидки"
+              - column:
+                  constraints:
+                    nullable: false
+                  name: discount_amount
+                  type: DECIMAL
+                  remarks: "Сумма скидки"
+              - column:
+                  constraints:
+                    nullable: false
+                  name: final_amount
+                  type: DECIMAL
+                  remarks: "Итоговая сумма к оплате"
+              - column:
+                  name: prepayment_amount
+                  type: DECIMAL
+                  remarks: "Сумма предоплаты"
+              - column:
+                  name: client_note
+                  type: VARCHAR(255)
+                  remarks: "Пожелания клиента"
+              - column:
+                  name: employee_note
+                  type: VARCHAR(255)
+                  remarks: "Заметки мастера"
+              - column:
+                  name: cancellation_reason
+                  type: VARCHAR(255)
+                  remarks: "Причина отмены"
+              - column:
+                  name: cancellation_role_id
+                  type: BIGINT
+                  remarks: "Кто отменил запись"
+              - column:
+                  name: promotion_id
+                  type: BIGINT
+                  remarks: "id примененного промокода"
+              - column:
+                  name: cancelled_at
+                  type: timestamp
+              - column:
+                  name: completed_at
+                  type: timestamp
+      rollback:
+        - dropTable:
+            tableName: appointment

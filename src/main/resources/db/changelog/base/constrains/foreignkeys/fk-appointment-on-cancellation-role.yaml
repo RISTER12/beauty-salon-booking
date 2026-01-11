@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: fk-appointment-on-cancellation-role
+      author: Il'ia Kuz'min
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: cancellation_role_id
+            baseTableName: appointment
+            constraintName: FK_APPOINTMENT_ON_CANCELLATION_ROLE
+            referencedColumnNames: id
+            referencedTableName: cancellation_role
+            onUpdate: CASCADE
+            onDelete: RESTRICT
+      rollback:
+          - dropForeignKeyConstraint:
+                constraintName: FK_APPOINTMENT_ON_CANCELLATION_ROLE
+                tableName: appointment

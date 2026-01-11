@@ -1,0 +1,96 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-promotion-table
+      author: Il'ia Kuz'min
+      preConditions:
+        - not:
+            tableExists:
+              tableName: promotion
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            tableName: promotion
+            remarks: "Акции, скидки, купоны"
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_promotion
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: created_at
+                  type: TIMESTAMP WITH TIME ZONE
+              - column:
+                  constraints:
+                    nullable: false
+                  name: updated_at
+                  type: TIMESTAMP WITH TIME ZONE
+              - column:
+                  constraints:
+                    nullable: false
+                  name: promotion_name
+                  type: VARCHAR(255)
+                  remarks: "Скидка 20% на первую стрижку"
+              - column:
+                  name: description
+                  type: VARCHAR(255)
+              - column:
+                  name: code
+                  type: VARCHAR(255)
+                  remarks: "Промокод: FIRST20"
+              - column:
+                  name: banner_url
+                  type: VARCHAR(255)
+                  remarks: "Ссылка на баннер для сайта"
+              - column:
+                  name: discount_count
+                  type: BIGINT
+                  remarks: "Скидка в процентах"
+              - column:
+                  name: min_order_amount
+                  type: DECIMAL
+                  remarks: "Минимальная сумма заказа для получения скидки"
+              - column:
+                  name: usage_limit
+                  type: BIGINT
+                  remarks: "Ограничение на количество использований"
+              - column:
+                  name: usage_limit_per_client
+                  type: BIGINT
+                  remarks: "Ограничение на использование для одного клиента"
+              - column:
+                  constraints:
+                    nullable: false
+                  name: start_date
+                  type: DATE
+                  remarks: "Дата начала действия скидки"
+              - column:
+                  name: end_date
+                  type: DATE
+                  remarks: "Дата окончания действия скидки"
+              - column:
+                  constraints:
+                    nullable: false
+                  name: used_count
+                  type: BIGINT
+                  remarks: "Количество использований скидки"
+              - column:
+                  constraints:
+                    nullable: false
+                  name: is_active
+                  type: BOOLEAN
+                  remarks: "Действует ли акция"
+      rollback:
+        - dropTable:
+            tableName: promotion

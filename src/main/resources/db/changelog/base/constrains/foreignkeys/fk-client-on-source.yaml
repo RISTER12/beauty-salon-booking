@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: fk-client-on-source
+      author: Il'ia Kuz'min
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: source_id
+            baseTableName: client
+            constraintName: FK_CLIENT_ON_SOURCE
+            referencedColumnNames: id
+            referencedTableName: source
+            onUpdate: CASCADE
+            onDelete: RESTRICT
+      rollback:
+          - dropForeignKeyConstraint:
+                constraintName: FK_CLIENT_ON_SOURCE
+                tableName: client

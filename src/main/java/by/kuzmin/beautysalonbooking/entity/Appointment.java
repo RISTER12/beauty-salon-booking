@@ -21,7 +21,6 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = false, exclude = {
         "paymentList", "reviewList", "timeslotList", "serviceList"
 })
-//TODO нет проверки на null значения полей и не везде где надо указано nullable = false
 public class Appointment extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -59,8 +58,8 @@ public class Appointment extends BaseEntity {
     private String cancellationReason;
 
     @ManyToOne
-    @JoinColumn(name = "cancellation_initiated_by_id")
-    private CancellationInitiated cancellationInitiated;
+    @JoinColumn(name = "cancellation_role_id")
+    private CancellationRole cancellationRole;
 
     @ManyToOne
     @JoinColumn(name = "promotion_id")

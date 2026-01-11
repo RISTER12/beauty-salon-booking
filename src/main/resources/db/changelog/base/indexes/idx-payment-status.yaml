@@ -1,0 +1,16 @@
+databaseChangeLog:
+  - changeSet:
+      id: idx-payment-status
+      author: Il'ia Kuz'min
+      changes:
+        - createIndex:
+            indexName: idx_payment_status
+            tableName: payment
+            columns:
+              - column:
+                  name: payment_status_id
+      rollback:
+        - dropIndex:
+            indexName: idx_payment_status
+            tableName: payment
+

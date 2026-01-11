@@ -1,0 +1,76 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-payment-table
+      author: Il'ia Kuz'min
+      preConditions:
+        - not:
+            tableExists:
+              tableName: payment
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            tableName: payment
+            remarks: "Платежи"
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_payment
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: created_at
+                  type: TIMESTAMP WITH TIME ZONE
+              - column:
+                  constraints:
+                    nullable: false
+                  name: updated_at
+                  type: TIMESTAMP WITH TIME ZONE
+              - column:
+                  name: external_id
+                  type: BIGINT
+                  remarks: "id во внешней системе"
+              - column:
+                  name: gateway_transaction_id
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: appointment_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: amount
+                  type: DECIMAL
+              - column:
+                  name: payment_method_id
+                  type: BIGINT
+              - column:
+                  name: payment_status_id
+                  type: BIGINT
+                  remarks: "Например: pending, processing, completed, 
+                  failed, refunded, partially_refunded"
+              - column:
+                  name: gateway_response
+                  type: jsonb
+                  remarks: "Ответ платёжной системы"
+              - column:
+                  constraints:
+                    nullable: false
+                  name: receipt
+                  type: VARCHAR(255)
+                  remarks: "Чек"
+      rollback:
+        - dropTable:
+            tableName: payment

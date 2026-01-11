@@ -24,7 +24,6 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = false, exclude = {
         "appointments", "serviceList", "salonList"
 })
-//TODO нет проверки на null значения полей
 public class Promotion extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

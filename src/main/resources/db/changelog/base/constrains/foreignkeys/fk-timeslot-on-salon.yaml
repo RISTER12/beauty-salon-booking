@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: fk-timeslot-on-salon
+      author: Il'ia Kuz'min
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: employee_id
+            baseTableName: timeslot
+            constraintName: FK_TIMESLOT_ON_SALON
+            referencedColumnNames: id
+            referencedTableName: employee
+            onUpdate: RESTRICT
+            onDelete: CASCADE
+      rollback:
+          - dropForeignKeyConstraint:
+                constraintName: FK_TIMESLOT_ON_EMPLOYEE
+                tableName: timeslot

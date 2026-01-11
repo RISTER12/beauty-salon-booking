@@ -1,0 +1,103 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-employee-table
+      author: Il'ia Kuz'min
+      preConditions:
+        - not:
+            tableExists:
+              tableName: employee
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            tableName: employee
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_employee
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: created_at
+                  type: TIMESTAMP WITH TIME ZONE
+              - column:
+                  constraints:
+                    nullable: false
+                  name: updated_at
+                  type: TIMESTAMP WITH TIME ZONE
+              - column:
+                  name: salon_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: first_name
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: last_name
+                  type: VARCHAR(255)
+              - column:
+                  name: middle_name
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: job_title
+                  type: VARCHAR(255)
+                  remarks: "Название профессии: например: Парикмахер-стилист"
+              - column:
+                  constraints:
+                    nullable: false
+                  name: experience_years
+                  type: BIGINT
+                  remarks: "Опыт в годах"
+              - column:
+                  name: certifications
+                  type: text[]
+                  remarks: "Сертификаты"
+              - column:
+                  name: awards
+                  type: text[]
+                  remarks: "Награды"
+              - column:
+                  name: photo_url
+                  type: VARCHAR(255)
+                  remarks: "Ссылка на фото сотрудника"
+              - column:
+                  name: portfolio_photos_urls
+                  type: text[]
+                  remarks: "Ссылки фото работ"
+              - column:
+                  name: portfolio_video_urls
+                  type: text[]
+                  remarks: "Ссылки на видео работ"
+              - column:
+                  constraints:
+                    nullable: false
+                  name: employee_status_id
+                  type: BIGINT
+                  remarks: "Например: active, inactive, vacation, sick_leave, dismissed"
+              - column:
+                  name: average_rating
+                  type: DECIMAL
+                  remarks: "Рейтинг сотрудника"
+              - column:
+                  constraints:
+                    nullable: false
+                  name: is_visible_on_website
+                  type: BOOLEAN
+      rollback:
+        - dropTable:
+            tableName: employee

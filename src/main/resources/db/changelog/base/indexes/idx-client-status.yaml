@@ -1,0 +1,16 @@
+databaseChangeLog:
+  - changeSet:
+      id: idx-client-status
+      author: Il'ia Kuz'min
+      changes:
+        - createIndex:
+            indexName: idx_client_status
+            tableName: client
+            columns:
+              - column:
+                  name: status_id
+      rollback:
+        - dropIndex:
+            indexName: idx_client_status
+            tableName: client
+

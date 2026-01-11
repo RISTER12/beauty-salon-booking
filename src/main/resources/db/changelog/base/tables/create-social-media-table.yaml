@@ -1,0 +1,77 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-social-media-table
+      author: Il'ia Kuz'min
+      preConditions:
+        - not:
+            tableExists:
+              tableName: social_media
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            tableName: social_media
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_social_media
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: created_at
+                  type: TIMESTAMP WITH TIME ZONE
+              - column:
+                  constraints:
+                    nullable: false
+                  name: updated_at
+                  type: TIMESTAMP WITH TIME ZONE
+              - column:
+                  constraints:
+                    nullable: false
+                  name: social_media_type_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: value
+                  type: VARCHAR(254)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: url
+                  type: VARCHAR(255)
+              - column:
+                  name: client_id
+                  type: BIGINT
+              - column:
+                  name: employee_id
+                  type: BIGINT
+              - column:
+                  name: salon_id
+                  type: BIGINT
+              - column:
+                  name: company_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: is_primary
+                  type: BOOLEAN
+              - column:
+                  constraints:
+                    nullable: false
+                  name: is_notification_channel
+                  type: BOOLEAN
+      rollback:
+        - dropTable:
+            tableName: social_media

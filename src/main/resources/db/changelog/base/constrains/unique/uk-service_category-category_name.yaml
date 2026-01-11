@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: uk-service_category-category_name
+      author: Il'ia Kuz'min
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: category_name
+            constraintName: UK_SERVICE_CATEGORY_CATEGORY_NAME
+            tableName: service_category
+      rollback:
+        - dropUniqueConstraint:
+            constraintName: UK_SERVICE_CATEGORY_CATEGORY_NAME
+            tableName: service_category

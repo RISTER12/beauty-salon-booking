@@ -1,0 +1,15 @@
+databaseChangeLog:
+  - changeSet:
+      id: idx-timeslot-status
+      author: Il'ia Kuz'min
+      changes:
+        - createIndex:
+            indexName: idx_timeslot_status
+            tableName: timeslot
+            columns:
+              - column:
+                  name: status_id
+      rollback:
+        - dropIndex:
+            indexName: idx_timeslot_status
+            tableName: timeslot

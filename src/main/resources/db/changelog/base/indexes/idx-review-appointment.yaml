@@ -1,0 +1,15 @@
+databaseChangeLog:
+  - changeSet:
+      id: idx-review-appointment
+      author: Il'ia Kuz'min
+      changes:
+        - createIndex:
+            indexName: idx_review_appointment
+            tableName: review
+            columns:
+              - column:
+                  name: appointment_id
+      rollback:
+        - dropIndex:
+            indexName: idx_review_appointment
+            tableName: review

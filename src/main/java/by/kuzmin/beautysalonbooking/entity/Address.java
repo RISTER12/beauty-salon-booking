@@ -20,12 +20,11 @@ import java.util.List;
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode(callSuper = false)
-//TODO Проверено, осталось: исключения в аннотации, nullable = false
 public class Address extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "full_address", nullable = false)
+    @Column(name = "full_address")
     private String fullAddress;
     @Column(nullable = false)
     private String city;
@@ -37,7 +36,7 @@ public class Address extends BaseEntity {
     private String apartment;
     @Column(name = "metro_station")
     private String metroStation;
-    @Column(name = "postal_code")
+    @Column(name = "postal_code", nullable = false)
     private String postalCode;
     @Column(nullable = false)
     private BigDecimal latitude;

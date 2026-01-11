@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: fk-appointment-on-appointment-status
+      author: Il'ia Kuz'min
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: appointment_status_id
+            baseTableName: appointment
+            constraintName: FK_APPOINTMENT_ON_APPOINTMENT_STATUS
+            referencedColumnNames: id
+            referencedTableName: appointment_status
+            onUpdate: CASCADE
+            onDelete: RESTRICT
+      rollback:
+          - dropForeignKeyConstraint:
+                constraintName: FK_APPOINTMENT_ON_APPOINTMENT_STATUS
+                tableName: appointment

@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: idx-employee-service-price
+      author: Il'ia Kuz'min
+      changes:
+        - createIndex:
+            indexName: idx_employee_service_price
+            tableName: employee_service
+            columns:
+              - column:
+                  name: service_id
+              - column:
+                  name: price
+      rollback:
+        - dropIndex:
+            indexName: idx_employee_service_price
+            tableName: employee_service
+

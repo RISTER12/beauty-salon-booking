@@ -20,7 +20,6 @@ import java.math.BigDecimal;
 @EqualsAndHashCode(callSuper = false, exclude = {
         "employee", "service"
 })
-//TODO нет проверки на null значения полей и не везде где надо указано nullable = false
 public class EmployeeService extends BaseEntity {
     @EmbeddedId
     private EmployeeServiceId id;

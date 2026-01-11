@@ -1,0 +1,76 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-company-table
+      author: Il'ia Kuz'min
+      preConditions:
+        - not:
+            tableExists:
+              tableName: company
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            tableName: company
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_company
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: created_at
+                  type: TIMESTAMP WITH TIME ZONE
+              - column:
+                  constraints:
+                    nullable: false
+                  name: updated_at
+                  type: TIMESTAMP WITH TIME ZONE
+              - column:
+                  constraints:
+                    nullable: false
+                  name: company_name
+                  type: VARCHAR(50)
+                  remarks: "Короткое название компании для сайта"
+              - column:
+                  constraints:
+                    nullable: false
+                  name: company_legal_name
+                  type: VARCHAR(255)
+                  remarks: "Полное название компании"
+              - column:
+                  name: description
+                  type: VARCHAR(500)
+              - column:
+                  name: short_description
+                  type: VARCHAR(255)
+                  remarks: "Описание компании для сайта"
+              - column:
+                  constraints:
+                    nullable: false
+                  name: tax_number
+                  type: VARCHAR(10)
+                  remarks: "ИНН"
+              - column:
+                  constraints:
+                    nullable: false
+                  name: registration_number
+                  type: VARCHAR(13)
+                  remarks: "ОГРН"
+              - column:
+                  constraints:
+                    nullable: false
+                  name: address_id
+                  type: BIGINT
+      rollback:
+        - dropTable:
+            tableName: company

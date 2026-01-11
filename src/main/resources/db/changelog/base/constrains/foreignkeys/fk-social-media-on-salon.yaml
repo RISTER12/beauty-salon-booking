@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: fk-social-media-on-salon
+      author: Il'ia Kuz'min
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: salon_id
+            baseTableName: social_media
+            constraintName: FK_SOCIAL_MEDIA_ON_SALON
+            referencedColumnNames: id
+            referencedTableName: salon
+            onUpdate: RESTRICT
+            onDelete: SET NULL
+      rollback:
+          - dropForeignKeyConstraint:
+                constraintName: FK_SOCIAL_MEDIA_ON_SALON
+                tableName: social_media

@@ -1,0 +1,16 @@
+databaseChangeLog:
+  - changeSet:
+      id: idx-payment-appointment
+      author: Il'ia Kuz'min
+      changes:
+        - createIndex:
+            indexName: idx_payment_appointment
+            tableName: payment
+            columns:
+              - column:
+                  name: appointment_id
+      rollback:
+        - dropIndex:
+            indexName: idx_payment_appointment
+            tableName: payment
+

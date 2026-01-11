@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: fk-review-on-employee-responded
+      author: Il'ia Kuz'min
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: responded_by_employee_id
+            baseTableName: review
+            constraintName: FK_REVIEW_ON_RESPONDED_BY_EMPLOYEE
+            referencedColumnNames: id
+            referencedTableName: employee
+            onUpdate: RESTRICT
+            onDelete: SET NULL
+      rollback:
+          - dropForeignKeyConstraint:
+                constraintName: FK_REVIEW_ON_RESPONDED_BY_EMPLOYEE
+                tableName: review

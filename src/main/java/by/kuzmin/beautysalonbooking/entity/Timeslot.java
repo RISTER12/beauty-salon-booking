@@ -16,7 +16,6 @@ import java.time.OffsetDateTime;
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode(callSuper = false)
-//TODO нет проверки на null значения полей и не везде где надо указано nullable = false
 public class Timeslot extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: uk-social_media_type-type_name
+      author: Il'ia Kuz'min
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: type_name
+            constraintName: UK_SOCIAL_MEDIA_TYPE_TYPE_NAME
+            tableName: social_media_type
+      rollback:
+        - dropUniqueConstraint:
+            constraintName: UK_SOCIAL_MEDIA_TYPE_TYPE_NAME
+            tableName: social_media_type

@@ -15,13 +15,12 @@ import java.util.List;
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode(callSuper = false)
-//TODO нет проверки на null значения полей и не везде где надо указано nullable = false
 public class SocialMediaType extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false)
-    private String name;
+    @Column(name = "type_name",nullable = false, unique = true)
+    private String typeName;
     @Column(name = "base_url", nullable = false)
     private String baseUrl;
 }

@@ -1,0 +1,15 @@
+databaseChangeLog:
+  - changeSet:
+      id: idx-notification-status
+      author: Il'ia Kuz'min
+      changes:
+        - createIndex:
+            indexName: idx_notification_status
+            tableName: notification
+            columns:
+              - column:
+                  name: notification_status_id
+      rollback:
+        - dropIndex:
+            indexName: idx_notification_status
+            tableName: notification

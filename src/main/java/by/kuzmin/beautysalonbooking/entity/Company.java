@@ -20,7 +20,6 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = false, exclude = {
         "salonList", "socialMediaList", "address"
 })
-//TODO нет проверки на null значения полей и не везде где надо указано nullable = false
 public class Company extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

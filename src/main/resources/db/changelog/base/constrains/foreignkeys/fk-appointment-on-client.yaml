@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: fk-appointment-on-client
+      author: Il'ia Kuz'min
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: client_id
+            baseTableName: appointment
+            constraintName: FK_APPOINTMENT_ON_CLIENT
+            referencedColumnNames: id
+            referencedTableName: client
+            onUpdate: RESTRICT
+            onDelete: RESTRICT
+      rollback:
+          - dropForeignKeyConstraint:
+                constraintName: FK_APPOINTMENT_ON_CLIENT
+                tableName: appointment

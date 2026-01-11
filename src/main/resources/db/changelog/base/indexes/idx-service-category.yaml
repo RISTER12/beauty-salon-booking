@@ -1,0 +1,15 @@
+databaseChangeLog:
+  - changeSet:
+      id: idx-service-category
+      author: Il'ia Kuz'min
+      changes:
+        - createIndex:
+            indexName: idx_service_category
+            tableName: service
+            columns:
+              - column:
+                  name: category_id
+      rollback:
+        - dropIndex:
+            indexName: idx_service_category
+            tableName: service

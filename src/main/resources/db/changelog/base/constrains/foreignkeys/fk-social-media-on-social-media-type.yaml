@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: fk-social-media-on-social-media-type
+      author: Il'ia Kuz'min
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: social_media_type_id
+            baseTableName: social_media
+            constraintName: FK_SOCIAL_MEDIA_ON_SOCIAL_MEDIA_TYPE
+            referencedColumnNames: id
+            referencedTableName: social_media_type
+            onUpdate: CASCADE
+            onDelete: RESTRICT
+      rollback:
+          - dropForeignKeyConstraint:
+                constraintName: FK_SOCIAL_MEDIA_ON_SOCIAL_MEDIA_TYPE
+                tableName: social_media

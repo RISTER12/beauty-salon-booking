@@ -6,7 +6,6 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Map;
 
 @Entity
 @Table(
@@ -19,14 +18,13 @@ import java.util.Map;
 @ToString(exclude = {
         "clientList", "employeeServiceList", "revenueReportList",
         "employeeList", "socialMediaList", "timeslotList",
-        "workSchedule", "portfolioPhotosUrlList", "portfolioVideoUrlList"
+        "portfolioPhotosUrlList", "portfolioVideoUrlList"
 })
 @EqualsAndHashCode(callSuper = false, exclude = {
         "clientList", "employeeServiceList", "revenueReportList",
         "employeeList", "socialMediaList", "timeslotList",
-        "workSchedule", "portfolioPhotosUrlList", "portfolioVideoUrlList"
+        "portfolioPhotosUrlList", "portfolioVideoUrlList"
 })
-//TODO нет проверки на null значения полей и не везде где надо указано nullable = false
 public class Employee extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -75,9 +73,6 @@ public class Employee extends BaseEntity {
 
     @OneToMany(mappedBy = "employee")
     private List<RevenueReport> revenueReportList;
-
-    @OneToMany(mappedBy = "employee")
-    private List<Employee> employeeList;
 
     @OneToMany(mappedBy = "employee")
     private List<SocialMedia> socialMediaList;

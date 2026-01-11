@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: idx-revenue-report-salon
+      author: Il'ia Kuz'min
+      changes:
+        - createIndex:
+            indexName: idx_revenue_report_salon
+            tableName: revenue_report
+            columns:
+              - column:
+                  name: salon_id
+      rollback:
+        - dropIndex:
+            indexName: idx_revenue_report_salon
+            tableName: revenue_report
+
+

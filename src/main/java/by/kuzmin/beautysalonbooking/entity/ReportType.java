@@ -15,12 +15,11 @@ import java.util.List;
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode(callSuper = false)
-//TODO нет проверки на null значения полей и не везде где надо указано nullable = false
 public class ReportType extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "type_name", nullable = false)
+    @Column(name = "type_name", nullable = false, unique = true)
     private String typeName;
     private String description;
 }

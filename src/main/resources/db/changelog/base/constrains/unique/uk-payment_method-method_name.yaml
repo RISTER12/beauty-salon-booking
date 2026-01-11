@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: uk-payment_method-method_name
+      author: Il'ia Kuz'min
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: method_name
+            constraintName: UK_PAYMENT_METHOD_METHOD_NAME
+            tableName: payment_method
+      rollback:
+        - dropUniqueConstraint:
+            constraintName: UK_PAYMENT_METHOD_METHOD_NAME
+            tableName: payment_method

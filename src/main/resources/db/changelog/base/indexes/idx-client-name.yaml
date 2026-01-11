@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: idx-client-name
+      author: Il'ia Kuz'min
+      changes:
+        - createIndex:
+            indexName: idx_client_name
+            tableName: client
+            columns:
+              - column:
+                  name: last_name
+              - column:
+                  name: first_name
+      rollback:
+        - dropIndex:
+            indexName: idx_client_name
+            tableName: client

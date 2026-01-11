@@ -15,7 +15,6 @@ import java.time.OffsetDateTime;
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode(callSuper = false)
-//TODO нет проверки на null значения полей и не везде где надо указано nullable = false
 public class Review extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,7 +47,7 @@ public class Review extends BaseEntity {
     private String negativeAspects;
     @Column(name = "admin_response")
     private String adminResponse;
-    //TODO тут реализована только односторонняя связь, проверить нужна ли вообще двусторонняя
+
     @ManyToOne
     @JoinColumn(name = "responded_by_employee_id")
     private Employee respondedEmployee;
@@ -56,7 +55,6 @@ public class Review extends BaseEntity {
     @Column(name = "responded_at")
     private OffsetDateTime respondedAt;
 
-    //TODO тут реализована только односторонняя связь, проверить нужна ли вообще двусторонняя
     @ManyToOne
     @JoinColumn(name = "moderated_by_employee_id")
     private Employee moderatedEmployee;

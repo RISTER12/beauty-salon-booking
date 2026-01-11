@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: fk-employee-service-on-employee
+      author: Il'ia Kuz'min
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: employee_id
+            baseTableName: employee_service
+            constraintName: FK_EMPLOYEE_SERVICE_ON_EMPLOYEE
+            referencedColumnNames: id
+            referencedTableName: employee
+            onUpdate: RESTRICT
+            onDelete: CASCADE
+      rollback:
+          - dropForeignKeyConstraint:
+                constraintName: FK_EMPLOYEE_SERVICE_ON_EMPLOYEE
+                tableName: employee_service

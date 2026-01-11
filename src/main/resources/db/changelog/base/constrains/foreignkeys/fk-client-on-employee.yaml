@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: fk-client-on-employee
+      author: Il'ia Kuz'min
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: preferred_employee_id
+            baseTableName: client
+            constraintName: FK_CLIENT_ON_PREFERRED_EMPLOYEE
+            referencedColumnNames: id
+            referencedTableName: employee
+            onUpdate: RESTRICT
+            onDelete: SET NULL
+      rollback:
+          - dropForeignKeyConstraint:
+                constraintName: FK_CLIENT_ON_PREFERRED_EMPLOYEE
+                tableName: client

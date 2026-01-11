@@ -1,0 +1,15 @@
+databaseChangeLog:
+  - changeSet:
+      id: idx-review-rating
+      author: Il'ia Kuz'min
+      changes:
+        - createIndex:
+            indexName: idx_review_rating
+            tableName: review
+            columns:
+              - column:
+                  name: rating_overall
+      rollback:
+        - dropIndex:
+            indexName: idx_review_rating
+            tableName: review

@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: uk-report_type-type_name
+      author: Il'ia Kuz'min
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: type_name
+            constraintName: UK_REPORT_TYPE_TYPE_NAME
+            tableName: report_type
+      rollback:
+        - dropUniqueConstraint:
+            constraintName: UK_REPORT_TYPE_TYPE_NAME
+            tableName: report_type

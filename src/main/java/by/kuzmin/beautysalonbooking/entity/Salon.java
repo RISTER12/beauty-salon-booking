@@ -32,7 +32,6 @@ import java.util.Map;
         "promotionList", "workingHours", "amenitiesList",
         "photoUrlList", "interiorPhotoList", "videoUrlList",
 })
-//TODO нет проверки на null значения полей и не везде где надо указано nullable = false
 public class Salon extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

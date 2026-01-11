@@ -1,0 +1,84 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-service-table
+      author: Il'ia Kuz'min
+      preConditions:
+        - not:
+            tableExists:
+              tableName: service
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            tableName: service
+            remarks: "Услуги"
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_service
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: created_at
+                  type: TIMESTAMP WITH TIME ZONE
+              - column:
+                  constraints:
+                    nullable: false
+                  name: updated_at
+                  type: TIMESTAMP WITH TIME ZONE
+              - column:
+                  constraints:
+                    nullable: false
+                  name: category_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: name
+                  type: VARCHAR(255)
+              - column:
+                  name: short_name
+                  type: VARCHAR(255)
+                  remarks: "Короткое название услуги. Например: Стрижка жен."
+              - column:
+                  name: description
+                  type: VARCHAR(255)
+              - column:
+                  name: short_description
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: min_price
+                  type: DECIMAL
+              - column:
+                  constraints:
+                    nullable: false
+                  name: max_price
+                  type: DECIMAL
+              - column:
+                  name: price_range_description
+                  type: VARCHAR(255)
+                  remarks: "Например: от 1500 до 5000 руб"
+              - column:
+                  name: photo_urls
+                  type: text[]
+                  remarks: "Фотографии оказанной услуги"
+              - column:
+                  constraints:
+                    nullable: false
+                  name: salon_id
+                  type: BIGINT
+      rollback:
+        - dropTable:
+            tableName: service

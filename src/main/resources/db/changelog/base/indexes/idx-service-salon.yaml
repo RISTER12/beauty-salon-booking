@@ -1,0 +1,15 @@
+databaseChangeLog:
+  - changeSet:
+      id: idx-service-salon
+      author: Il'ia Kuz'min
+      changes:
+        - createIndex:
+            indexName: idx_service_salon
+            tableName: service
+            columns:
+              - column:
+                  name: salon_id
+      rollback:
+        - dropIndex:
+            indexName: idx_service_salon
+            tableName: service

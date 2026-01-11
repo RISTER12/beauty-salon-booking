@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: fk-revenue-report-on-report-type
+      author: Il'ia Kuz'min
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: report_type_id
+            baseTableName: revenue_report
+            constraintName: FK_REVENUE_REPORT_ON_REPORT_TYPE
+            referencedColumnNames: id
+            referencedTableName: report_type
+            onUpdate: CASCADE
+            onDelete: RESTRICT
+      rollback:
+          - dropForeignKeyConstraint:
+                constraintName: FK_REVENUE_REPORT_ON_REPORT_TYPE
+                tableName: revenue_report

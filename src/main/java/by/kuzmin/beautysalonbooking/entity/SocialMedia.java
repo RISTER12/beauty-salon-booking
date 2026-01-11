@@ -15,7 +15,6 @@ import java.util.List;
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode(callSuper = false)
-//TODO нет проверки на null значения полей и не везде где надо указано nullable = false
 public class SocialMedia extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: uk-source-name
+      author: Il'ia Kuz'min
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: name
+            constraintName: UK_SOURCE_NAME
+            tableName: source
+      rollback:
+        - dropUniqueConstraint:
+            constraintName: UK_SOURCE_NAME
+            tableName: source

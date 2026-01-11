@@ -22,7 +22,6 @@ import java.util.Map;
 @EqualsAndHashCode(callSuper = false, exclude = {
         "metadata"
 })
-//TODO нет проверки на null значения полей и не везде где надо указано nullable = false
 public class Notification extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

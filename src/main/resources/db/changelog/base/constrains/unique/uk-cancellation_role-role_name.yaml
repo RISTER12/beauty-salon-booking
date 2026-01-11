@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: uk-cancellation_role-role_name
+      author: Il'ia Kuz'min
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: role_name
+            constraintName: UK_CANCELLATION_ROLE_ROLE_NAME
+            tableName: cancellation_role
+      rollback:
+        - dropUniqueConstraint:
+            constraintName: UK_CANCELLATION_ROLE_ROLE_NAME
+            tableName: cancellation_role

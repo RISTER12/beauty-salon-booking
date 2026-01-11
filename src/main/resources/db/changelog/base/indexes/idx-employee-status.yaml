@@ -1,0 +1,16 @@
+databaseChangeLog:
+  - changeSet:
+      id: idx-employee-status
+      author: Il'ia Kuz'min
+      changes:
+        - createIndex:
+            indexName: idx_employee_status
+            tableName: employee
+            columns:
+              - column:
+                  name: employee_status_id
+      rollback:
+        - dropIndex:
+            indexName: idx_employee_status
+            tableName: employee
+

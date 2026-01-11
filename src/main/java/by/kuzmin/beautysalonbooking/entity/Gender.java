@@ -19,7 +19,6 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = false, exclude = {
         "clientList"
 })
-//TODO нет проверки на null значения полей и не везде где надо указано nullable = false
 public class Gender extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

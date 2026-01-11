@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: fk-salon-on-address
+      author: Il'ia Kuz'min
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: address_id
+            baseTableName: salon
+            constraintName: FK_SALON_ON_ADDRESS
+            referencedColumnNames: id
+            referencedTableName: address
+            onUpdate: RESTRICT
+            onDelete: RESTRICT
+      rollback:
+          - dropForeignKeyConstraint:
+                constraintName: FK_SALON_ON_ADDRESS
+                tableName: salon

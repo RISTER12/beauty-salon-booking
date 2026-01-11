@@ -1,1 +1,8 @@
 databaseChangeLog:
+  - includeAll:
+      path: db/changelog/base/tables
+  - includeAll:
+      path: db/changelog/base/constrains
+  - includeAll:
+      path: db/changelog/base/indexes
+

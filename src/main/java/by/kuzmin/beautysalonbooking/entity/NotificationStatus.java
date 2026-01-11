@@ -19,13 +19,12 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = false, exclude = {
         "notificationList"
 })
-//TODO нет проверки на null значения полей и не везде где надо указано nullable = false
 public class NotificationStatus extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "status_name", nullable = false)
+    @Column(name = "status_name", nullable = false, unique = true)
     private String statusName;
 
     @OneToMany(mappedBy = "notificationStatus")

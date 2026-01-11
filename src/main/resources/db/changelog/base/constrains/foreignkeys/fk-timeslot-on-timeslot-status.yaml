@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: fk-timeslot-on-timeslot-status
+      author: Il'ia Kuz'min
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: status_id
+            baseTableName: timeslot
+            constraintName: FK_TIMESLOT_ON_STATUS
+            referencedColumnNames: id
+            referencedTableName: timeslot_status
+            onUpdate: CASCADE
+            onDelete: RESTRICT
+      rollback:
+          - dropForeignKeyConstraint:
+                constraintName: FK_TIMESLOT_ON_STATUS
+                tableName: timeslot

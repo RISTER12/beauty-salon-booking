@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: uk-notification_status-status_name
+      author: Il'ia Kuz'min
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: status_name
+            constraintName: UK_NOTIFICATION_STATUS_STATUS_NAME
+            tableName: notification_status
+      rollback:
+        - dropUniqueConstraint:
+            constraintName: UK_NOTIFICATION_STATUS_STATUS_NAME
+            tableName: notification_status

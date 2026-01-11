@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: idx-revenue-report-period
+      author: Il'ia Kuz'min
+      changes:
+        - createIndex:
+            indexName: idx_revenue_report_period
+            tableName: revenue_report
+            columns:
+              - column:
+                  name: period_start_date
+              - column:
+                  name: period_end_date
+      rollback:
+        - dropIndex:
+            indexName: idx_revenue_report_period
+            tableName: revenue_report
+

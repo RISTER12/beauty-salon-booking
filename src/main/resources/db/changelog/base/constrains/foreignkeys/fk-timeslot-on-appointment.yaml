@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: fk-timeslot-on-appointment
+      author: Il'ia Kuz'min
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: appointment_id
+            baseTableName: timeslot
+            constraintName: FK_TIMESLOT_ON_APPOINTMENT
+            referencedColumnNames: id
+            referencedTableName: appointment
+            onUpdate: RESTRICT
+            onDelete: SET NULL
+      rollback:
+          - dropForeignKeyConstraint:
+                constraintName: FK_TIMESLOT_ON_APPOINTMENT
+                tableName: timeslot

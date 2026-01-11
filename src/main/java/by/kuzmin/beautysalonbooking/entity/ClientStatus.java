@@ -13,20 +13,12 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = {
-        "clientList"
-})
-@EqualsAndHashCode(callSuper = false, exclude = {
-        "clientList"
-})
-//TODO нет проверки на null значения полей и не везде где надо указано nullable = false
+@ToString
+@EqualsAndHashCode(callSuper = false)
 public class ClientStatus extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "status_name", nullable = false)
+    @Column(name = "status_name", nullable = false, unique = true)
     private String statusName;
-    @OneToMany(mappedBy = "clientStatus")
-    private List<Client> clientList;
-
 }
