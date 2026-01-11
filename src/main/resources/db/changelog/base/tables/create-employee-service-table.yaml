@@ -12,22 +12,6 @@ databaseChangeLog:
             tableName: employee_service
             columns:
               - column:
-                  name: created_by
-                  type: VARCHAR(255)
-              - column:
-                  name: updated_by
-                  type: VARCHAR(255)
-              - column:
-                  constraints:
-                    nullable: false
-                  name: created_at
-                  type: TIMESTAMP WITH TIME ZONE
-              - column:
-                  constraints:
-                    nullable: false
-                  name: updated_at
-                  type: TIMESTAMP WITH TIME ZONE
-              - column:
                   name: price
                   type: DECIMAL
                   remarks: "Цена этой услуги у этого мастера"
@@ -48,6 +32,22 @@ databaseChangeLog:
                     primaryKeyName: pk_employee_service
                   name: service_id
                   type: BIGINT
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: created_at
+                  type: TIMESTAMP WITH TIME ZONE
+              - column:
+                  constraints:
+                    nullable: false
+                  name: updated_at
+                  type: TIMESTAMP WITH TIME ZONE
       rollback:
         - dropTable:
             tableName: employee_service

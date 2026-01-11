@@ -21,6 +21,16 @@ databaseChangeLog:
                   name: id
                   type: BIGINT
               - column:
+                  constraints:
+                    nullable: false
+                  name: type_name
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: base_url
+                  type: VARCHAR(255)
+              - column:
                   name: created_by
                   type: VARCHAR(255)
               - column:
@@ -36,16 +46,6 @@ databaseChangeLog:
                     nullable: false
                   name: updated_at
                   type: TIMESTAMP WITH TIME ZONE
-              - column:
-                  constraints:
-                    nullable: false
-                  name: type_name
-                  type: VARCHAR(255)
-              - column:
-                  constraints:
-                    nullable: false
-                  name: base_url
-                  type: VARCHAR(255)
       rollback:
         - dropTable:
             tableName: social_media_type

@@ -20,22 +20,6 @@ databaseChangeLog:
                   name: id
                   type: BIGINT
               - column:
-                  name: created_by
-                  type: VARCHAR(255)
-              - column:
-                  name: updated_by
-                  type: VARCHAR(255)
-              - column:
-                  constraints:
-                    nullable: false
-                  name: created_at
-                  type: TIMESTAMP WITH TIME ZONE
-              - column:
-                  constraints:
-                    nullable: false
-                  name: updated_at
-                  type: TIMESTAMP WITH TIME ZONE
-              - column:
                   name: full_address
                   type: VARCHAR(255)
               - column:
@@ -92,6 +76,22 @@ databaseChangeLog:
                   name: description
                   type: VARCHAR(500)
                   remarks: "Описание адреса, например: вход со стороны ул. Тухачевского"
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: created_at
+                  type: TIMESTAMP WITH TIME ZONE
+              - column:
+                  constraints:
+                    nullable: false
+                  name: updated_at
+                  type: TIMESTAMP WITH TIME ZONE
       rollback:
         - dropTable:
             tableName: address

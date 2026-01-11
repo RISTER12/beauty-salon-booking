@@ -21,6 +21,11 @@ databaseChangeLog:
                   name: id
                   type: BIGINT
               - column:
+                  constraints:
+                    nullable: false
+                  name: status_name
+                  type: VARCHAR(255)
+              - column:
                   name: created_by
                   type: VARCHAR(255)
               - column:
@@ -36,11 +41,6 @@ databaseChangeLog:
                     nullable: false
                   name: updated_at
                   type: TIMESTAMP WITH TIME ZONE
-              - column:
-                  constraints:
-                    nullable: false
-                  name: status_name
-                  type: VARCHAR(255)
       rollback:
         - dropTable:
             tableName: notification_status

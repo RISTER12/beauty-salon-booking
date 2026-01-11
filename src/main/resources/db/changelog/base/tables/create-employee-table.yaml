@@ -20,22 +20,6 @@ databaseChangeLog:
                   name: id
                   type: BIGINT
               - column:
-                  name: created_by
-                  type: VARCHAR(255)
-              - column:
-                  name: updated_by
-                  type: VARCHAR(255)
-              - column:
-                  constraints:
-                    nullable: false
-                  name: created_at
-                  type: TIMESTAMP WITH TIME ZONE
-              - column:
-                  constraints:
-                    nullable: false
-                  name: updated_at
-                  type: TIMESTAMP WITH TIME ZONE
-              - column:
                   name: salon_id
                   type: BIGINT
               - column:
@@ -98,6 +82,22 @@ databaseChangeLog:
                     nullable: false
                   name: is_visible_on_website
                   type: BOOLEAN
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: created_at
+                  type: TIMESTAMP WITH TIME ZONE
+              - column:
+                  constraints:
+                    nullable: false
+                  name: updated_at
+                  type: TIMESTAMP WITH TIME ZONE
       rollback:
         - dropTable:
             tableName: employee

@@ -21,22 +21,6 @@ databaseChangeLog:
                   name: id
                   type: BIGINT
               - column:
-                  name: created_by
-                  type: VARCHAR(255)
-              - column:
-                  name: updated_by
-                  type: VARCHAR(255)
-              - column:
-                  constraints:
-                    nullable: false
-                  name: created_at
-                  type: TIMESTAMP WITH TIME ZONE
-              - column:
-                  constraints:
-                    nullable: false
-                  name: updated_at
-                  type: TIMESTAMP WITH TIME ZONE
-              - column:
                   constraints:
                     nullable: false
                   name: client_id
@@ -56,6 +40,22 @@ databaseChangeLog:
                     nullable: false
                   name: metadata
                   type: jsonb
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: created_at
+                  type: TIMESTAMP WITH TIME ZONE
+              - column:
+                  constraints:
+                    nullable: false
+                  name: updated_at
+                  type: TIMESTAMP WITH TIME ZONE
       rollback:
         - dropTable:
             tableName: notification
