@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: chk-social-media-only-one-owner
+      author: Il'ia Kuz'min
+      changes:
+        - sql:
+            sql: >
+              ALTER TABLE social_media
+                ADD CONSTRAINT chk_social_media_only_one_owner
+                CHECK (
+                  (CASE WHEN salon_id IS NOT NULL THEN 1 ELSE 0 END +
+                   CASE WHEN employee_id IS NOT NULL THEN 1 ELSE 0 END +
+                   CASE WHEN client_id IS NOT NULL THEN 1 ELSE 0 END +
+                   CASE WHEN company_id IS NOT NULL THEN 1 ELSE 0 END) = 1
+                )
+      rollback:
+        - sql:
+            sql: ALTER TABLE social_media DROP CONSTRAINT chk_social_media_only_one_owner
