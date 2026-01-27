@@ -7,8 +7,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/booking")
 public class OnlineBookingController {
-    @GetMapping
+    @GetMapping()
     public String booking() {
-        return "online-booking";
+        return "online-booking-menu";
+    }
+    @GetMapping("select-master")
+    public String selectMaster() {
+        return "online-booking-select-master";
     }
 }
