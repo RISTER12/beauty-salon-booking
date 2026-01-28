@@ -7,47 +7,49 @@
     <link rel="stylesheet" href="../css/online-booking-select-master.css">
 </head>
 <body>
-<div class="wrapper">
-    <div class="center">
-        <header>
-            <a href="/booking" class="width-100">
-                <div class="left-arrow">←</div>
-                <div class="width-100">
-                    <div id="mainInfo">SEKTA X TEXH V</div>
-                    <div id="address">улица Покровка, 44</div>
+<form action="/booking" method="get">
+    <div class="wrapper">
+        <div class="center">
+            <header>
+                <a href="/booking" class="width-100">
+                    <div class="left-arrow">←</div>
+                    <div class="width-100">
+                        <div id="mainInfo">SEKTA X TEXH V</div>
+                        <div id="address">улица Покровка, 44</div>
+                    </div>
+                </a>
+            </header>
+            <main>
+                <h1>Выбрать специалиста</h1>
+                <div class="string">
+                    <label>
+                        <img src="../images/small-image.jpg">
+                        <div class="center-part" id="someone">
+                            <div class="name">Любой специалист</div>
+                        </div>
+                        <input type="radio" name="employee" checked="checked">
+                    </label>
                 </div>
-            </a>
-        </header>
-        <main>
-            <h1>Выбрать специалиста</h1>
-            <div class="string">
-                <label>
-                    <img src="../images/small-image.jpg">
-                    <div class="center-part" id="someone">
-                        <div class="name">Любой специалист</div>
-                    </div>
-                    <input type="radio" name="employee" checked="checked">
-                </label>
-            </div>
 
-            <div class="string">
-                <label>
-                    <img src="../images/small-image.jpg">
-                    <div class="center-part">
-                        <div class="name">Илья Кузьмин</div>
-                        <div class="professional">Мастер</div>
-                        <div class="review">30 отзывов</div>
-                    </div>
-                    <input type="radio" name="employee">
-                </label>
-            </div>
-        </main>
-        <footer>
-            <div id="go">
-                <button>Выбрать услугу</button>
-            </div>
-        </footer>
+                <div class="string">
+                    <label>
+                        <img src="../images/small-image.jpg">
+                        <div class="center-part">
+                            <div class="name">Илья Кузьмин</div>
+                            <div class="professional">Мастер</div>
+                            <div class="review">30 отзывов</div>
+                        </div>
+                        <input type="radio" name="employee">
+                    </label>
+                </div>
+            </main>
+            <footer>
+                <div id="go">
+                    <button type="submit">Выбрать услугу</button>
+                </div>
+            </footer>
+        </div>
     </div>
-</div>
+</form>
 </body>
 </html>

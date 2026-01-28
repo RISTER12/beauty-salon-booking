@@ -15,4 +15,8 @@ public class OnlineBookingController {
     public String selectMaster() {
         return "online-booking-select-master";
     }
+    @GetMapping("select-service")
+    public String selectService() {
+        return "online-booking-service-selection";
+    }
 }
