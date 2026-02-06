@@ -4,29 +4,60 @@
     <meta charset="UTF-8">
     <title>Выбор услуг</title>
     <link rel="stylesheet" href="../css/reset.css">
-    <link rel="stylesheet" href="../css/online-booking-service-selection.css">
+    <link rel="stylesheet" href="../css/online-booking-menu-pages.css">
 </head>
 <body>
 <div class="wrapper">
-    <div class="center">
-        <header>
-
-        </header>
-        <main>
-            <form method="post">
-                <div class="string">
-                    <label>
-                        <div class="center-part">
-                            <div class="name">Илья Кузьмин</div>
-                            <div class="professional">Мастер</div>
-                            <div class="review">30 отзывов</div>
-                        </div>
-                        <input type="radio" name="employee">
-                    </label>
+    <form action="/booking" method="get">
+        <div class="center">
+            <header>
+                <a href="/booking" class="width-100">
+                    <div class="left-arrow">←</div>
+                    <img src="../images/small-image.jpg" alt="">
+                    <div class="width-100">
+                        <div id="mainInfo">SEKTA X TEXH V</div>
+                        <div id="address">улица Покровка, 44</div>
+                    </div>
+                </a>
+            </header>
+            <main>
+                <h1>Выбрать услуги</h1>
+                <form method="post">
+                    <h2>Женская стрижка</h2>
+                    <div class="string">
+                        <label>
+                            <div class="center-part">
+                                <div class="name">
+                                    <span>Женская стрижка</span>  <!--<div th:each="ingredient : ${wrap}">-->
+                                    <span>[Мастер]</span>
+                                </div>
+<!--                                <label>-->
+                                    <!--<input type="checkbox" th:field="*{ingredients}" th:value="${ingredient.id}"/>-->
+                                    <!--<span th:text="${ingredient.name}">INGREDIENT</span><br/>-->
+                                    <!--</label>-->
+                                <div class="professional">
+                                    <span>1 ч 30 мин</span>
+                                    <span>+</span>
+                                    <span>укладка по форме стрижки </span>
+                                </div>
+                                <div class="review">
+                                    <span>3500</span>
+                                    <span>руб</span>
+                                </div>
+                            </div>
+                            <input type="checkbox" name="employee">
+                        </label>
+                    </div>
+                </form>
+            </main>
+            <footer>
+                <div id="go">
+                    <button type="submit">Выбрать услугу</button>
                 </div>
-            </form>
-        </main>
-    </div>
+            </footer>
+        </div>
+    </form>
+
 
     <!--        <form th:method="post" th:object="${taco}">-->
     <!--            <div>-->
