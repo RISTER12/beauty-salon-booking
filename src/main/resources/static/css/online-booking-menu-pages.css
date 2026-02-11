@@ -6,12 +6,18 @@
     header {
         height: 80px;
         max-width: 600px;
+
     }
 }
 
 body {
     background-color: rgb(20, 20, 20);
     box-sizing: border-box;
+}
+
+main {
+    flex: 1;
+    color: white;
 }
 
 .wrapper {
@@ -37,6 +43,7 @@ header {
     justify-content: center;
     padding: 10px;
     background-color: rgb(38, 38, 38);
+    user-select: none;
 }
 
 header img {
@@ -44,13 +51,14 @@ header img {
     height: 50px;
     padding: 0 10px;
 }
-header a .left-arrow {
+.arrow {
     display: flex;
     flex-direction: column;
     justify-content: center;
     color: white;
     font: 20px Arial;
     margin-right: 10px;
+    text-decoration: none;
 }
 header a {
     box-sizing: border-box;
@@ -159,4 +167,91 @@ button {
 
 button:hover {
     cursor: pointer;
+}
+
+#calendar {
+    padding: 20px;
+}
+
+#calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    user-select: none;
+}
+
+#month {
+    font-size: 20px;
+
+}
+
+#arrows {
+    display: flex;
+    gap: 10px;
+}
+
+.nav-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 5px 10px;
+}
+
+.nav-btn:hover {
+    background-color: grey;
+    border-radius: 4px;
+}
+
+.calendar-day {
+    text-align: center;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    user-select: none;
+
+}
+
+.calendar-day:hover {
+    background-color: grey;
+}
+
+.calendar-day.selected {
+    background-color: black;
+    color: white;
+}
+
+.calendar-day.today {
+    background-color: black;
+    text-decoration: underline;
+    text-decoration-color: white;
+    color: white;
+}
+
+
+.calendar-day.today-black-underline {
+    text-decoration: underline;
+    text-decoration-color: black;
+    background-color: transparent;
+    color: inherit;
+}
+
+.calendar-day.empty {
+    visibility: hidden;
+}
+
+#calendar-grid-header {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 10px;
+    user-select: none;
+}
+
+#calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
 }

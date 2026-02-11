@@ -52,6 +52,7 @@ header {
     padding: 10px;
     background-color: rgb(38, 38, 38);
     text-align: left;
+    user-select: none;
 }
 
 #aboutSalon #mainInfo {

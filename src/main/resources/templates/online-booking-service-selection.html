@@ -8,11 +8,11 @@
 </head>
 <body>
 <div class="wrapper">
-    <form action="/booking" method="get">
-        <div class="center">
+    <div class="center">
+        <form action="/booking" method="get">
             <header>
                 <a href="/booking" class="width-100">
-                    <div class="left-arrow">←</div>
+                    <div class="arrow">←</div>
                     <img src="../images/small-image.jpg" alt="">
                     <div class="width-100">
                         <div id="mainInfo">SEKTA X TEXH V</div>
@@ -31,10 +31,10 @@
                                     <span>Женская стрижка</span>  <!--<div th:each="ingredient : ${wrap}">-->
                                     <span>[Мастер]</span>
                                 </div>
-<!--                                <label>-->
-                                    <!--<input type="checkbox" th:field="*{ingredients}" th:value="${ingredient.id}"/>-->
-                                    <!--<span th:text="${ingredient.name}">INGREDIENT</span><br/>-->
-                                    <!--</label>-->
+                                <!--                                <label>-->
+                                <!--<input type="checkbox" th:field="*{ingredients}" th:value="${ingredient.id}"/>-->
+                                <!--<span th:text="${ingredient.name}">INGREDIENT</span><br/>-->
+                                <!--</label>-->
                                 <div class="professional">
                                     <span>1 ч 30 мин</span>
                                     <span>+</span>
@@ -48,15 +48,17 @@
                             <input type="checkbox" name="employee">
                         </label>
                     </div>
+
+                    <footer>
+                        <div id="go">
+                            <button type="submit">Выбрать услугу</button>
+                        </div>
+                    </footer>
                 </form>
             </main>
-            <footer>
-                <div id="go">
-                    <button type="submit">Выбрать услугу</button>
-                </div>
-            </footer>
-        </div>
-    </form>
+
+        </form>
+    </div>
 
 
     <!--        <form th:method="post" th:object="${taco}">-->

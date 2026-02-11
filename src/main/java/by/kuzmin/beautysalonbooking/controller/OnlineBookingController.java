@@ -19,4 +19,8 @@ public class OnlineBookingController {
     public String selectService() {
         return "online-booking-service-selection";
     }
+    @GetMapping("select-date-time")
+    public String selectDateTime() {
+        return "online-booking-select-date-time";
+    }
 }
