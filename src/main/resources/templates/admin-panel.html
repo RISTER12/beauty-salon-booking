@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Панель админа</title>
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/admin-panel.css">
+</head>
+<body>
+<div class="wrapper center">
+    <header></header>
+    <div id="container">
+        <aside>
+            <a href="/admin-panel/employees"
+               th:classappend="${section == 'employees'} ? 'active' : ''">
+                Сотрудники</a>
+            <a href="/admin-panel/salons"
+               th:classappend="${section == 'salons'} ? 'active' : ''">
+                Салоны</a>
+            <a href="/admin-panel/services"
+               th:classappend="${section == 'services'} ? 'active' : ''">
+                Услуги</a>
+        </aside>
+        <main>
+            <div th:if="${section == 'employees'}">
+                Сотрудники
+            </div>
+            <div th:if="${section == 'salons'}">
+                Салоны
+            </div>
+            <div th:if="${section == 'services'}">
+                Услуги
+            </div>
+            <div th:if="${section == null}">
+                <h1>Добро пожаловать в админ-панель</h1>
+                <p>Выберите раздел слева</p>
+            </div>
+        </main>
+    </div>
+    <footer></footer>
+</div>
+</body>
+</html>
