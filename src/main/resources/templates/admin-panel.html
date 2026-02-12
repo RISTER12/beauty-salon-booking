@@ -24,7 +24,18 @@
         </aside>
         <main>
             <div th:if="${section == 'employees'}">
-                Сотрудники
+
+                <form th:action="@{/admin-panel/employees}" th:object="${employeeDto}" th:method="post">
+                   <input th:type="text" placeholder="Имя" th:field="*{firstName}">
+                    <input th:type="text" placeholder="Фамилия" th:field="*{lastName}">
+                    <input th:type="text" placeholder="Отчество" th:field="*{middleName}">
+                    <button type="submit">Создать пользователя</button>
+                </form>
+
+                <form th:action="@{/admin-panel/employees-statuses}" th:object="${employeeStatusDto}" th:method="post">
+                    <input th:type="text" placeholder="Имя" th:field="*{statusName}">
+                    <button type="submit">Сохранить статус</button>
+                </form>
             </div>
             <div th:if="${section == 'salons'}">
                 Салоны

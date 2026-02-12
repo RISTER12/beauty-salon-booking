@@ -20,7 +20,7 @@ import java.math.BigDecimal;
 @EqualsAndHashCode(callSuper = false, exclude = {
         "employee", "service"
 })
-public class EmployeeService extends BaseEntity {
+public class EmployeeServiceProvision extends BaseEntity {
     @EmbeddedId
     private EmployeeServiceId id;
 

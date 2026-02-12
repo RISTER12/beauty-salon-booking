@@ -1,13 +1,11 @@
 package by.kuzmin.beautysalonbooking.entity;
 
+
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
-
 import java.math.BigDecimal;
-import java.time.OffsetDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -54,7 +52,7 @@ public class Service extends BaseEntity {
     private Salon salon;
 
     @OneToMany(mappedBy = "service")
-    private List<EmployeeService> employeeServiceList;
+    private List<EmployeeServiceProvision> employeeServiceList;
     @ManyToMany(mappedBy = "serviceList")
     private List<Promotion> promotionList;
 }

@@ -44,7 +44,9 @@ aside a:focus {
 aside a.active {
     background-color: black;
 }
-
+input, button {
+    color: black;
+}
 main {
     padding: 0 20px;
 }

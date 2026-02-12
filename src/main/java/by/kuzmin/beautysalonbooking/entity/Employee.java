@@ -15,16 +15,8 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = {
-        "clientList", "employeeServiceList", "revenueReportList",
-        "employeeList", "socialMediaList", "timeslotList",
-        "portfolioPhotosUrlList", "portfolioVideoUrlList"
-})
-@EqualsAndHashCode(callSuper = false, exclude = {
-        "clientList", "employeeServiceList", "revenueReportList",
-        "employeeList", "socialMediaList", "timeslotList",
-        "portfolioPhotosUrlList", "portfolioVideoUrlList"
-})
+@ToString(exclude = {"clientList", "employeeServiceList", "revenueReportList", "socialMediaList", "timeslotList", "portfolioPhotosUrlList", "portfolioVideoUrlList"})
+@EqualsAndHashCode(callSuper = false, exclude = {"clientList", "employeeServiceList", "revenueReportList", "socialMediaList", "timeslotList", "portfolioPhotosUrlList", "portfolioVideoUrlList"})
 public class Employee extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -69,7 +61,7 @@ public class Employee extends BaseEntity {
     private boolean isVisibleOnWebsite = false;
 
     @OneToMany(mappedBy = "employee")
-    private List<EmployeeService> employeeServiceList;
+    private List<EmployeeServiceProvision> employeeServiceList;
 
     @OneToMany(mappedBy = "employee")
     private List<RevenueReport> revenueReportList;
