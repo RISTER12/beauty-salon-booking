@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head xmlns:th="http://www.thymeleaf.org">
     <meta charset="UTF-8">
     <title>Выбор специалиста</title>
     <link rel="stylesheet" href="../css/reset.css">
@@ -31,12 +31,11 @@
                         <input type="radio" name="employee" checked="checked">
                     </label>
                 </div>
-
-                <div class="string">
+                <div class="string" th:each="emp : ${employees}">
                     <label>
                         <img src="../images/small-image.jpg">
                         <div class="center-part">
-                            <div class="name">Илья Кузьмин</div>
+                            <div class="name" th:text="${emp.firstName} + ' ' + ${emp.lastName}">Илья Кузьмин</div>
                             <div class="professional">Мастер</div>
                             <div class="review">30 отзывов</div>
                         </div>

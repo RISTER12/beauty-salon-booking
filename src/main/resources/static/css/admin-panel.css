@@ -23,8 +23,11 @@ aside {
     display: flex;
     flex-direction: column;
 }
-aside a {
+
+.width-100 {
     width: 100%;
+}
+.menu a {
     margin-bottom: 5px;
     padding: 20px;
     background-color: #292b33;
@@ -32,16 +35,16 @@ aside a {
 
 }
 
-aside a:hover {
+.menu a:hover {
     color: white;
     background-color: lightslategray;
 }
 
-aside a:focus {
+.menu a:focus {
 
 }
 
-aside a.active {
+.menu a.active {
     background-color: black;
 }
 input, button {
@@ -49,4 +52,39 @@ input, button {
 }
 main {
     padding: 0 20px;
+}
+
+.menu {
+    padding: 20px 0;
+}
+
+form {
+    display: grid;
+    grid-template-columns: 1fr;
+    min-width: 400px;
+    justify-self: center;
+}
+
+form > * {
+    display: flex;
+    flex-direction: column;
+}
+form label input, form button {
+    padding: 5px;
+}
+
+form button {
+    margin-top: 5px;
+}
+form label span {
+     padding: 5px 0;
+ }
+
+
+th, td, table {
+    border: 1px solid black;
+}
+
+td {
+    padding: 5px;
 }

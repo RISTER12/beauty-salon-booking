@@ -13,6 +13,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CreateEmployeeRequestDto {
 //    private Salon salon;
+    private Long id;
     private String firstName;
     private String lastName;
     private String middleName;
