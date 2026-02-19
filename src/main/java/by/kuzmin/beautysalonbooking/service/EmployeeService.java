@@ -24,7 +24,7 @@ public class EmployeeService {
     public CreateEmployeeResponseDto createEmployee(CreateEmployeeRequestDto createEmployeeRequestDto) {
         Employee employee = employeeMapper.toEntity(createEmployeeRequestDto);
         employee.setEmployeeStatus(
-                employeeStatusRepository.findById(1L).orElseThrow(() -> new RuntimeException("Employee not found"))
+                employeeStatusRepository.findById(3L).orElseThrow(() -> new RuntimeException("Employee status not found"))
         );
         return employeeMapper.toDto(
                 employeeRepository.save(employee)
