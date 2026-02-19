@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.OffsetDateTime;
 
 @Entity
@@ -33,10 +34,13 @@ public class Timeslot extends BaseEntity {
     private LocalDate slotDate;
 
     @Column(name = "start_time", nullable = false)
-    private OffsetDateTime startTime;
+    private LocalTime startTime;
 
     @Column(name = "end_time", nullable = false)
-    private OffsetDateTime endTime;
+    private LocalTime endTime;
+
+    @Column(name = "duration_minutes")
+    private Long durationMinutes;
 
     @ManyToOne
     @JoinColumn(name = "status_id", nullable = false)

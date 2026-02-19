@@ -39,12 +39,18 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                   name: start_time
-                  type: timestamp
+                  type: time
               - column:
                   constraints:
                     nullable: false
                   name: end_time
-                  type: timestamp
+                  type: time
+              - column:
+                  constraints:
+                    nullable: false
+                  name: duration_minutes
+                  type: bigint
+                  defaultValue: '30'
               - column:
                   constraints:
                     nullable: false

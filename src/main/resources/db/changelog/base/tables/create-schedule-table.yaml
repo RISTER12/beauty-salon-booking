@@ -23,13 +23,28 @@ databaseChangeLog:
               - column:
                   constraints:
                     nullable: false
+                  name: start_date
+                  type: date
+              - column:
+                  constraints:
+                    nullable: false
+                  name: working_days
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: weekend
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
                   name: start_time
-                  type: timestamp
+                  type: time
               - column:
                   constraints:
                     nullable: false
                   name: end_time
-                  type: timestamp
+                  type: time
               - column:
                   constraints:
                     nullable: false
