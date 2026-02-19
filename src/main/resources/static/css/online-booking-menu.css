@@ -11,6 +11,10 @@
 body {
     background-color: rgb(20, 20, 20);;
 }
+* {
+    scrollbar-gutter: stable;
+}
+
 
 .wrapper {
     display: flex;

@@ -3,11 +3,13 @@ document.addEventListener('DOMContentLoaded', function () {
     const calendarGrid = document.getElementById('calendar-grid');
     const prevBtn = document.querySelector('.prev-month');
     const nextBtn = document.querySelector('.next-month');
+    const confirmBtn = document.querySelector('#go button[type="submit"]');
+    const confirmWrapper = document.getElementById('go');
 
     let currentDate = new Date();
     let selectedDayElement = null;
+    let selectedSlotId = null;
 
-    // Сохраняем информацию о сегодняшней дате глобально
     const today = new Date();
     const todayDate = {
         day: today.getDate(),
@@ -15,11 +17,11 @@ document.addEventListener('DOMContentLoaded', function () {
         year: today.getFullYear()
     };
 
-    // Находим родительский элемент, где будут отображаться слоты
     const mainElement = document.querySelector('main');
-
-    // НОВОЕ: Объект для кэширования данных по датам
     const slotsCache = {};
+
+    // ========== ВЕСЬ ЭТОТ БЛОК УДАЛЕН (строки 26-55) ==========
+    // Теперь скролл работает всегда естественно
 
     // Функция для определения времени суток
     function getTimeCategory(time) {
@@ -29,31 +31,120 @@ document.addEventListener('DOMContentLoaded', function () {
         return 'evening';
     }
 
-    // Функция для форматирования времени
     function formatTime(time) {
-        return time.substring(0, 5); // "09:00" вместо "09:00:00"
+        return time.substring(0, 5);
     }
 
-    // НОВОЕ: Функция для проверки, есть ли слоты в кэше для даты
-    function hasSlotsForDate(year, month, day) {
-        const dateKey = `${year}-${month + 1}-${day}`;
-        return slotsCache[dateKey] && slotsCache[dateKey].length > 0;
+    function updateConfirmButtonVisibility() {
+        if (selectedSlotId) {
+            confirmWrapper.style.display = 'block';
+            setTimeout(() => {
+                confirmWrapper.style.opacity = '1';
+                confirmWrapper.style.transform = 'translateY(0)';
+            }, 50);
+        } else {
+            confirmWrapper.style.opacity = '0';
+            confirmWrapper.style.transform = 'translateY(20px)';
+            setTimeout(() => {
+                if (!selectedSlotId) {
+                    confirmWrapper.style.display = 'none';
+                }
+            }, 300);
+        }
     }
 
-    // Функция для отображения слотов
+    function resetSlotSelection() {
+        selectedSlotId = null;
+        updateConfirmButtonVisibility();
+    }
+
+    function createCollapsibleSection(title, slots, delay) {
+        const section = document.createElement('div');
+        section.className = 'collapsible-section';
+        section.style.opacity = '0';
+        section.style.transform = 'translateY(20px)';
+        section.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+        section.style.transitionDelay = `${delay}s`;
+
+        const header = document.createElement('div');
+        header.className = 'section-header';
+        header.innerHTML = `
+            <h2 class="time-category">${title}</h2>
+            <span class="toggle-icon">▼</span>
+        `;
+
+        const content = document.createElement('div');
+        content.className = 'section-content';
+        content.style.maxHeight = '0';
+        content.style.overflow = 'hidden';
+        content.style.transition = 'max-height 0.4s ease-out';
+
+        const slotsContainer = document.createElement('div');
+        slotsContainer.className = 'slots-container';
+
+        slots.forEach(slot => {
+            const slotSpan = document.createElement('span');
+            slotSpan.className = 'time-slot';
+            slotSpan.dataset.slotId = slot.id;
+            slotSpan.textContent = formatTime(slot.startTime);
+
+            slotSpan.addEventListener('click', function(e) {
+                e.stopPropagation();
+
+                document.querySelectorAll('.time-slot').forEach(s => {
+                    s.classList.remove('selected');
+                });
+
+                this.classList.add('selected');
+                selectedSlotId = this.dataset.slotId;
+                console.log('Выбран слот ID:', selectedSlotId);
+                updateConfirmButtonVisibility();
+            });
+
+            slotsContainer.appendChild(slotSpan);
+        });
+
+        content.appendChild(slotsContainer);
+
+        header.addEventListener('click', function() {
+            const isOpen = content.style.maxHeight !== '0px';
+            const icon = this.querySelector('.toggle-icon');
+
+            if (isOpen) {
+                content.style.maxHeight = '0';
+                icon.textContent = '▶';
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                content.style.maxHeight = content.scrollHeight + 'px';
+                icon.textContent = '▼';
+                icon.style.transform = 'rotate(0deg)';
+
+                setTimeout(() => {
+                    icon.style.opacity = '1';
+                }, 50);
+            }
+        });
+
+        section.appendChild(header);
+        section.appendChild(content);
+
+        setTimeout(() => {
+            section.style.opacity = '1';
+            section.style.transform = 'translateY(0)';
+        }, 50);
+
+        return section;
+    }
+
     function displayTimeslots(timeslots) {
         console.log('Получены слоты:', timeslots);
 
-        // Находим все существующие заголовки и слоты и удаляем их
-        const existingSlots = document.querySelectorAll('.time-slot, .time-category');
-        existingSlots.forEach(el => el.remove());
+        resetSlotSelection();
 
-        // Также удаляем старые заголовки h2, которые были в разметке
-        const oldHeaders = document.querySelectorAll('main h2');
-        oldHeaders.forEach(el => el.remove());
+        const existingSections = document.querySelectorAll('.collapsible-section');
+        existingSections.forEach(el => el.remove());
 
         if (!timeslots || timeslots.length === 0) {
-            // Если слотов нет вообще, показываем сообщение
             const noSlotsMessage = document.createElement('div');
             noSlotsMessage.className = 'no-slots-message';
             noSlotsMessage.textContent = 'На выбранную дату нет свободных слотов';
@@ -61,7 +152,6 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        // Группируем слоты по времени суток
         const slotsByCategory = {
             morning: [],
             day: [],
@@ -73,79 +163,54 @@ document.addEventListener('DOMContentLoaded', function () {
             slotsByCategory[category].push(slot);
         });
 
-        // Функция для создания заголовка категории
-        function createCategoryHeader(title) {
-            const header = document.createElement('h2');
-            header.className = 'time-category';
-            header.textContent = title;
-            return header;
-        }
+        let delay = 0.1;
 
-        // Функция для создания контейнера со слотами
-        function createSlotsContainer(slots) {
-            const container = document.createElement('div');
-            container.className = 'slots-container';
-
-            slots.forEach(slot => {
-                const slotSpan = document.createElement('span');
-                slotSpan.className = 'time-slot';
-                slotSpan.dataset.slotId = slot.id;
-                slotSpan.textContent = formatTime(slot.startTime);
-
-                slotSpan.addEventListener('click', function() {
-                    document.querySelectorAll('.time-slot').forEach(s => {
-                        s.classList.remove('selected');
-                    });
-                    this.classList.add('selected');
-                    console.log('Выбран слот ID:', this.dataset.slotId);
-                });
-
-                container.appendChild(slotSpan);
-            });
-
-            return container;
-        }
-
-        // Отображаем утренние слоты (только если они есть)
         if (slotsByCategory.morning.length > 0) {
-            mainElement.appendChild(createCategoryHeader('Утро'));
-            mainElement.appendChild(createSlotsContainer(slotsByCategory.morning));
+            const morningSection = createCollapsibleSection('Утро', slotsByCategory.morning, delay);
+            mainElement.appendChild(morningSection);
+            delay += 0.1;
         }
 
-        // Отображаем дневные слоты (только если они есть)
         if (slotsByCategory.day.length > 0) {
-            mainElement.appendChild(createCategoryHeader('День'));
-            mainElement.appendChild(createSlotsContainer(slotsByCategory.day));
+            const daySection = createCollapsibleSection('День', slotsByCategory.day, delay);
+            mainElement.appendChild(daySection);
+            delay += 0.1;
         }
 
-        // Отображаем вечерние слоты (только если они есть)
         if (slotsByCategory.evening.length > 0) {
-            mainElement.appendChild(createCategoryHeader('Вечер'));
-            mainElement.appendChild(createSlotsContainer(slotsByCategory.evening));
+            const eveningSection = createCollapsibleSection('Вечер', slotsByCategory.evening, delay);
+            mainElement.appendChild(eveningSection);
         }
+
+        setTimeout(() => {
+            document.querySelectorAll('.collapsible-section .section-header').forEach(header => {
+                const content = header.nextElementSibling;
+                const icon = header.querySelector('.toggle-icon');
+
+                if (content && content.classList.contains('section-content') && content.children[0]?.children.length > 0) {
+                    content.style.maxHeight = content.scrollHeight + 'px';
+                    if (icon) icon.textContent = '▼';
+                }
+            });
+        }, 500);
     }
 
-    // Функция для отправки данных на бэкенд
     async function sendDateToBackend(year, month, day) {
         const dateKey = `${year}-${month + 1}-${day}`;
 
-        // Формируем данные для отправки
         const dateData = {
             year: year,
-            month: month + 1, // +1 потому что в JS месяцы с 0
+            month: month + 1,
             day: day,
             dateString: `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`
         };
 
-        // ОЧИЩАЕМ main ПЕРЕД КАЖДЫМ ЗАПРОСОМ
-        const oldContent = document.querySelectorAll('.time-slot, .time-category, .no-slots-message, .error-message, main h2, .slots-container');
+        const oldContent = document.querySelectorAll('.collapsible-section, .no-slots-message, .error-message');
         oldContent.forEach(el => el.remove());
 
         try {
-            // Показываем индикатор загрузки (опционально)
             showLoadingIndicator();
 
-            // Отправляем POST запрос
             const response = await fetch('/booking/select-date-time', {
                 method: 'POST',
                 headers: {
@@ -154,7 +219,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 body: JSON.stringify(dateData)
             });
 
-            // Проверяем ответ
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
@@ -162,16 +226,12 @@ document.addEventListener('DOMContentLoaded', function () {
             const result = await response.json();
             console.log('Ответ от сервера:', result);
 
-            // НОВОЕ: Сохраняем в кэш
             slotsCache[dateKey] = result;
-
-            // Вызываем displayTimeslots с полученными данными
             displayTimeslots(result);
 
         } catch (error) {
             console.error('Ошибка при отправке даты:', error);
 
-            // Показываем сообщение об ошибке
             const errorMessage = document.createElement('div');
             errorMessage.className = 'error-message';
             errorMessage.textContent = 'Не удалось загрузить расписание';
@@ -181,70 +241,48 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Вспомогательные функции для UI (опционально)
     function showLoadingIndicator() {
-        // Показать индикатор загрузки
         const loader = document.getElementById('loading-indicator');
         if (loader) loader.style.display = 'block';
     }
 
     function hideLoadingIndicator() {
-        // Скрыть индикатор загрузки
         const loader = document.getElementById('loading-indicator');
         if (loader) loader.style.display = 'none';
     }
 
-    function showErrorMessage(message) {
-        // Показать сообщение об ошибке
-        const errorDiv = document.getElementById('error-message');
-        if (errorDiv) {
-            errorDiv.textContent = message;
-            errorDiv.style.display = 'block';
-            setTimeout(() => {
-                errorDiv.style.display = 'none';
-            }, 3000);
-        } else {
-            alert(message);
-        }
-    }
-
-    // Функция для отображения календаря
     function renderCalendar() {
         calendarGrid.innerHTML = '';
 
         const year = currentDate.getFullYear();
         const month = currentDate.getMonth();
 
-        // Устанавливаем название месяца
         const monthNames = [
             'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
             'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'
         ];
         monthElement.textContent = `${monthNames[month]} ${year}`;
 
-        // Получаем первый день месяца
         const firstDay = new Date(year, month, 1);
         const lastDay = new Date(year, month + 1, 0);
         const daysInMonth = lastDay.getDate();
 
-        // Определяем день недели первого дня
         let firstDayOfWeek = firstDay.getDay();
         if (firstDayOfWeek === 0) firstDayOfWeek = 7;
 
-        // Добавляем пустые ячейки
         for (let i = 1; i < firstDayOfWeek; i++) {
             const emptyCell = document.createElement('div');
             emptyCell.className = 'calendar-day empty';
             calendarGrid.appendChild(emptyCell);
         }
 
-        // Добавляем дни текущего месяца
+        let foundTodayInThisMonth = false;
+
         for (let day = 1; day <= daysInMonth; day++) {
             const dayElement = document.createElement('div');
             dayElement.className = 'calendar-day';
             dayElement.textContent = day;
 
-            // Проверяем, является ли этот день сегодняшним
             const isToday = (year === todayDate.year &&
                 month === todayDate.month &&
                 day === todayDate.day);
@@ -253,89 +291,92 @@ document.addEventListener('DOMContentLoaded', function () {
                 dayElement.classList.add('today');
             }
 
-            // НОВОЕ: Создаем дату для проверки (прошлое или будущее)
             const cellDate = new Date(year, month, day);
-            const isPastDate = cellDate < new Date(today.setHours(0, 0, 0, 0));
+            const startOfToday = new Date(todayDate.year, todayDate.month, todayDate.day);
+            const isPastDate = cellDate < startOfToday;
 
-            // НОВОЕ: Если дата в прошлом - делаем её некликабельной
             if (isPastDate) {
                 dayElement.classList.add('past');
                 dayElement.style.opacity = '0.5';
                 dayElement.style.pointerEvents = 'none';
                 dayElement.style.cursor = 'not-allowed';
             } else {
-                // Добавляем обработчик клика ТОЛЬКО для НЕ-прошлых дат
                 dayElement.addEventListener('click', function (e) {
                     e.preventDefault();
 
-                    // Получаем все элементы с классом today и today-black-underline
+                    resetSlotSelection();
+
                     const allTodayElements = document.querySelectorAll('.calendar-day.today, .calendar-day.today-black-underline');
 
-                    // Убираем выделение у всех дней
                     document.querySelectorAll('.calendar-day').forEach(d => {
                         d.classList.remove('selected');
                     });
 
-                    // Обрабатываем сегодняшний день
                     allTodayElements.forEach(el => {
                         const dayNumber = parseInt(el.textContent);
                         const elMonth = parseInt(el.dataset.month);
                         const elYear = parseInt(el.dataset.year);
 
-                        // Проверяем, является ли этот элемент сегодняшним днем
                         const isTodayElement = (elYear === todayDate.year &&
                             elMonth === todayDate.month &&
                             dayNumber === todayDate.day);
 
                         if (isTodayElement) {
                             if (this === el) {
-                                // Если кликнули на сегодняшний день
                                 el.classList.remove('today-black-underline');
-                                el.classList.add('today'); // Возвращаем черный фон
+                                el.classList.add('today');
                             } else {
-                                // Если кликнули на другой день
                                 el.classList.remove('today');
-                                el.classList.add('today-black-underline'); // Черный underline
+                                el.classList.add('today-black-underline');
                             }
                         }
                     });
 
-                    // Выделяем выбранный день
                     this.classList.add('selected');
                     selectedDayElement = this;
 
                     console.log(`Выбрана дата: ${day}.${month + 1}.${year}`);
-
-                    // ОТПРАВЛЯЕМ ДАННЫЕ НА БЭКЕНД
                     sendDateToBackend(year, month, day);
                 });
             }
 
-            // Сохраняем месяц и год
             dayElement.dataset.month = month;
             dayElement.dataset.year = year;
-
             calendarGrid.appendChild(dayElement);
+
+            if (isToday && !isPastDate && !foundTodayInThisMonth) {
+                foundTodayInThisMonth = true;
+
+                setTimeout(() => {
+                    document.querySelectorAll('.calendar-day').forEach(d => {
+                        d.classList.remove('selected');
+                    });
+
+                    dayElement.classList.add('selected');
+                    selectedDayElement = dayElement;
+
+                    console.log('Автоматически выбрана сегодняшняя дата:',
+                        todayDate.day, todayDate.month + 1, todayDate.year);
+                    sendDateToBackend(todayDate.year, todayDate.month, todayDate.day);
+                }, 100);
+            }
         }
 
-        // Восстанавливаем выделение, если было в этом месяце
-        if (selectedDayElement) {
-            const selectedDay = parseInt(selectedDayElement.textContent);
-            const selectedMonth = parseInt(selectedDayElement.dataset.month);
-            const selectedYear = parseInt(selectedDayElement.dataset.year);
+        if (!foundTodayInThisMonth && !selectedDayElement) {
+            const firstAvailableDay = Array.from(document.querySelectorAll('.calendar-day:not(.empty):not(.past)'))[0];
+            if (firstAvailableDay) {
+                setTimeout(() => {
+                    firstAvailableDay.classList.add('selected');
+                    selectedDayElement = firstAvailableDay;
 
-            if (selectedMonth === month && selectedYear === year) {
-                const dayElements = document.querySelectorAll('.calendar-day:not(.empty)');
-                dayElements.forEach(el => {
-                    if (parseInt(el.textContent) === selectedDay) {
-                        el.classList.add('selected');
-                    }
-                });
+                    const day = parseInt(firstAvailableDay.textContent);
+                    console.log(`Автоматически выбран первый доступный день: ${day}.${month + 1}.${year}`);
+                    sendDateToBackend(year, month, day);
+                }, 100);
             }
         }
     }
 
-    // Обработчики для кнопок навигации
     prevBtn.addEventListener('click', function () {
         currentDate.setMonth(currentDate.getMonth() - 1);
         renderCalendar();
@@ -346,10 +387,35 @@ document.addEventListener('DOMContentLoaded', function () {
         renderCalendar();
     });
 
-    // Инициализация календаря
     renderCalendar();
 
-    // Для клика по заголовку
+    if (confirmWrapper) {
+        confirmWrapper.style.display = 'none';
+        confirmWrapper.style.opacity = '0';
+        confirmWrapper.style.transform = 'translateY(20px)';
+        confirmWrapper.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+    }
+
+    if (confirmBtn) {
+        confirmBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (selectedSlotId) {
+                console.log('Подтверждение записи для слота:', selectedSlotId);
+                fetch('/booking/confirm', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ slotId: selectedSlotId })
+                }).then(response => {
+                    if (response.ok) {
+                        window.location.href = '/booking/success';
+                    }
+                });
+            }
+        });
+    }
+
     const headerLink = document.querySelector('.header-link');
     if (headerLink) {
         headerLink.addEventListener('click', function (e) {
