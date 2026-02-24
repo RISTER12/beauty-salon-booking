@@ -20,8 +20,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const mainElement = document.querySelector('main');
     const slotsCache = {};
 
-    // ========== ВЕСЬ ЭТОТ БЛОК УДАЛЕН (строки 26-55) ==========
-    // Теперь скролл работает всегда естественно
+    // Флаг для отслеживания загрузки данных месяца
+    let monthDataLoaded = false;
+
+    // Флаг для анимации
+    let isAnimating = false;
 
     // Функция для определения времени суток
     function getTimeCategory(time) {
@@ -251,6 +254,65 @@ document.addEventListener('DOMContentLoaded', function () {
         if (loader) loader.style.display = 'none';
     }
 
+    // ========== НОВАЯ ФУНКЦИЯ: загрузка данных за месяц ==========
+    async function loadMonthData(year, month) {
+        try {
+            console.log(`Загружаем данные за месяц: ${year}-${month + 1}`);
+
+            const response = await fetch('/booking/select-date-time/month-slots', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    year: year,
+                    month: month + 1
+                })
+            });
+
+            if (response.ok) {
+                const allMonthSlots = await response.json();
+                console.log('Получены данные за месяц:', allMonthSlots);
+
+                // Очищаем старые данные из кэша для этого месяца
+                const daysInMonth = new Date(year, month + 1, 0).getDate();
+                for (let d = 1; d <= daysInMonth; d++) {
+                    const dateKey = `${year}-${month + 1}-${d}`;
+                    delete slotsCache[dateKey];
+                }
+
+                // Если есть слоты, сохраняем их в кэш
+                if (allMonthSlots && allMonthSlots.length > 0) {
+                    allMonthSlots.forEach(slot => {
+                        if (slot.slotDate) {
+                            const dateParts = slot.slotDate.split('-');
+                            if (dateParts.length === 3) {
+                                const slotDay = parseInt(dateParts[2]);
+                                const dateKey = `${year}-${month + 1}-${slotDay}`;
+
+                                if (!slotsCache[dateKey]) {
+                                    slotsCache[dateKey] = [];
+                                }
+                                slotsCache[dateKey].push(slot);
+                            }
+                        }
+                    });
+                }
+
+                monthDataLoaded = true;
+                console.log('Кэш обновлен:', slotsCache);
+            } else {
+                console.error('Ошибка загрузки данных месяца:', response.status);
+            }
+        } catch (error) {
+            console.error('Ошибка при загрузке данных месяца:', error);
+        }
+
+        // После загрузки данных рендерим календарь
+        renderCalendar();
+    }
+
+    // ========== ИЗМЕНЕНА: функция renderCalendar с проверкой слотов ==========
     function renderCalendar() {
         calendarGrid.innerHTML = '';
 
@@ -295,14 +357,33 @@ document.addEventListener('DOMContentLoaded', function () {
             const startOfToday = new Date(todayDate.year, todayDate.month, todayDate.day);
             const isPastDate = cellDate < startOfToday;
 
-            if (isPastDate) {
-                dayElement.classList.add('past');
+            // ========== ПРОВЕРКА НАЛИЧИЯ СЛОТОВ ==========
+            const dateKey = `${year}-${month + 1}-${day}`;
+            const hasSlots = slotsCache[dateKey] && slotsCache[dateKey].length > 0;
+
+            // День кликабелен если:
+            // 1. Не в прошлом И
+            // 2. Есть слоты
+            const isClickable = !isPastDate && hasSlots;
+
+            if (!isClickable) {
+                dayElement.classList.add('unavailable');
                 dayElement.style.opacity = '0.5';
                 dayElement.style.pointerEvents = 'none';
                 dayElement.style.cursor = 'not-allowed';
+
+                if (isPastDate) {
+                    dayElement.title = 'Дата в прошлом';
+                } else {
+                    dayElement.title = 'Нет свободных слотов';
+                }
             } else {
                 dayElement.addEventListener('click', function (e) {
                     e.preventDefault();
+                    if (this.classList.contains('selected')) {
+                        console.log('Этот день уже выбран');
+                        return;
+                    }
 
                     resetSlotSelection();
 
@@ -344,7 +425,7 @@ document.addEventListener('DOMContentLoaded', function () {
             dayElement.dataset.year = year;
             calendarGrid.appendChild(dayElement);
 
-            if (isToday && !isPastDate && !foundTodayInThisMonth) {
+            if (isToday && !isPastDate && !foundTodayInThisMonth && hasSlots) {
                 foundTodayInThisMonth = true;
 
                 setTimeout(() => {
@@ -362,8 +443,10 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
 
+        // Если сегодняшний день не найден или недоступен, выбираем первый доступный
         if (!foundTodayInThisMonth && !selectedDayElement) {
-            const firstAvailableDay = Array.from(document.querySelectorAll('.calendar-day:not(.empty):not(.past)'))[0];
+            // Ищем первый доступный день (кликабельный)
+            const firstAvailableDay = Array.from(document.querySelectorAll('.calendar-day:not(.empty):not(.unavailable)'))[0];
             if (firstAvailableDay) {
                 setTimeout(() => {
                     firstAvailableDay.classList.add('selected');
@@ -377,17 +460,56 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    // ========== НОВАЯ ФУНКЦИЯ: анимированное переключение месяцев ==========
+    async function changeMonth(direction) {
+        if (isAnimating) return;
+        isAnimating = true;
+
+        // Анимация исчезновения
+        calendarGrid.style.opacity = '0';
+        calendarGrid.style.transform = 'scale(0.95)';
+        calendarGrid.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
+
+        // Меняем месяц
+        if (direction === 'prev') {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+        } else {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+        }
+
+        monthDataLoaded = false;
+
+        // Ждем окончания анимации
+        await new Promise(resolve => setTimeout(resolve, 200));
+
+        // Загружаем новые данные
+        await loadMonthData(currentDate.getFullYear(), currentDate.getMonth());
+
+        // Анимация появления
+        calendarGrid.style.opacity = '1';
+        calendarGrid.style.transform = 'scale(1)';
+
+        // Сбрасываем флаг
+        setTimeout(() => {
+            isAnimating = false;
+        }, 200);
+    }
+
+    // ========== ИЗМЕНЕНЫ: обработчики навигации ==========
     prevBtn.addEventListener('click', function () {
-        currentDate.setMonth(currentDate.getMonth() - 1);
-        renderCalendar();
+        changeMonth('prev');
     });
 
     nextBtn.addEventListener('click', function () {
-        currentDate.setMonth(currentDate.getMonth() + 1);
-        renderCalendar();
+        changeMonth('next');
     });
 
-    renderCalendar();
+    // ========== ИНИЦИАЛИЗАЦИЯ: загружаем данные и потом рендерим ==========
+    async function initialize() {
+        await loadMonthData(currentDate.getFullYear(), currentDate.getMonth());
+    }
+
+    initialize();
 
     if (confirmWrapper) {
         confirmWrapper.style.display = 'none';

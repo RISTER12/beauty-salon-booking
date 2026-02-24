@@ -39,6 +39,7 @@ public class SelectDateTimeController {
     public ResponseEntity<?> selectDateTimeByMonth(@RequestBody MonthRequest request) {
         List<TimeslotDto> timeslots = timeslotService.findAllByMonth(request.getYear(), request.getMonth(), 1L);
         timeslots.forEach(System.out::println);
+        System.out.println("selectDateTimeByMonth(request)");
         return ResponseEntity.ok(timeslots);
     }
 }
