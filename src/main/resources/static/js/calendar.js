@@ -10,6 +10,9 @@ document.addEventListener('DOMContentLoaded', function () {
     let selectedDayElement = null;
     let selectedSlotId = null;
 
+    // Хранилище выбранных дат для каждого месяца (ключ: "год-месяц")
+    const selectedDatesByMonth = {};
+
     const today = new Date();
     const todayDate = {
         day: today.getDate(),
@@ -61,6 +64,94 @@ document.addEventListener('DOMContentLoaded', function () {
         updateConfirmButtonVisibility();
     }
 
+    // ========== ФУНКЦИИ ДЛЯ РАБОТЫ С ВЫБРАННЫМИ ДАТАМИ ПО МЕСЯЦАМ ==========
+    function getMonthKey(year, month) {
+        return `${year}-${month + 1}`;
+    }
+
+    function saveSelectedDateForCurrentMonth() {
+        const key = getMonthKey(currentDate.getFullYear(), currentDate.getMonth());
+        if (selectedDayElement) {
+            const day = parseInt(selectedDayElement.textContent);
+            selectedDatesByMonth[key] = {
+                year: currentDate.getFullYear(),
+                month: currentDate.getMonth(),
+                day
+            };
+        }
+    }
+
+    function loadSelectedDateForCurrentMonth() {
+        const key = getMonthKey(currentDate.getFullYear(), currentDate.getMonth());
+        return selectedDatesByMonth[key] || null;
+    }
+
+    // ========== ФУНКЦИЯ: поиск ближайшей доступной даты (только для сообщения) ==========
+    function findNextAvailableDate() {
+        const year = currentDate.getFullYear();
+        const month = currentDate.getMonth();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+        // Сначала ищем в текущем месяце
+        for (let day = todayDate.day; day <= daysInMonth; day++) {
+            const dateKey = `${year}-${month + 1}-${day}`;
+            const hasAvailableSlots = hasAvailableSlotsForDate(dateKey, { year, month, day });
+            if (hasAvailableSlots) {
+                return { year, month, day };
+            }
+        }
+
+        // Если в текущем месяце нет, ищем в следующем
+        const nextMonth = month + 1;
+        const nextMonthYear = nextMonth > 11 ? year + 1 : year;
+        const nextMonthIndex = nextMonth > 11 ? 0 : nextMonth;
+        const nextMonthDays = new Date(nextMonthYear, nextMonthIndex + 1, 0).getDate();
+
+        for (let day = 1; day <= nextMonthDays; day++) {
+            const dateKey = `${nextMonthYear}-${nextMonthIndex + 1}-${day}`;
+            const hasAvailableSlots = hasAvailableSlotsForDate(dateKey, {
+                year: nextMonthYear,
+                month: nextMonthIndex,
+                day
+            });
+            if (hasAvailableSlots) {
+                return { year: nextMonthYear, month: nextMonthIndex, day };
+            }
+        }
+
+        return null;
+    }
+
+    // ========== ФУНКЦИЯ: проверка наличия актуальных слотов для даты ==========
+    function hasAvailableSlotsForDate(dateKey, date) {
+        if (!slotsCache[dateKey] || slotsCache[dateKey].length === 0) {
+            return false;
+        }
+
+        const now = new Date();
+        const currentHour = now.getHours();
+        const currentMinute = now.getMinutes();
+
+        const selectedDate = new Date(date.year, date.month, date.day);
+        const isToday = selectedDate.getTime() === new Date(todayDate.year, todayDate.month, todayDate.day).getTime();
+
+        // Если дата в будущем - достаточно наличия слотов
+        if (selectedDate > new Date(todayDate.year, todayDate.month, todayDate.day)) {
+            return true;
+        }
+
+        // Если дата сегодняшняя - проверяем каждый слот
+        if (isToday) {
+            return slotsCache[dateKey].some(slot => {
+                const [slotHour, slotMinute] = slot.startTime.split(':').map(Number);
+                return (slotHour > currentHour) ||
+                    (slotHour === currentHour && slotMinute > currentMinute);
+            });
+        }
+
+        return false;
+    }
+
     function createCollapsibleSection(title, slots, delay) {
         const section = document.createElement('div');
         section.className = 'collapsible-section';
@@ -85,11 +176,39 @@ document.addEventListener('DOMContentLoaded', function () {
         const slotsContainer = document.createElement('div');
         slotsContainer.className = 'slots-container';
 
-        slots.forEach(slot => {
+        // ========== ФИЛЬТРУЕМ СЛОТЫ ПО ТЕКУЩЕМУ ВРЕМЕНИ ==========
+        const now = new Date();
+        const currentHour = now.getHours();
+        const currentMinute = now.getMinutes();
+
+        const filteredSlots = slots.filter(slot => {
+            // Если дата в будущем - показываем все слоты
+            const selectedDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), parseInt(slot.slotDate.split('-')[2]));
+
+            if (selectedDate > new Date(todayDate.year, todayDate.month, todayDate.day)) {
+                return true; // Будущая дата - показываем все слоты
+            }
+
+            // Если дата сегодняшняя - фильтруем по времени
+            if (selectedDate.getTime() === new Date(todayDate.year, todayDate.month, todayDate.day).getTime()) {
+                const [slotHour, slotMinute] = slot.startTime.split(':').map(Number);
+                return (slotHour > currentHour) ||
+                    (slotHour === currentHour && slotMinute > currentMinute);
+            }
+
+            return true; // Прошлые даты уже отфильтрованы в календаре
+        });
+
+        filteredSlots.forEach(slot => {
             const slotSpan = document.createElement('span');
             slotSpan.className = 'time-slot';
             slotSpan.dataset.slotId = slot.id;
             slotSpan.textContent = formatTime(slot.startTime);
+
+            // ========== ВОССТАНАВЛИВАЕМ ВЫБРАННЫЙ СЛОТ ==========
+            if (selectedSlotId && selectedSlotId === slot.id.toString()) {
+                slotSpan.classList.add('selected');
+            }
 
             slotSpan.addEventListener('click', function(e) {
                 e.stopPropagation();
@@ -101,6 +220,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.classList.add('selected');
                 selectedSlotId = this.dataset.slotId;
                 console.log('Выбран слот ID:', selectedSlotId);
+
                 updateConfirmButtonVisibility();
             });
 
@@ -118,9 +238,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 icon.textContent = '▶';
                 icon.style.transform = 'rotate(0deg)';
             } else {
-                content.style.maxHeight = content.scrollHeight + 'px';
-                icon.textContent = '▼';
-                icon.style.transform = 'rotate(0deg)';
+                // Если есть слоты после фильтрации, открываем секцию
+                if (filteredSlots.length > 0) {
+                    content.style.maxHeight = content.scrollHeight + 'px';
+                    icon.textContent = '▼';
+                    icon.style.transform = 'rotate(0deg)';
+                }
 
                 setTimeout(() => {
                     icon.style.opacity = '1';
@@ -136,7 +259,8 @@ document.addEventListener('DOMContentLoaded', function () {
             section.style.transform = 'translateY(0)';
         }, 50);
 
-        return section;
+        // Возвращаем секцию только если есть слоты после фильтрации
+        return filteredSlots.length > 0 ? section : null;
     }
 
     function displayTimeslots(timeslots) {
@@ -148,13 +272,33 @@ document.addEventListener('DOMContentLoaded', function () {
         existingSections.forEach(el => el.remove());
 
         if (!timeslots || timeslots.length === 0) {
-            const noSlotsMessage = document.createElement('div');
-            noSlotsMessage.className = 'no-slots-message';
-            noSlotsMessage.textContent = 'На выбранную дату нет свободных слотов';
-            mainElement.appendChild(noSlotsMessage);
+            const nextDate = findNextAvailableDate();
+
+            const messageContainer = document.createElement('div');
+            messageContainer.className = 'no-slots-container';
+
+            const messageElement = document.createElement('div');
+            messageElement.className = 'no-slots-message';
+            messageElement.textContent = 'На выбранную дату нет свободных слотов';
+            messageContainer.appendChild(messageElement);
+
+            if (nextDate) {
+                const monthNames = [
+                    'января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
+                    'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'
+                ];
+
+                const nextDateInfo = document.createElement('div');
+                nextDateInfo.className = 'next-date-info';
+                nextDateInfo.textContent = `Ближайшая доступная запись: ${nextDate.day} ${monthNames[nextDate.month]}`;
+                messageContainer.appendChild(nextDateInfo);
+            }
+
+            mainElement.appendChild(messageContainer);
             return;
         }
 
+        // Группируем слоты по времени суток
         const slotsByCategory = {
             morning: [],
             day: [],
@@ -167,22 +311,62 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         let delay = 0.1;
+        let hasAnySlots = false;
 
+        // Отображаем утренние слоты (только если есть после фильтрации)
         if (slotsByCategory.morning.length > 0) {
             const morningSection = createCollapsibleSection('Утро', slotsByCategory.morning, delay);
-            mainElement.appendChild(morningSection);
-            delay += 0.1;
+            if (morningSection) {
+                mainElement.appendChild(morningSection);
+                delay += 0.1;
+                hasAnySlots = true;
+            }
         }
 
+        // Отображаем дневные слоты (только если есть после фильтрации)
         if (slotsByCategory.day.length > 0) {
             const daySection = createCollapsibleSection('День', slotsByCategory.day, delay);
-            mainElement.appendChild(daySection);
-            delay += 0.1;
+            if (daySection) {
+                mainElement.appendChild(daySection);
+                delay += 0.1;
+                hasAnySlots = true;
+            }
         }
 
+        // Отображаем вечерние слоты (только если есть после фильтрации)
         if (slotsByCategory.evening.length > 0) {
             const eveningSection = createCollapsibleSection('Вечер', slotsByCategory.evening, delay);
-            mainElement.appendChild(eveningSection);
+            if (eveningSection) {
+                mainElement.appendChild(eveningSection);
+                hasAnySlots = true;
+            }
+        }
+
+        // Если после фильтрации не осталось слотов
+        if (!hasAnySlots) {
+            const nextDate = findNextAvailableDate();
+
+            const messageContainer = document.createElement('div');
+            messageContainer.className = 'no-slots-container';
+
+            const messageElement = document.createElement('div');
+            messageElement.className = 'no-slots-message';
+            messageElement.textContent = 'На выбранную дату нет доступных слотов (все слоты уже прошли)';
+            messageContainer.appendChild(messageElement);
+
+            if (nextDate) {
+                const monthNames = [
+                    'января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
+                    'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'
+                ];
+
+                const nextDateInfo = document.createElement('div');
+                nextDateInfo.className = 'next-date-info';
+                nextDateInfo.textContent = `Ближайшая доступная запись: ${nextDate.day} ${monthNames[nextDate.month]}`;
+                messageContainer.appendChild(nextDateInfo);
+            }
+
+            mainElement.appendChild(messageContainer);
         }
 
         setTimeout(() => {
@@ -198,8 +382,16 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 500);
     }
 
+    // ========== ОТПРАВКА ДАТЫ С ИСПОЛЬЗОВАНИЕМ КЭША ==========
     async function sendDateToBackend(year, month, day) {
         const dateKey = `${year}-${month + 1}-${day}`;
+
+        // Если данные для этой даты уже есть в кэше, отображаем их без запроса
+        if (slotsCache[dateKey]) {
+            console.log('Данные для даты уже есть в кэше', dateKey);
+            displayTimeslots(slotsCache[dateKey]);
+            return;
+        }
 
         const dateData = {
             year: year,
@@ -208,7 +400,7 @@ document.addEventListener('DOMContentLoaded', function () {
             dateString: `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`
         };
 
-        const oldContent = document.querySelectorAll('.collapsible-section, .no-slots-message, .error-message');
+        const oldContent = document.querySelectorAll('.collapsible-section, .no-slots-message, .error-message, .no-slots-container');
         oldContent.forEach(el => el.remove());
 
         try {
@@ -254,8 +446,27 @@ document.addEventListener('DOMContentLoaded', function () {
         if (loader) loader.style.display = 'none';
     }
 
-    // ========== НОВАЯ ФУНКЦИЯ: загрузка данных за месяц ==========
+    // ========== ЗАГРУЗКА ДАННЫХ ЗА МЕСЯЦ С КЭШИРОВАНИЕМ ==========
     async function loadMonthData(year, month) {
+        // Проверяем, есть ли уже данные для этого месяца в кэше
+        const monthKey = getMonthKey(year, month);
+        let hasMonthData = false;
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        for (let d = 1; d <= daysInMonth; d++) {
+            const dateKey = `${year}-${month + 1}-${d}`;
+            if (slotsCache[dateKey]) {
+                hasMonthData = true;
+                break;
+            }
+        }
+
+        if (hasMonthData) {
+            console.log(`Данные за месяц ${monthKey} уже есть в кэше, пропускаем запрос`);
+            monthDataLoaded = true;
+            renderCalendar();
+            return;
+        }
+
         try {
             console.log(`Загружаем данные за месяц: ${year}-${month + 1}`);
 
@@ -275,7 +486,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.log('Получены данные за месяц:', allMonthSlots);
 
                 // Очищаем старые данные из кэша для этого месяца
-                const daysInMonth = new Date(year, month + 1, 0).getDate();
                 for (let d = 1; d <= daysInMonth; d++) {
                     const dateKey = `${year}-${month + 1}-${d}`;
                     delete slotsCache[dateKey];
@@ -308,11 +518,10 @@ document.addEventListener('DOMContentLoaded', function () {
             console.error('Ошибка при загрузке данных месяца:', error);
         }
 
-        // После загрузки данных рендерим календарь
         renderCalendar();
     }
 
-    // ========== ИЗМЕНЕНА: функция renderCalendar с проверкой слотов ==========
+    // ========== ОТРИСОВКА КАЛЕНДАРЯ ==========
     function renderCalendar() {
         calendarGrid.innerHTML = '';
 
@@ -338,7 +547,11 @@ document.addEventListener('DOMContentLoaded', function () {
             calendarGrid.appendChild(emptyCell);
         }
 
-        let foundTodayInThisMonth = false;
+        // Флаг, указывающий, был ли уже выбран день в этом месяце
+        let selectedInThisMonth = false;
+
+        // Загружаем сохранённый день для этого месяца
+        let savedDate = loadSelectedDateForCurrentMonth();
 
         for (let day = 1; day <= daysInMonth; day++) {
             const dayElement = document.createElement('div');
@@ -357,14 +570,14 @@ document.addEventListener('DOMContentLoaded', function () {
             const startOfToday = new Date(todayDate.year, todayDate.month, todayDate.day);
             const isPastDate = cellDate < startOfToday;
 
-            // ========== ПРОВЕРКА НАЛИЧИЯ СЛОТОВ ==========
+            // Проверка наличия актуальных слотов
             const dateKey = `${year}-${month + 1}-${day}`;
-            const hasSlots = slotsCache[dateKey] && slotsCache[dateKey].length > 0;
+            const hasAvailableSlots = hasAvailableSlotsForDate(dateKey, { year, month, day });
 
-            // День кликабелен если:
-            // 1. Не в прошлом И
-            // 2. Есть слоты
-            const isClickable = !isPastDate && hasSlots;
+            // День кликабелен, если не в прошлом и есть слоты
+            const isClickable = !isPastDate && hasAvailableSlots;
+
+            const isSavedDate = savedDate && savedDate.year === year && savedDate.month === month && savedDate.day === day;
 
             if (!isClickable) {
                 dayElement.classList.add('unavailable');
@@ -375,7 +588,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (isPastDate) {
                     dayElement.title = 'Дата в прошлом';
                 } else {
-                    dayElement.title = 'Нет свободных слотов';
+                    dayElement.title = 'Нет доступных слотов';
                 }
             } else {
                 dayElement.addEventListener('click', function (e) {
@@ -387,12 +600,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     resetSlotSelection();
 
-                    const allTodayElements = document.querySelectorAll('.calendar-day.today, .calendar-day.today-black-underline');
-
+                    // Убираем выделение у всех дней
                     document.querySelectorAll('.calendar-day').forEach(d => {
                         d.classList.remove('selected');
                     });
 
+                    // Обрабатываем сегодняшний день (подчёркивание)
+                    const allTodayElements = document.querySelectorAll('.calendar-day.today, .calendar-day.today-black-underline');
                     allTodayElements.forEach(el => {
                         const dayNumber = parseInt(el.textContent);
                         const elMonth = parseInt(el.dataset.month);
@@ -416,6 +630,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     this.classList.add('selected');
                     selectedDayElement = this;
 
+                    // Сохраняем выбранную дату для этого месяца
+                    saveSelectedDateForCurrentMonth();
+
                     console.log(`Выбрана дата: ${day}.${month + 1}.${year}`);
                     sendDateToBackend(year, month, day);
                 });
@@ -425,45 +642,55 @@ document.addEventListener('DOMContentLoaded', function () {
             dayElement.dataset.year = year;
             calendarGrid.appendChild(dayElement);
 
-            if (isToday && !isPastDate && !foundTodayInThisMonth && hasSlots) {
-                foundTodayInThisMonth = true;
-
+            // Если это сохранённый день и он доступен, выделяем его
+            if (isSavedDate && isClickable && !selectedInThisMonth) {
+                dayElement.classList.add('selected');
+                selectedDayElement = dayElement;
+                selectedInThisMonth = true;
+                // Загружаем слоты для этого дня (с небольшой задержкой, чтобы календарь успел отрисоваться)
                 setTimeout(() => {
-                    document.querySelectorAll('.calendar-day').forEach(d => {
-                        d.classList.remove('selected');
-                    });
-
-                    dayElement.classList.add('selected');
-                    selectedDayElement = dayElement;
-
-                    console.log('Автоматически выбрана сегодняшняя дата:',
-                        todayDate.day, todayDate.month + 1, todayDate.year);
-                    sendDateToBackend(todayDate.year, todayDate.month, todayDate.day);
-                }, 100);
-            }
-        }
-
-        // Если сегодняшний день не найден или недоступен, выбираем первый доступный
-        if (!foundTodayInThisMonth && !selectedDayElement) {
-            // Ищем первый доступный день (кликабельный)
-            const firstAvailableDay = Array.from(document.querySelectorAll('.calendar-day:not(.empty):not(.unavailable)'))[0];
-            if (firstAvailableDay) {
-                setTimeout(() => {
-                    firstAvailableDay.classList.add('selected');
-                    selectedDayElement = firstAvailableDay;
-
-                    const day = parseInt(firstAvailableDay.textContent);
-                    console.log(`Автоматически выбран первый доступный день: ${day}.${month + 1}.${year}`);
                     sendDateToBackend(year, month, day);
                 }, 100);
             }
         }
+
+        // Если сохранённый день не был выделен (т.е. он был, но недоступен), удаляем его из хранилища
+        if (!selectedInThisMonth && savedDate) {
+            delete selectedDatesByMonth[getMonthKey(currentDate.getFullYear(), currentDate.getMonth())];
+        }
+
+        // Если в этом месяце ещё не выбран день, выбираем сегодняшний
+        if (!selectedInThisMonth) {
+            const todayElement = Array.from(document.querySelectorAll('.calendar-day:not(.empty)')).find(el => {
+                const elDay = parseInt(el.textContent);
+                const elMonth = parseInt(el.dataset.month);
+                const elYear = parseInt(el.dataset.year);
+                return elYear === todayDate.year && elMonth === todayDate.month && elDay === todayDate.day;
+            });
+
+            if (todayElement) {
+                if (todayElement.classList.contains('unavailable')) {
+                    todayElement.classList.add('selected');
+                    selectedDayElement = todayElement;
+                    selectedInThisMonth = true;
+                    console.log('Визуально выбран сегодняшний день (без слотов)');
+                } else {
+                    todayElement.classList.add('selected');
+                    selectedDayElement = todayElement;
+                    selectedInThisMonth = true;
+                    sendDateToBackend(todayDate.year, todayDate.month, todayDate.day);
+                }
+            }
+        }
     }
 
-    // ========== НОВАЯ ФУНКЦИЯ: анимированное переключение месяцев ==========
+    // ========== АНИМИРОВАННОЕ ПЕРЕКЛЮЧЕНИЕ МЕСЯЦЕВ ==========
     async function changeMonth(direction) {
         if (isAnimating) return;
         isAnimating = true;
+
+        // Сохраняем выбранный день для текущего месяца перед уходом
+        saveSelectedDateForCurrentMonth();
 
         // Анимация исчезновения
         calendarGrid.style.opacity = '0';
@@ -482,7 +709,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // Ждем окончания анимации
         await new Promise(resolve => setTimeout(resolve, 200));
 
-        // Загружаем новые данные
+        // Загружаем данные для нового месяца (с кэшированием)
         await loadMonthData(currentDate.getFullYear(), currentDate.getMonth());
 
         // Анимация появления
@@ -495,7 +722,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 200);
     }
 
-    // ========== ИЗМЕНЕНЫ: обработчики навигации ==========
+    // ========== ОБРАБОТЧИКИ НАВИГАЦИИ ==========
     prevBtn.addEventListener('click', function () {
         changeMonth('prev');
     });
@@ -504,8 +731,9 @@ document.addEventListener('DOMContentLoaded', function () {
         changeMonth('next');
     });
 
-    // ========== ИНИЦИАЛИЗАЦИЯ: загружаем данные и потом рендерим ==========
+    // ========== ИНИЦИАЛИЗАЦИЯ ==========
     async function initialize() {
+        // Загружаем данные для текущего месяца
         await loadMonthData(currentDate.getFullYear(), currentDate.getMonth());
     }
 

@@ -159,14 +159,13 @@ footer {
     width: 100%;
     bottom: 20px;
 }
-
 #go {
     display: flex;
+    text-align: center;
     justify-content: center;
-    margin: 20px;
     width: 100%;
-
 }
+
 
 button {
     background-color: #292b33;
@@ -340,11 +339,43 @@ button:hover {
 }
 
 
-#go {
-    display: flex;
-    flex-direction: column;
+
+/* Стили для контейнера сообщения об отсутствии слотов */
+.no-slots-container {
     text-align: center;
+    padding: 30px;
+    color: #6c757d;
 }
+
+.next-date-info {
+    font-size: 16px;
+    margin: 15px 0;
+    color: #4CAF50;
+    font-weight: bold;
+}
+
+.next-date-button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 12px 24px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+}
+
+.next-date-button:hover {
+    background-color: #45a049;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.next-date-button:active {
+    transform: translateY(0);
+}
+
 
 
 
