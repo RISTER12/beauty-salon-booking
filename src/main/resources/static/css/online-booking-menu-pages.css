@@ -235,18 +235,9 @@ button:hover {
 }
 
 .calendar-day.today {
-    background-color: black;
     text-decoration: underline;
     text-decoration-color: white;
     color: white;
-}
-
-
-.calendar-day.today-black-underline {
-    text-decoration: underline;
-    text-decoration-color: black;
-    background-color: transparent;
-    color: inherit;
 }
 
 .calendar-day.empty {
