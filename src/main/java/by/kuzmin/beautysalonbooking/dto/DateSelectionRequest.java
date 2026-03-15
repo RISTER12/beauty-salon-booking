@@ -13,4 +13,5 @@ public class DateSelectionRequest {
     private int month;
     private int day;
     private String dateString;
+    private Long employeeId;
 }

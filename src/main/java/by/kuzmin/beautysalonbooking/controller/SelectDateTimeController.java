@@ -33,16 +33,37 @@ public class SelectDateTimeController {
                 request.getMonth(),
                 request.getDay()
         );
-        //todo понять откуда правильно брать freeStatusId(сейчас захардкоженый вариант 1L)
-        List<TimeslotDto> timeslots = timeslotService.findAllByDay(localDate, 1L);
-        timeslots.forEach(System.out::println);
+        List<TimeslotDto> timeslots;
+        if (request.getEmployeeId() != null) {
+            timeslots = timeslotService.findAllByDayAndEmployeeId(
+                    request.getEmployeeId(),
+                    localDate,
+                    1L
+            );
+        } else {
+            timeslots = timeslotService.findAllByDay(localDate, 1L);
+        }
         return ResponseEntity.ok(timeslots);
     }
 
     @PostMapping("/month-slots")
     @ResponseBody
     public ResponseEntity<?> selectDateTimeByMonth(@RequestBody MonthRequest request) {
-        List<TimeslotDto> timeslots = timeslotService.findAllByMonth(request.getYear(), request.getMonth(), 1L);
+        List<TimeslotDto> timeslots;
+        if (request.getEmployeeId() != null) {
+            timeslots = timeslotService.findAllByMonthAndEmployeeId(
+                    request.getEmployeeId(),
+                    request.getYear(),
+                    request.getMonth(),
+                    1L
+            );
+        } else {
+            timeslots = timeslotService.findAllByMonth(
+                    request.getYear(),
+                    request.getMonth(),
+                    1L
+            );
+        }
         return ResponseEntity.ok(timeslots);
     }
 }

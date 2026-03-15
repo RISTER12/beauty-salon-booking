@@ -35,7 +35,7 @@
         <form action="/booking" method="get">
 
             <header>
-                <a href="/booking" class="width-100">
+                <a th:href="@{/booking(employee=${employeeId})}" class="width-100">
                     <div class="arrow">←</div>
                     <img src="../images/small-image.jpg" alt="">
                     <div>
@@ -74,5 +74,10 @@
     </div>
 </div>
 <script src="../js/calendar.js"></script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    window.selectedEmployeeId = [[${employeeId}]];
+    /*]]>*/
+</script>
 </body>
 </html>

@@ -53,7 +53,13 @@
 
 
             <div class="string">
-                <a href="/booking/select-date-time">
+                <a th:if="${employee != null && employee != 0}" th:href="@{/booking/select-date-time(employeeId=${employee.id})}">
+                    <img src="../images/small-image.jpg">
+                    <span>Выбрать дату и время</span>
+                    <div class="end-line">></div>
+                </a>
+
+                <a th:unless="${employee != null && employee != 0}" th:href="@{/booking/select-date-time}">
                     <img src="../images/small-image.jpg">
                     <span>Выбрать дату и время</span>
                     <div class="end-line">></div>

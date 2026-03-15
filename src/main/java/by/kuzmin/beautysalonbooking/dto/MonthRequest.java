@@ -12,4 +12,5 @@ import lombok.Setter;
 public class MonthRequest {
     private int year;
     private int month;
+    private Long employeeId;
 }
