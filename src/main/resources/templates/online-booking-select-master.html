@@ -28,7 +28,7 @@
                         <div class="center-part" id="someone">
                             <div class="name">Любой специалист</div>
                         </div>
-                        <input type="radio" name="employee" checked="checked">
+                        <input type="radio" name="employee" checked="checked" value="0">
                     </label>
                 </div>
                 <div class="string" th:each="emp : ${employees}">
@@ -39,7 +39,7 @@
                             <div class="professional">Мастер</div>
                             <div class="review">30 отзывов</div>
                         </div>
-                        <input type="radio" name="employee">
+                        <input type="radio" name="employee" th:value="${emp.id}">
                     </label>
                 </div>
             </main>

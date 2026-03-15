@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"
+    xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Онлайн запись</title>
@@ -22,13 +23,34 @@
             </div>
         </header>
         <main>
-            <div class="string">
-                <a href="/booking/select-master">
+            <div class="string" th:if="${employee == null}">
+                <a href="/select-master">
                     <img src="../images/small-image.jpg">
                     <span>Выбрать специалиста</span>
                     <div class="end-line">></div>
                 </a>
             </div>
+
+
+            <div class="string" th:unless="${employee == null}">
+                <div class="string" th:if="${employee == 0}">
+                    <a href="/select-master">
+                        <img src="../images/small-image.jpg">
+                        <span>Любой специалист</span>
+                        <div class="end-line">></div>
+                    </a>
+                </div>
+
+                <div class="string" th:unless="${employee == 0}">
+                    <a href="/select-master">
+                        <img src="../images/small-image.jpg">
+                        <span th:text="${employee.firstName} + ' ' + ${employee.lastName}">Имя</span>
+
+                        <div class="end-line">></div>
+                    </a>
+                </div>
+            </div>
+
 
             <div class="string">
                 <a href="/booking/select-date-time">

@@ -48,4 +48,10 @@ public class EmployeeService {
                 )
         );
     }
+
+    public CreateEmployeeResponseDto findEmployeeById(Long id) {
+        return employeeMapper.toDto(
+                employeeRepository.findById(id).orElseThrow(() -> new RuntimeException("Employee not found"))
+        );
+    }
 }
