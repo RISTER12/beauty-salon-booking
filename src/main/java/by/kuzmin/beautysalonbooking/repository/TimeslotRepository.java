@@ -69,4 +69,6 @@ public interface TimeslotRepository extends JpaRepository<Timeslot, Long> {
             @Param("employeeId") Long employeeId,
             @Param("date") LocalDate date,
             @Param("freeStatusId") Long freeStatusId);
+
+    Timeslot findById(long id);
 }

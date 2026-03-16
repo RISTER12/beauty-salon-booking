@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"
-    xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Онлайн запись</title>
@@ -18,50 +18,63 @@
             </div>
 
             <div id="aboutSalon">
-                <a id= "mainInfo" href="/">SEKTA X TEXH V</a>
+                <a id="mainInfo" href="/">SEKTA X TEXH V</a>
                 <div id="address">улица Покровка, 44</div>
             </div>
         </header>
         <main>
+
             <div class="string" th:if="${employee == null}">
-                <a href="/select-master">
+                <a th:unless="${employeeId == 0}"
+                   th:href="@{/booking/select-master(slotId=${slotId}, employeeId=${employeeId})}">
                     <img src="../images/small-image.jpg">
                     <span>Выбрать специалиста</span>
                     <div class="end-line">></div>
                 </a>
-            </div>
 
+                <a th:if="${employeeId == 0}"
+                   th:href="@{/booking/select-master(slotId=${slotId}, employeeId=${employeeId})}">
+                    <img src="../images/small-image.jpg">
+                    <span>Любой специалист</span>
+                    <div class="end-line">></div>
+                </a>
+            </div>
 
             <div class="string" th:unless="${employee == null}">
-                <div class="string" th:if="${employee == 0}">
-                    <a href="/select-master">
-                        <img src="../images/small-image.jpg">
-                        <span>Любой специалист</span>
-                        <div class="end-line">></div>
-                    </a>
-                </div>
+                <a th:unless="${employeeId == 0}"
+                   th:href="@{/booking/select-master(slotId=${slotId}, employeeId=${employeeId})}">
+                    <img src="../images/small-image.jpg">
+                    <span th:text="${employee.firstName} + ' ' + ${employee.lastName}">Имя Фамилия</span>
 
-                <div class="string" th:unless="${employee == 0}">
-                    <a href="/select-master">
-                        <img src="../images/small-image.jpg">
-                        <span th:text="${employee.firstName} + ' ' + ${employee.lastName}">Имя</span>
-
-                        <div class="end-line">></div>
-                    </a>
-                </div>
+                    <div class="end-line">></div>
+                </a>
             </div>
 
 
-            <div class="string">
-                <a th:if="${employee != null && employee != 0}" th:href="@{/booking/select-date-time(employeeId=${employee.id})}">
+            <div class="string" th:if="${slotId == null}">
+                <a th:if="${employee != 0}" th:href="@{/booking/select-date-time(employeeId=${employeeId})}">
                     <img src="../images/small-image.jpg">
                     <span>Выбрать дату и время</span>
                     <div class="end-line">></div>
                 </a>
 
-                <a th:unless="${employee != null && employee != 0}" th:href="@{/booking/select-date-time}">
+                <a th:unless="${employee != 0}" th:href="@{/booking/select-date-time}">
                     <img src="../images/small-image.jpg">
                     <span>Выбрать дату и время</span>
+                    <div class="end-line">></div>
+                </a>
+            </div>
+
+            <div class="string" th:unless="${slotId == null}">
+                <a th:if="${employee != 0}" th:href="@{/booking/select-date-time(employeeId=${employeeId})}">
+                    <img src="../images/small-image.jpg">
+                    <span th:text="${timeslot.startTime + ' ' + timeslot.slotDate}">Время Дата</span>
+                    <div class="end-line">></div>
+                </a>
+
+                <a th:unless="${employee != 0}" th:href="@{/booking/select-date-time}">
+                    <img src="../images/small-image.jpg">
+                    <span th:text="${timeslot.startTime + ' ' + timeslot.slotDate}">Время Дата</span>
                     <div class="end-line">></div>
                 </a>
             </div>

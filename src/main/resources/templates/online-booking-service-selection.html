@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head xmlns:th="http://www.thymeleaf.org">
     <meta charset="UTF-8">
     <title>Выбор услуг</title>
     <link rel="stylesheet" href="../css/reset.css">
@@ -45,7 +45,7 @@
                                     <span>руб</span>
                                 </div>
                             </div>
-                            <input type="checkbox" name="employee">
+                            <input type="checkbox" name="service" th:value="${}">
                         </label>
                     </div>
 

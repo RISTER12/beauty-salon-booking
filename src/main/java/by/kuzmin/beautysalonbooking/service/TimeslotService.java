@@ -1,6 +1,7 @@
 package by.kuzmin.beautysalonbooking.service;
 
 import by.kuzmin.beautysalonbooking.dto.TimeslotDto;
+import by.kuzmin.beautysalonbooking.entity.Timeslot;
 import by.kuzmin.beautysalonbooking.mapper.TimeslotMapper;
 import by.kuzmin.beautysalonbooking.repository.TimeslotRepository;
 import lombok.AllArgsConstructor;
@@ -15,6 +16,10 @@ import java.util.List;
 public class TimeslotService {
     private TimeslotRepository timeslotRepository;
     private TimeslotMapper timeslotMapper;
+
+    public TimeslotDto findById(long id) {
+        return timeslotMapper.toDto(timeslotRepository.findById(id));
+    }
 
     public List<TimeslotDto> findAllByMonth(int year, int month, Long freeStatusId) {
         return timeslotRepository.findAllByMonth(year, month, freeStatusId).stream()

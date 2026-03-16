@@ -12,6 +12,7 @@ import java.time.LocalTime;
 @ToString
 @EqualsAndHashCode
 public class TimeslotDto {
+    private Long id;
     private Long employeeId;
     private Long salonId;
     private LocalDate slotDate;

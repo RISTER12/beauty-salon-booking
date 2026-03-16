@@ -2,7 +2,9 @@ package by.kuzmin.beautysalonbooking.controller;
 
 import by.kuzmin.beautysalonbooking.dto.CreateEmployeeResponseDto;
 
+import by.kuzmin.beautysalonbooking.dto.TimeslotDto;
 import by.kuzmin.beautysalonbooking.service.EmployeeService;
+import by.kuzmin.beautysalonbooking.service.TimeslotService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,14 +17,22 @@ import org.springframework.web.bind.annotation.RequestParam;
 @AllArgsConstructor
 public class OnlineBookingController {
     private EmployeeService employeeService;
-    //todo надо будет добавить дату и время в параметры
+    private TimeslotService timeslotService;
     @GetMapping
-    public String booking(@RequestParam(required = false, name = "employee") Long employeeId, Model model) {
+    public String booking(@RequestParam(required = false, name = "employeeId") Long employeeId,
+                          @RequestParam(required = false, name = "slotId") Long slotId,
+                          Model model) {
+        if (slotId != null) {
+            TimeslotDto timeslotDto = timeslotService.findById(slotId);
+            model.addAttribute("timeslot", timeslotDto);
+            model.addAttribute("slotId", slotId);
+        }
         if (employeeId != null && employeeId > 0) {
             CreateEmployeeResponseDto employeeResponseDto = employeeService.findEmployeeById(employeeId);
             model.addAttribute("employee", employeeResponseDto);
+            model.addAttribute("employeeId", employeeId);
         } else if (employeeId != null) {
-            model.addAttribute("employee", employeeId);
+            model.addAttribute("employeeId", employeeId);
         }
         return "online-booking-menu";
     }

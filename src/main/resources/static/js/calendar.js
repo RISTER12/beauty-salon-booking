@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const calendarGrid = document.getElementById('calendar-grid');
     const prevBtn = document.querySelector('.prev-month');
     const nextBtn = document.querySelector('.next-month');
-    const confirmBtn = document.querySelector('#go button[type="submit"]');
+    const confirmBtn = document.querySelector('#go button');
     const confirmWrapper = document.getElementById('go');
     const mainElement = document.querySelector('main');
 
@@ -35,7 +35,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let isAnimating = false;
 
     // ==================== КЭШИ ====================
-    // Для учёта разных сотрудников включаем employeeId в ключ
     const getCacheKey = (dateKey) => selectedEmployeeId ? `${dateKey}-emp${selectedEmployeeId}` : dateKey;
     const slotsCache = {};
     const renderedSlotsCache = {};
@@ -62,6 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ==================== КНОПКА ПОДТВЕРЖДЕНИЯ ====================
     const updateConfirmButtonVisibility = () => {
+        console.log('updateConfirmButtonVisibility, selectedSlotId =', selectedSlotId);
         if (selectedSlotId) {
             confirmWrapper.style.display = 'block';
             setTimeout(() => {
@@ -200,7 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
             const result = await response.json();
-            console.log('Ответ от сервера:', result);
+            console.log('Ответ от сервера (слоты дня):', result);
 
             slotsCache[cacheKey] = result;
             displayTimeslots(result);
@@ -257,6 +257,10 @@ document.addEventListener('DOMContentLoaded', () => {
         filteredSlots.forEach(slot => {
             const slotSpan = document.createElement('span');
             slotSpan.className = 'time-slot';
+            // Важно: проверяем наличие id
+            if (!slot.id) {
+                console.warn('Слот без id!', slot);
+            }
             slotSpan.dataset.slotId = slot.id;
             slotSpan.textContent = formatTime(slot.startTime);
             if (selectedSlotId && selectedSlotId === slot.id.toString()) {
@@ -265,6 +269,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             slotSpan.addEventListener('click', (e) => {
                 e.stopPropagation();
+                console.log('Клик по слоту, dataset.slotId =', slotSpan.dataset.slotId);
                 document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
                 slotSpan.classList.add('selected');
                 selectedSlotId = slotSpan.dataset.slotId;
@@ -714,16 +719,18 @@ document.addEventListener('DOMContentLoaded', () => {
     if (confirmBtn) {
         confirmBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            if (selectedSlotId) {
-                console.log('Подтверждение записи для слота:', selectedSlotId);
-                fetch('/booking/confirm', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ slotId: selectedSlotId })
-                }).then(response => {
-                    if (response.ok) window.location.href = '/booking/success';
-                });
+            console.log('Кнопка подтверждения, selectedSlotId =', selectedSlotId);
+            if (!selectedSlotId) {
+                console.warn('Слот не выбран');
+                return;
             }
+            const params = new URLSearchParams();
+            params.append('slotId', selectedSlotId);
+            if (selectedEmployeeId !== null && selectedEmployeeId !== undefined) {
+                params.append('employeeId', selectedEmployeeId);
+            }
+            // Можно добавить дату, если нужно
+            window.location.href = `/booking?${params.toString()}`;
         });
     }
 
