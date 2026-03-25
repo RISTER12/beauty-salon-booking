@@ -36,10 +36,4 @@ public class OnlineBookingController {
         }
         return "online-booking-menu";
     }
-
-
-    @GetMapping("/select-service")
-    public String selectService() {
-        return "online-booking-service-selection";
-    }
 }

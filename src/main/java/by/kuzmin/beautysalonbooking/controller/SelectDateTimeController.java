@@ -14,8 +14,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Controller
-@AllArgsConstructor
 @RequestMapping("/booking/select-date-time")
+@AllArgsConstructor
 public class SelectDateTimeController {
     private TimeslotService timeslotService;
 

@@ -3,6 +3,7 @@ package by.kuzmin.beautysalonbooking.controller;
 import by.kuzmin.beautysalonbooking.dto.CreateEmployeeRequestDto;
 import by.kuzmin.beautysalonbooking.dto.EmployeeStatusRequestDto;
 import by.kuzmin.beautysalonbooking.service.EmployeeService;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -11,12 +12,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/admin-panel")
+@AllArgsConstructor
 public class AdminPanelController {
     private final EmployeeService employeeService;
-
-    public AdminPanelController(EmployeeService employeeService) {
-        this.employeeService = employeeService;
-    }
 
     @GetMapping
     public String adminPanel(Model model) {
