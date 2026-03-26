@@ -17,12 +17,12 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(exclude = {
-        "promotionList"
+        "promotionList", "employeeList"
 })
 @EqualsAndHashCode(callSuper = false, exclude = {
-        "promotionList"
+        "promotionList", "employeeList"
 })
-public class Service extends BaseEntity {
+public class ServiceEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -51,8 +51,9 @@ public class Service extends BaseEntity {
     @JoinColumn(name = "salon_id", nullable = false)
     private Salon salon;
 
-    @OneToMany(mappedBy = "service")
-    private List<EmployeeServiceProvision> employeeServiceList;
+    @ManyToMany(mappedBy = "serviceList")
+    private List<Employee> employeeList;
+
     @ManyToMany(mappedBy = "serviceList")
     private List<Promotion> promotionList;
 }

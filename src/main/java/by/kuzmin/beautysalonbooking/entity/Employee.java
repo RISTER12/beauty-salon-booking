@@ -15,8 +15,8 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = {"clientList", "employeeServiceList", "revenueReportList", "socialMediaList", "timeslotList", "portfolioPhotosUrlList", "portfolioVideoUrlList"})
-@EqualsAndHashCode(callSuper = false, exclude = {"clientList", "employeeServiceList", "revenueReportList", "socialMediaList", "timeslotList", "portfolioPhotosUrlList", "portfolioVideoUrlList"})
+@ToString(exclude = {"clientList", "serviceList", "revenueReportList", "socialMediaList", "timeslotList", "portfolioPhotosUrlList", "portfolioVideoUrlList"})
+@EqualsAndHashCode(callSuper = false, exclude = {"clientList", "serviceList", "revenueReportList", "socialMediaList", "timeslotList", "portfolioPhotosUrlList", "portfolioVideoUrlList"})
 public class Employee extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -61,9 +61,6 @@ public class Employee extends BaseEntity {
     private boolean isVisibleOnWebsite = false;
 
     @OneToMany(mappedBy = "employee")
-    private List<EmployeeServiceProvision> employeeServiceList;
-
-    @OneToMany(mappedBy = "employee")
     private List<RevenueReport> revenueReportList;
 
     @OneToMany(mappedBy = "employee")
@@ -71,4 +68,12 @@ public class Employee extends BaseEntity {
 
     @OneToMany(mappedBy = "employee")
     private List<Timeslot> timeslotList;
+
+    @ManyToMany
+    @JoinTable(
+            name = "employee_service",
+            joinColumns = @JoinColumn(name = "service_id"),
+            inverseJoinColumns = @JoinColumn(name = "employee_id")
+    )
+    private List<ServiceEntity> serviceList;
 }

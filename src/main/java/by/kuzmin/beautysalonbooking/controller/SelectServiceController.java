@@ -14,7 +14,7 @@ public class SelectServiceController {
     ServiceService serviceService;
     @GetMapping
     public String selectService(Model model) {
-        model.addAttribute("services", serviceService.findAll());
+        model.addAttribute("servicesGroupByCategory", serviceService.findAllWithCategoryDto());
         return "online-booking-select-service";
     }
 }

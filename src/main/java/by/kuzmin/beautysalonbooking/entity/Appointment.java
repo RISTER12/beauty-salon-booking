@@ -82,5 +82,5 @@ public class Appointment extends BaseEntity {
             joinColumns = @JoinColumn(name = "appointment_id"),
             inverseJoinColumns = @JoinColumn(name = "service_id")
     )
-    private List<Service> serviceList;
+    private List<ServiceEntity> serviceList;
 }

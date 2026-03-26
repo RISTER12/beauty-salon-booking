@@ -12,13 +12,6 @@ databaseChangeLog:
             tableName: employee_service
             columns:
               - column:
-                  name: price
-                  type: DECIMAL
-                  remarks: "Цена этой услуги у этого мастера"
-              - column:
-                  name: duration_minutes
-                  type: BIGINT
-              - column:
                   constraints:
                     nullable: false
                     primaryKey: true

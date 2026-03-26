@@ -5,9 +5,6 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -61,7 +58,7 @@ public class Promotion extends BaseEntity {
             joinColumns = @JoinColumn(name = "promotion_id"),
             inverseJoinColumns = @JoinColumn(name = "service_id")
     )
-    private List<Service> serviceList;
+    private List<ServiceEntity> serviceList;
     @ManyToMany
     @JoinTable(
             name = "promotion_salon",

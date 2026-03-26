@@ -24,7 +24,7 @@ public class SelectDateTimeController {
         model.addAttribute("employeeId", employeeId);
         return "online-booking-select-date-time";
     }
-
+    //todo Убрать всё что нужно на слой сервиса(почти всё)
     @PostMapping
     @ResponseBody
     public ResponseEntity<?> selectDateTime(@RequestBody DateSelectionRequest request) {

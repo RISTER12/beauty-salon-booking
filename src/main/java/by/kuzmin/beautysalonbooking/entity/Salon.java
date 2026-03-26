@@ -6,9 +6,6 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
-import java.sql.Time;
-import java.time.OffsetDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -77,7 +74,7 @@ public class Salon extends BaseEntity {
     private Company company;
 
     @OneToMany(mappedBy = "salon")
-    private List<Service> serviceList;
+    private List<ServiceEntity> serviceList;
 
     @OneToMany(mappedBy = "salon")
     private List<SocialMedia> socialMediaList;

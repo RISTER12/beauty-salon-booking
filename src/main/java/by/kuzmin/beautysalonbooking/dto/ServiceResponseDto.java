@@ -10,7 +10,7 @@ import lombok.*;
 @ToString
 @EqualsAndHashCode
 public class ServiceResponseDto {
-    ServiceCategory serviceCategory;
+    private Long categoryId;
     private String name;
-    //todo доделать после изменения структуры бд
+    //todo доделать
 }
