@@ -35,7 +35,8 @@
         <form action="/booking" method="get">
 
             <header>
-                <a th:href="@{/booking(employee=${employeeId})}" class="width-100">
+                //todo понять почему тут employee, а не employeeId
+                <a th:href="@{/booking(serviceIds=${serviceIds}, employee=${employeeId})}" class="width-100">
                     <div class="arrow">←</div>
                     <img src="../images/small-image.jpg" alt="">
                     <div>

@@ -12,6 +12,7 @@ import by.kuzmin.beautysalonbooking.repository.ServiceRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -43,6 +44,12 @@ public class ServiceService {
                                 .map(serviceMapper::toDto)
                                 .toList()
                 ))
+                .toList();
+    }
+
+    public List<ServiceResponseDto> findAllByIds(List<Long> ids) {
+        return serviceRepository.findAllById(ids).stream()
+                .map(serviceMapper::toDto)
                 .toList();
     }
 }

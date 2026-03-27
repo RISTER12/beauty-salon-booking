@@ -20,8 +20,13 @@ public class SelectDateTimeController {
     private TimeslotService timeslotService;
 
     @GetMapping
-    public String selectDateTime(@RequestParam(required = false) Long employeeId, Model model) {
+    public String selectDateTime(@RequestParam(required = false) Long employeeId,
+                                 @RequestParam(required = false, name = "serviceIds") List<Long> serviceIds,
+                                 Model model) {
         model.addAttribute("employeeId", employeeId);
+        if (serviceIds != null && !serviceIds.isEmpty()) {
+            model.addAttribute("serviceIds", serviceIds);
+        }
         return "online-booking-select-date-time";
     }
     //todo Убрать всё что нужно на слой сервиса(почти всё)

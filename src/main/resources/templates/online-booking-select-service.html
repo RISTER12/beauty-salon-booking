@@ -10,8 +10,10 @@
 <div class="wrapper">
     <div class="center">
         <form action="/booking" method="get">
+            <input type="hidden" name="employeeId" th:value="${employeeId}" />
+            <input type="hidden" name="slotId" th:value="${slotId}" />
             <header>
-                <a href="/booking" class="width-100">
+                <a th:href="@{/booking(employeeId=${employeeId}, slotId=${slotId})}" class="width-100">
                     <div class="arrow">←</div>
                     <img src="../images/small-image.jpg" alt="">
                     <div class="width-100">

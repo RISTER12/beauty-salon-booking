@@ -23,8 +23,6 @@ body {
 
 .center {
     flex: 1;
-    display: flex;
-    flex-direction: column;
     margin: 0 auto;
     background-color: rgb(38, 38, 38);
 }
@@ -34,6 +32,14 @@ header {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+}
+#list {
+    display: block;
+}
+main h2 {
+    padding: 20px;
+    color: white;
+    font: 20px Arial;
 }
 
 #profile {
