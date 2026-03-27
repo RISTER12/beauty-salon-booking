@@ -23,13 +23,13 @@
             <main>
                 <h1>Выбрать услуги</h1>
                 <form method="post">
-                    <div>
-                        <h2>Женская стрижка</h2>
-                        <div class="string">
+                    <div th:each="serviceGroup : ${servicesGroupByCategory}">
+                        <h2 th:text="${serviceGroup.getServiceCategoryResponseDto().getCategoryName()}">Женская стрижка</h2>
+                        <div class="string" th:each="service : ${serviceGroup.getServiceResponseDto()}">
                             <label>
                                 <div class="center-part">
                                     <div class="name">
-                                        <span>Женская стрижка</span>  <!--<div th:each="ingredient : ${wrap}">-->
+                                        <span th:text="${service.getName()}">Женская стрижка</span>  <!--<div th:each="ingredient : ${wrap}">-->
                                         <span>[Мастер]</span>
                                     </div>
                                     <!--                                <label>-->
@@ -46,7 +46,7 @@
                                         <span>руб</span>
                                     </div>
                                 </div>
-                                <input type="checkbox" name="service">
+                                <input type="checkbox" name="serviceIds" th:value="${service.getId()}">
                             </label>
                         </div>
                     </div>

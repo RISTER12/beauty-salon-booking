@@ -11,6 +11,7 @@ import lombok.*;
 @EqualsAndHashCode
 public class ServiceResponseDto {
     private Long categoryId;
+    private Long id;
     private String name;
     //todo доделать
 }
