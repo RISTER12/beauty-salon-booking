@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: idx-service-price-range
+      author: Il'ia Kuz'min
+      changes:
+        - createIndex:
+            indexName: idx_service_price_range
+            tableName: service
+            columns:
+              - column:
+                  name: min_price
+              - column:
+                  name: max_price
+      rollback:
+        - dropIndex:
+            indexName: idx_service_price_range
+            tableName: service
