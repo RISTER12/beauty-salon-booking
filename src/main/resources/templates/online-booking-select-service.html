@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head xmlns:th="http://www.thymeleaf.org">
+    <meta charset="UTF-8">
+    <title>Выбор услуг</title>
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/online-booking-menu-pages.css">
+</head>
+<body>
+<div class="wrapper">
+    <div class="center">
+        <form action="/booking" method="get">
+            <input type="hidden" name="employeeId" th:value="${employeeId}" />
+            <input type="hidden" name="slotId" th:value="${slotId}" />
+            <header>
+                <a th:href="@{/booking(employeeId=${employeeId}, slotId=${slotId})}" class="width-100">
+                    <div class="arrow">←</div>
+                    <img src="../images/small-image.jpg" alt="">
+                    <div class="width-100">
+                        <div id="mainInfo">SEKTA X TEXH V</div>
+                        <div id="address">улица Покровка, 44</div>
+                    </div>
+                </a>
+            </header>
+            <main>
+                <h1>Выбрать услуги</h1>
+                <form method="post">
+                    <div th:each="serviceGroup : ${servicesGroupByCategory}">
+                        <h2 th:text="${serviceGroup.getServiceCategoryResponseDto().getCategoryName()}">Женская стрижка</h2>
+                        <div class="string" th:each="service : ${serviceGroup.getServiceResponseDto()}">
+                            <label>
+                                <div class="center-part">
+                                    <div class="name">
+                                        <span th:text="${service.getName()}">Женская стрижка</span>  <!--<div th:each="ingredient : ${wrap}">-->
+                                        <span>[Мастер]</span>
+                                    </div>
+                                    <!--                                <label>-->
+                                    <!--<input type="checkbox" th:field="*{ingredients}" th:value="${ingredient.id}"/>-->
+                                    <!--<span th:text="${ingredient.name}">INGREDIENT</span><br/>-->
+                                    <!--</label>-->
+                                    <div class="professional">
+                                        <span>1 ч 30 мин</span>
+                                        <span>+</span>
+                                        <span>укладка по форме стрижки </span>
+                                    </div>
+                                    <div class="review">
+                                        <span>3500</span>
+                                        <span>руб</span>
+                                    </div>
+                                </div>
+                                <input type="checkbox" name="serviceIds" th:value="${service.getId()}">
+                            </label>
+                        </div>
+                    </div>
+                    <footer>
+                        <div id="go">
+                            <button type="submit">Выбрать услугу</button>
+                        </div>
+                    </footer>
+                </form>
+            </main>
+
+        </form>
+    </div>
+
+
+    <!--        <form th:method="post" th:object="${taco}">-->
+    <!--            <div>-->
+    <!--                <h2>Услуги</h2>-->
+    <!--                <div th:each="ingredient : ${wrap}">-->
+    <!--                    <label>-->
+    <!--                        <input type="checkbox" th:field="*{ingredients}" th:value="${ingredient.id}"/>-->
+    <!--                        <span th:text="${ingredient.name}">INGREDIENT</span><br/>-->
+    <!--                    </label>-->
+    <!--                </div>-->
+
+    <!--                <h2>Мужские стрижки</h2>-->
+    <!--                <div th:each="ingredient : ${protein}">-->
+    <!--                    <label>-->
+    <!--                        <input type="checkbox" th:field="*{ingredients}" th:value="${ingredient.id}"/>-->
+    <!--                        <span th:text="${ingredient.name}">INGREDIENT</span>-->
+    <!--                    </label>-->
+    <!--                </div>-->
+
+    <!--                <h2>Укладка мужская</h2>-->
+    <!--                <div th:each="ingredient : ${veggies}">-->
+    <!--                    <label>-->
+    <!--                        <input type="checkbox" th:field="*{ingredients}" th:value="${ingredient.id}"/>-->
+    <!--                        <span th:text="${ingredient.name}">INGREDIENT</span>-->
+    <!--                    </label>-->
+    <!--                </div>-->
+
+    <!--                <h2>Мужское окрашивание</h2>-->
+    <!--                <div th:each="ingredient : ${cheese}">-->
+    <!--                    <label>-->
+    <!--                        <input type="checkbox" th:field="*{ingredients}" th:value="${ingredient.id}">-->
+    <!--                        <span th:text="${ingredient.name}">INGREDIENT</span>-->
+    <!--                    </label>-->
+    <!--                </div>-->
+
+    <!--                <h2>Моделирование бороды и усов</h2>-->
+    <!--                <div th:each="ingredient : ${sauce}">-->
+    <!--                    <label>-->
+    <!--                        <input type="checkbox" th:field="*{ingredients}" th:value="${ingredient.id}">-->
+    <!--                        <span th:text="${ingredient.name}">INGREDIENT</span>-->
+    <!--                    </label>-->
+    <!--                </div>-->
+
+    <!--        <h2>Женская стрижка</h2>-->
+    <!--                <div th:each="ingredient : ${sauce}">-->
+    <!--                    <label>-->
+    <!--                        <input type="checkbox" th:field="*{ingredients}" th:value="${ingredient.id}">-->
+    <!--                        <span th:text="${ingredient.name}">INGREDIENT</span>-->
+    <!--                    </label>-->
+    <!--                </div>-->
+
+    <!--        <h2>Женская стрижка (чёлка)</h2>-->
+    <!--                <div th:each="ingredient : ${sauce}">-->
+    <!--                    <label>-->
+    <!--                        <input type="checkbox" th:field="*{ingredients}" th:value="${ingredient.id}">-->
+    <!--                        <span th:text="${ingredient.name}">INGREDIENT</span>-->
+    <!--                    </label>-->
+    <!--                </div>-->
+
+    <!--                <h2>Окрашивание корней</h2>-->
+    <!--                <div th:each="ingredient : ${sauce}">-->
+    <!--                    <label>-->
+    <!--                        <input type="checkbox" th:field="*{ingredients}" th:value="${ingredient.id}">-->
+    <!--                        <span th:text="${ingredient.name}">INGREDIENT</span>-->
+    <!--                    </label>-->
+    <!--                </div>-->
+    <!--                <h2>Окрашивание в тон</h2>-->
+    <!--                <div th:each="ingredient : ${sauce}">-->
+    <!--                    <label>-->
+    <!--                        <input type="checkbox" th:field="*{ingredients}" th:value="${ingredient.id}">-->
+    <!--                        <span th:text="${ingredient.name}">INGREDIENT</span>-->
+    <!--                    </label>-->
+    <!--                </div>-->
+
+    <!--                <h2>Растяжка цвета</h2>-->
+    <!--                <div th:each="ingredient : ${sauce}">-->
+    <!--                    <label>-->
+    <!--                        <input type="checkbox" th:field="*{ingredients}" th:value="${ingredient.id}">-->
+    <!--                        <span th:text="${ingredient.name}">INGREDIENT</span>-->
+    <!--                    </label>-->
+    <!--                </div>-->
+    <!--                <h2>Детская стрижка</h2>-->
+    <!--                <div th:each="ingredient : ${sauce}">-->
+    <!--                    <label>-->
+    <!--                        <input type="checkbox" th:field="*{ingredients}" th:value="${ingredient.id}">-->
+    <!--                        <span th:text="${ingredient.name}">INGREDIENT</span>-->
+    <!--                    </label>-->
+    <!--                </div>-->
+    <!--                <h2>Укладка</h2>-->
+    <!--                <div th:each="ingredient : ${sauce}">-->
+    <!--                    <label>-->
+    <!--                        <input type="checkbox" th:field="*{ingredients}" th:value="${ingredient.id}">-->
+    <!--                        <span th:text="${ingredient.name}">INGREDIENT</span>-->
+    <!--                    </label>-->
+    <!--                </div>-->
+
+    <!--                <h2>Камуфляж седины</h2>-->
+    <!--                <div th:each="ingredient : ${sauce}">-->
+    <!--                    <label>-->
+    <!--                        <input type="checkbox" th:field="*{ingredients}" th:value="${ingredient.id}">-->
+    <!--                        <span th:text="${ingredient.name}">INGREDIENT</span>-->
+    <!--                    </label>-->
+    <!--                </div>-->
+    <!--                <h2>Name your taco</h2>-->
+    <!--                <div>-->
+    <!--                    <label>-->
+    <!--                        <input type="text" th:field="*{name}"><br/><br/>-->
+
+    <!--                    </label>-->
+
+    <!--                    <button>Create taco</button>-->
+
+    <!--                </div>-->
+    <!--            </div>-->
+    <!--        </form>-->
+</div>
+</body>
+</html>

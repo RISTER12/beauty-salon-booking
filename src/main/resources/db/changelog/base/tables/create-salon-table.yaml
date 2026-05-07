@@ -1,0 +1,99 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-salon-table
+      author: Il'ia Kuz'min
+      preConditions:
+        - not:
+            tableExists:
+              tableName: salon
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            tableName: salon
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_salon
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: salon_name
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: address_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: working_hours
+                  type: jsonb
+              - column:
+                  name: amenities
+                  type: text[]
+                  remarks: "Удобства: wifi, парковка, кофе"
+              - column:
+                  name: photo_urls
+                  type: text[]
+                  remarks: "URL фотографий салона"
+              - column:
+                  name: interior_photos
+                  type: text[]
+                  remarks: "URL фотографий интерьера"
+              - column:
+                  name: video_urls
+                  type: text[]
+                  remarks: "URL для видео-тура по салону"
+              - column:
+                  name: total_area
+                  type: DECIMAL
+              - column:
+                  constraints:
+                    nullable: false
+                  name: status_id
+                  type: BIGINT
+                  remarks: "Статус: active, inactive, renovation, closed"
+              - column:
+                  constraints:
+                    nullable: false
+                  name: is_booking_available
+                  type: BOOLEAN
+                  remarks: "Доступна ли запись"
+              - column:
+                  constraints:
+                    nullable: false
+                  name: is_visible_on_website
+                  type: BOOLEAN
+                  remarks: "Показывать ли салон на сайте"
+              - column:
+                  constraints:
+                    nullable: false
+                  name: company_id
+                  type: BIGINT
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: created_at
+                  type: TIMESTAMP WITH TIME ZONE
+                  defaultValueComputed: "CURRENT_TIMESTAMP"
+              - column:
+                  constraints:
+                    nullable: false
+                  name: updated_at
+                  type: TIMESTAMP WITH TIME ZONE
+                  defaultValueComputed: "CURRENT_TIMESTAMP"
+      rollback:
+        - dropTable:
+            tableName: salon

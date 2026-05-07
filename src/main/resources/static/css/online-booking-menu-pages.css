@@ -1,0 +1,373 @@
+@media (min-width: 600px) {
+    .center {
+        width: 600px;
+    }
+
+    header {
+        height: 80px;
+        max-width: 600px;
+
+    }
+}
+
+
+* {
+    scrollbar-gutter: stable;
+}
+
+body {
+    background-color: rgb(20, 20, 20);
+    box-sizing: border-box;
+}
+
+main {
+    flex: 1;
+    color: white;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.center {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    background-color: rgb(38, 38, 38);
+}
+
+header {
+    display: flex;
+    height: 50px;
+    position: sticky;
+    top: 0;
+    flex-direction: column;
+    justify-content: center;
+    padding: 10px;
+    background-color: rgb(38, 38, 38);
+    user-select: none;
+}
+
+header img {
+    border-radius: 50%;
+    height: 50px;
+    padding: 0 10px;
+}
+
+.arrow {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: white;
+    font: 20px Arial;
+    margin-right: 10px;
+    text-decoration: none;
+}
+
+header a {
+    box-sizing: border-box;
+    display: inline-flex;
+    text-decoration: none;
+    padding: 10px;
+}
+
+#mainInfo {
+    color: white;
+    font: 20px Arial;
+    text-decoration: none;
+}
+
+#address {
+    color: darkgray;
+    font: 16px Arial;
+}
+
+main h1 {
+    padding: 20px;
+    color: white;
+    font: 26px Arial;
+}
+
+main h2 {
+    padding: 20px;
+    color: white;
+    font: 20px Arial;
+}
+
+.string {
+    display: block;
+}
+
+label {
+    height: 40px;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 20px;
+    margin-bottom: 10px;
+}
+
+label:hover {
+    cursor: pointer;
+}
+
+label input {
+    display: flex;
+    align-self: center;
+    accent-color: #292b33;
+    height: 20px;
+    width: 20px;
+}
+
+.center-part {
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    width: 100%;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.center-part#someone {
+    justify-content: center;
+}
+
+.name {
+    color: white;
+    font: 16px Arial;
+}
+
+.professional {
+    color: darkgray;
+    font: 12px Arial;
+}
+
+.review {
+    color: darkgray;
+    font: 12px Arial;
+}
+
+.string img {
+    border-radius: 50%;
+}
+
+footer {
+    display: flex;
+    position: sticky;
+    width: 100%;
+    bottom: 20px;
+}
+#go {
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    width: 100%;
+}
+
+
+button {
+    background-color: #292b33;
+    color: white;
+    font: 16px Arial;
+    border: 0;
+    border-radius: 20px;
+    padding: 10px;
+    width: 80%;
+}
+
+button:hover {
+    cursor: pointer;
+}
+
+#calendar {
+    padding: 20px;
+}
+
+#calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    user-select: none;
+}
+
+#month {
+    font-size: 20px;
+
+}
+
+#arrows {
+    display: flex;
+    gap: 10px;
+}
+
+.nav-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 5px 10px;
+}
+
+.nav-btn:hover {
+    background-color: grey;
+    border-radius: 4px;
+}
+
+.calendar-day {
+    text-align: center;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    user-select: none;
+
+}
+
+.calendar-day:hover {
+    background-color: grey;
+}
+
+.calendar-day.selected {
+    background-color: black;
+    color: white;
+}
+
+.calendar-day.today {
+    text-decoration: underline;
+    text-decoration-color: white;
+    color: white;
+}
+
+.calendar-day.empty {
+    visibility: hidden;
+}
+
+#calendar-grid-header {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 10px;
+    user-select: none;
+}
+
+#calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+}
+
+
+/*todo поработать над стилем по .error-message*/
+
+/* Стили для выпадающих списков */
+.collapsible-section {
+    margin-bottom: 15px;
+    border-radius: 4px;
+    overflow: hidden;
+    padding: 0 20px;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    user-select: none;
+    border-radius: 5px;
+}
+
+.time-category {
+    font-size: 20px;
+}
+
+.toggle-icon, .no-slots-indicator {
+    font-size: 16px;
+    transition: transform 0.3s ease;
+    color: grey;
+}
+
+.section-content {
+    padding: 0 10px;
+}
+
+.slots-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 15px 0;
+}
+
+.time-slot {
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: rgb(97, 97, 97);
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    user-select: none;
+}
+
+.time-slot:hover {
+    background-color: grey;
+    transform: translateY(-2px);
+}
+
+.time-slot.selected {
+    background-color: black;
+    color: white;
+}
+
+.error-message {
+    text-align: center;
+    padding: 20px;
+    color: #dc3545;
+    background-color: #f8d7da;
+    border-radius: 8px;
+    margin: 20px 0;
+}
+
+
+
+/* Стили для контейнера сообщения об отсутствии слотов */
+.no-slots-container {
+    text-align: center;
+    padding: 30px;
+    color: #6c757d;
+}
+
+.next-date-info {
+    font-size: 16px;
+    margin: 15px 0;
+    color: #4CAF50;
+    font-weight: bold;
+}
+
+.next-date-button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 12px 24px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+}
+
+.next-date-button:hover {
+    background-color: #45a049;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.next-date-button:active {
+    transform: translateY(0);
+}
+
+
+
+
+

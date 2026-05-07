@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: fk-payment-on-payment-status
+      author: Il'ia Kuz'min
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: payment_status_id
+            baseTableName: payment
+            constraintName: FK_PAYMENT_ON_PAYMENT_STATUS
+            referencedColumnNames: id
+            referencedTableName: payment_status
+            onUpdate: CASCADE
+            onDelete: RESTRICT
+      rollback:
+          - dropForeignKeyConstraint:
+                constraintName: FK_PAYMENT_ON_PAYMENT_STATUS
+                tableName: payment

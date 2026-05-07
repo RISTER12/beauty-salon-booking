@@ -1,0 +1,91 @@
+#container {
+    display: grid;
+    grid-template-columns: 1fr 6fr;
+    padding: 20px;
+}
+
+* {
+    box-sizing: border-box;
+    color: white;
+    scrollbar-gutter: stable;
+}
+
+body {
+    background-color: rgb(20, 20, 20);;
+}
+
+.center {
+    margin: 0 auto;
+    width: 80%;
+    height: 100vh;
+    background-color: rgb(38, 38, 38);
+}
+aside {
+    display: flex;
+    flex-direction: column;
+}
+
+.width-100 {
+    width: 100%;
+}
+.menu a {
+    margin-bottom: 5px;
+    padding: 20px;
+    background-color: #292b33;
+    text-decoration: none;
+
+}
+
+.menu a:hover {
+    color: white;
+    background-color: lightslategray;
+}
+
+.menu a:focus {
+
+}
+
+.menu a.active {
+    background-color: black;
+}
+input, button {
+    color: black;
+}
+main {
+    padding: 0 20px;
+}
+
+.menu {
+    padding: 20px 0;
+}
+
+form {
+    display: grid;
+    grid-template-columns: 1fr;
+    min-width: 400px;
+    justify-self: center;
+}
+
+form > * {
+    display: flex;
+    flex-direction: column;
+}
+form label input, form button {
+    padding: 5px;
+}
+
+form button {
+    margin-top: 5px;
+}
+form label span {
+     padding: 5px 0;
+ }
+
+
+th, td, table {
+    border: 1px solid black;
+}
+
+td {
+    padding: 5px;
+}

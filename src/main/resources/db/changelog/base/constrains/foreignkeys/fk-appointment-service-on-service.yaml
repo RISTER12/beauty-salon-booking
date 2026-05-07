@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: fk-appointment-service-on-service
+      author: Il'ia Kuz'min
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: service_id
+            baseTableName: appointment_service
+            constraintName: FK-APPOINTMENT-SERVICE-ON-SERVICE
+            referencedColumnNames: id
+            referencedTableName: service
+            onUpdate: RESTRICT
+            onDelete: CASCADE
+      rollback:
+          - dropForeignKeyConstraint:
+                constraintName: FK-APPOINTMENT-SERVICE-ON-SERVICE
+                tableName: appointment_service

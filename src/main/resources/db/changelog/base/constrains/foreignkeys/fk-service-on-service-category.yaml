@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: fk-service-on-service-category
+      author: Il'ia Kuz'min
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: category_id
+            baseTableName: service
+            constraintName: FK_SERVICE_ON_CATEGORY
+            referencedColumnNames: id
+            referencedTableName: service_category
+            onUpdate: CASCADE
+            onDelete: RESTRICT
+      rollback:
+          - dropForeignKeyConstraint:
+                constraintName: FK_SERVICE_ON_CATEGORY
+                tableName: service

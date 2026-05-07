@@ -1,0 +1,49 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-comment-status-table
+      author: Il'ia Kuz'min
+      preConditions:
+        - not:
+            tableExists:
+              tableName: comment_status
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            tableName: comment_status
+            remarks: "Статус комментария"
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_comment_status
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: status_name
+                  type: VARCHAR(255)
+                  remarks: "Например: pending, approved, rejected, hidden"
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: created_at
+                  type: TIMESTAMP WITH TIME ZONE
+                  defaultValueComputed: "CURRENT_TIMESTAMP"
+              - column:
+                  constraints:
+                    nullable: false
+                  name: updated_at
+                  type: TIMESTAMP WITH TIME ZONE
+                  defaultValueComputed: "CURRENT_TIMESTAMP"
+      rollback:
+        - dropTable:
+            tableName: comment_status

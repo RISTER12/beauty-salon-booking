@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: uk-schedule-start_time-employee_id
+      author: Il'ia Kuz'min
+      changes:
+        - addUniqueConstraint:
+            columnNames: start_time,employee_id
+            constraintName: uk_schedule_start_time_employee_id
+            tableName: schedule

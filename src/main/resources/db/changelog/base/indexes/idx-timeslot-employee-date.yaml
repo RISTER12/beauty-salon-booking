@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: idx-timeslot-employee-date
+      author: Il'ia Kuz'min
+      changes:
+        - createIndex:
+            indexName: idx_timeslot_employee_date
+            tableName: timeslot
+            columns:
+              - column:
+                  name: employee_id
+              - column:
+                  name: slot_date
+      rollback:
+        - dropIndex:
+            indexName: idx_timeslot_employee_date
+            tableName: timeslot

@@ -1,0 +1,16 @@
+databaseChangeLog:
+  - changeSet:
+      id: idx-promotion-code
+      author: Il'ia Kuz'min
+      changes:
+        - createIndex:
+            indexName: idx_promotion_code
+            tableName: promotion
+            columns:
+              - column:
+                  name: code
+            where: code IS NOT NULL
+      rollback:
+        - dropIndex:
+            indexName: idx_promotion_code
+            tableName: promotion

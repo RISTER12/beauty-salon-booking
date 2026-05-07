@@ -1,0 +1,109 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-review-table
+      author: Il'ia Kuz'min
+      preConditions:
+        - not:
+            tableExists:
+              tableName: review
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            tableName: review
+            remarks: "Отзывы клиентов"
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_review
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: comment_status_id
+                  type: BIGINT
+              - column:
+                  name: appointment_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: client_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: rating_overall
+                  type: TINYINT
+              - column:
+                  name: rating_service
+                  type: TINYINT
+              - column:
+                  name: rating_employee
+                  type: TINYINT
+              - column:
+                  name: rating_atmosphere
+                  type: TINYINT
+              - column:
+                  name: comment
+                  type: VARCHAR(255)
+              - column:
+                  name: positive_aspects
+                  type: VARCHAR(255)
+              - column:
+                  name: negative_aspects
+                  type: VARCHAR(255)
+              - column:
+                  name: admin_response
+                  type: VARCHAR(255)
+                  remarks: "Ответ администрации на отзыв"
+              - column:
+                  name: responded_by_employee_id
+                  type: BIGINT
+              - column:
+                  name: responded_at
+                  type: timestamp
+              - column:
+                  name: moderated_by_employee_id
+                  type: BIGINT
+              - column:
+                  name: moderated_at
+                  type: timestamp
+              - column:
+                  name: moderation_node
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: is_features
+                  type: BOOLEAN
+                  remarks: "Показывать ли комментарий на главной"
+              - column:
+                  constraints:
+                    nullable: false
+                  name: is_anonymous
+                  type: BOOLEAN
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: created_at
+                  type: TIMESTAMP WITH TIME ZONE
+                  defaultValueComputed: "CURRENT_TIMESTAMP"
+              - column:
+                  constraints:
+                    nullable: false
+                  name: updated_at
+                  type: TIMESTAMP WITH TIME ZONE
+                  defaultValueComputed: "CURRENT_TIMESTAMP"
+      rollback:
+        - dropTable:
+            tableName: review

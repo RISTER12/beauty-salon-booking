@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: load-address-data
+      author: Il'ia Kuz'min
+      changes:
+        - loadData:
+            tableName: address
+            file: ../csv/address.csv
+            relativeToChangelogFile: true

@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: fk-promotion-salon-on-promotion
+      author: Il'ia Kuz'min
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: promotion_id
+            baseTableName: promotion_salon
+            constraintName: FK-PROMOTION-SALON-ON-PROMOTION
+            referencedColumnNames: id
+            referencedTableName: promotion
+            onUpdate: RESTRICT
+            onDelete: CASCADE
+      rollback:
+          - dropForeignKeyConstraint:
+                constraintName: FK-PROMOTION-SALON-ON-PROMOTION
+                tableName: promotion_salon

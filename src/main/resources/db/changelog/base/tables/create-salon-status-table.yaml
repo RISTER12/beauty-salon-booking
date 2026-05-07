@@ -1,0 +1,48 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-salon-status-table
+      author: Il'ia Kuz'min
+      preConditions:
+        - not:
+            tableExists:
+              tableName: salon_status
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            tableName: salon_status
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_salon_status
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: status_name
+                  type: VARCHAR(255)
+                  remarks: "Статус: active, inactive, renovation, closed"
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: created_at
+                  type: TIMESTAMP WITH TIME ZONE
+                  defaultValueComputed: "CURRENT_TIMESTAMP"
+              - column:
+                  constraints:
+                    nullable: false
+                  name: updated_at
+                  type: TIMESTAMP WITH TIME ZONE
+                  defaultValueComputed: "CURRENT_TIMESTAMP"
+      rollback:
+        - dropTable:
+            tableName: salon_status

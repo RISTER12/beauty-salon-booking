@@ -1,0 +1,125 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-client-table
+      author: Il'ia Kuz'min
+      preConditions:
+        - not:
+            tableExists:
+              tableName: client
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            tableName: client
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_client
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: first_name
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: last_name
+                  type: VARCHAR(255)
+              - column:
+                  name: middle_name
+                  type: VARCHAR(255)
+              - column:
+                  name: birth_date
+                  type: DATE
+              - column:
+                  name: gender_id
+                  type: BIGINT
+              - column:
+                  name: preferred_salon_id
+                  type: BIGINT
+                  remarks: "id салона, который предпочитает клиент"
+              - column:
+                  name: preferred_employee_id
+                  type: BIGINT
+                  remarks: "id сотрудника, которого предпочитает клиент"
+              - column:
+                  constraints:
+                    nullable: false
+                  name: total_visits
+                  type: BIGINT
+              - column:
+                  name: last_visit_date
+                  type: DATE
+              - column:
+                  name: first_visit_date
+                  type: DATE
+              - column:
+                  name: source_id
+                  type: BIGINT
+                  remarks: "Откуда клиент узнал о салоне"
+              - column:
+                  constraints:
+                    nullable: false
+                  name: referral_code
+                  type: VARCHAR(255)
+                  remarks: "Реферальный код клиента"
+              - column:
+                  name: referral_balance
+                  type: DECIMAL
+              - column:
+                  name: referred_by_client_id
+                  type: BIGINT
+                  remarks: "id клиента который привел этого клиента"
+              - column:
+                  name: notes
+                  type: VARCHAR(255)
+                  remarks: "Комментарий администратора об этом клиенте"
+              - column:
+                  name: allergies
+                  type: VARCHAR(255)
+                  remarks: "Аллергии клиента"
+              - column:
+                  name: contraindications
+                  type: VARCHAR(255)
+                  remarks: "Противопоказания"
+              - column:
+                  name: status_id
+                  type: BIGINT
+                  remarks: "Например: active, inactive, blocked"
+              - column:
+                  constraints:
+                    nullable: false
+                  name: is_subscribed_to_newsletter
+                  type: BOOLEAN
+                  remarks: "Подписан ли на новостную рассылку"
+              - column:
+                  constraints:
+                    nullable: false
+                  name: is_verified
+                  type: BOOLEAN
+                  remarks: "Верифицирован ли пользователь"
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: created_at
+                  type: TIMESTAMP WITH TIME ZONE
+                  defaultValueComputed: "CURRENT_TIMESTAMP"
+              - column:
+                  constraints:
+                    nullable: false
+                  name: updated_at
+                  type: TIMESTAMP WITH TIME ZONE
+                  defaultValueComputed: "CURRENT_TIMESTAMP"
+      rollback:
+        - dropTable:
+            tableName: client

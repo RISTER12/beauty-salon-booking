@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: load-service-category-data
+      author: Il'ia Kuz'min
+      changes:
+        - loadData:
+            tableName: service_category
+            file: ../csv/service-category.csv
+            relativeToChangelogFile: true

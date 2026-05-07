@@ -1,0 +1,27 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-appointment-service-table
+      author: Il'ia Kuz'min
+      preConditions:
+        - not:
+            tableExists:
+              tableName: appointment_service
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            tableName: appointment_service
+            remarks: "Таблица описывает какие услуги будут оказаны во время приёма"
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                  name: appointment_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: service_id
+                  type: BIGINT
+      rollback:
+        - dropTable:
+            tableName: appointment_service

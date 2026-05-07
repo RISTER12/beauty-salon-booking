@@ -1,0 +1,78 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-schedule-table
+      author: Il'ia Kuz'min
+      preConditions:
+        - not:
+            tableExists:
+              tableName: schedule
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            tableName: schedule
+            remarks: "Расписание сотрудника"
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_schedule
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: start_date
+                  type: date
+              - column:
+                  constraints:
+                    nullable: false
+                  name: working_days
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: weekend
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: start_time
+                  type: time
+              - column:
+                  constraints:
+                    nullable: false
+                  name: end_time
+                  type: time
+              - column:
+                  constraints:
+                    nullable: false
+                  name: hours
+                  type: DECIMAL
+              - column:
+                  constraints:
+                    nullable: false
+                  name: employee_id
+                  type: BIGINT
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: created_at
+                  type: TIMESTAMP WITH TIME ZONE
+                  defaultValueComputed: "CURRENT_TIMESTAMP"
+              - column:
+                  constraints:
+                    nullable: false
+                  name: updated_at
+                  type: TIMESTAMP WITH TIME ZONE
+                  defaultValueComputed: "CURRENT_TIMESTAMP"
+      rollback:
+        - dropTable:
+            tableName: schedule

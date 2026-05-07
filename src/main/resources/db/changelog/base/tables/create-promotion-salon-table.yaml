@@ -1,0 +1,26 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-promotion-salon-table
+      author: Il'ia Kuz'min
+      preConditions:
+        - not:
+            tableExists:
+              tableName: promotion_salon
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            tableName: promotion_salon
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                  name: promotion_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: salon_id
+                  type: BIGINT
+      rollback:
+        - dropTable:
+            tableName: promotion_salon

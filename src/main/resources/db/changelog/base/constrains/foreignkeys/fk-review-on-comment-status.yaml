@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: fk-review-on-comment-status
+      author: Il'ia Kuz'min
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: comment_status_id
+            baseTableName: review
+            constraintName: FK_REVIEW_ON_COMMENT_STATUS
+            referencedColumnNames: id
+            referencedTableName: comment_status
+            onUpdate: CASCADE
+            onDelete: RESTRICT
+      rollback:
+          - dropForeignKeyConstraint:
+                constraintName: FK_REVIEW_ON_COMMENT_STATUS
+                tableName: review

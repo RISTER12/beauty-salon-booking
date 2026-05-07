@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Выбор даты и времени</title>
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/online-booking-menu-pages.css">
+    <style>
+        /* Дополнительные стили для ясности */
+        .arrow {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            color: white;
+            font: 20px Arial;
+            margin-right: 10px;
+            text-decoration: none;
+        }
+
+        header a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+
+        #arrows a {
+            text-decoration: none;
+            color: inherit;
+        }
+    </style>
+</head>
+<body>
+<div class="wrapper">
+    <div class="center">
+        <form action="/booking" method="get">
+
+            <header>
+                //todo понять почему тут employee, а не employeeId
+                <a th:href="@{/booking(serviceIds=${serviceIds}, employee=${employeeId})}" class="width-100">
+                    <div class="arrow">←</div>
+                    <img src="../images/small-image.jpg" alt="">
+                    <div>
+                        <div id="mainInfo">SEKTA X TEXH V</div>
+                        <div id="address">улица Покровка, 44</div>
+                    </div>
+                </a>
+            </header>
+            <main>
+                <div id="calendar">
+                    <div id="calendar-header">
+                        <span id="month"></span>
+                        <div id="arrows">
+                            <button type="button" class="nav-btn prev-month">←</button>
+                            <button type="button" class="nav-btn next-month">→</button>
+                        </div>
+                    </div>
+                    <div id="calendar-grid-header">
+                        <div class="day-header">Пн</div>
+                        <div class="day-header">Вт</div>
+                        <div class="day-header">Ср</div>
+                        <div class="day-header">Чт</div>
+                        <div class="day-header">Пт</div>
+                        <div class="day-header">Сб</div>
+                        <div class="day-header">Вс</div>
+                    </div>
+                    <div id="calendar-grid"></div>
+                </div>
+            </main>
+            <footer>
+                <div id="go">
+                    <button type="button" id="confirm-button">Подтвердить запись</button>
+                </div>
+            </footer>
+        </form>
+    </div>
+</div>
+<script src="../js/calendar.js"></script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    window.selectedEmployeeId = [[${employeeId}]];
+    /*]]>*/
+</script>
+</body>
+</html>

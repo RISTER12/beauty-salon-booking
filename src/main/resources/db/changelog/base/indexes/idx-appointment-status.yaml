@@ -1,0 +1,15 @@
+databaseChangeLog:
+  - changeSet:
+      id: idx-appointment-status
+      author: Il'ia Kuz'min
+      changes:
+        - createIndex:
+            indexName: idx_appointment_status
+            tableName: appointment
+            columns:
+              - column:
+                  name: appointment_status_id
+      rollback:
+        - dropIndex:
+            indexName: idx_appointment_status
+            tableName: appointment

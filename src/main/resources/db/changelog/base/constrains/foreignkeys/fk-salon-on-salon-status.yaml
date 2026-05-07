@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: fk-salon-on-salon-status
+      author: Il'ia Kuz'min
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: status_id
+            baseTableName: salon
+            constraintName: FK_SALON_ON_STATUS
+            referencedColumnNames: id
+            referencedTableName: salon_status
+            onUpdate: CASCADE
+            onDelete: RESTRICT
+      rollback:
+          - dropForeignKeyConstraint:
+                constraintName: FK_SALON_ON_STATUS
+                tableName: salon

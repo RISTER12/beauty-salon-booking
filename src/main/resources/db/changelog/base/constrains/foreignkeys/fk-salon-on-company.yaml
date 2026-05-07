@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: fk-salon-on-company
+      author: Il'ia Kuz'min
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: company_id
+            baseTableName: salon
+            constraintName: FK_SALON_ON_COMPANY
+            referencedColumnNames: id
+            referencedTableName: company
+            onUpdate: RESTRICT
+            onDelete: CASCADE
+      rollback:
+          - dropForeignKeyConstraint:
+                constraintName: FK_SALON_ON_COMPANY
+                tableName: salon

@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: uk-gender-code
+      author: Il'ia Kuz'min
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: code
+            constraintName: UK_GENDER_CODE
+            tableName: gender
+      rollback:
+        - dropUniqueConstraint:
+            constraintName: UK_GENDER_CODE
+            tableName: gender

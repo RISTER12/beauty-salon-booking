@@ -1,0 +1,16 @@
+databaseChangeLog:
+  - changeSet:
+      id: idx-employee-salon
+      author: Il'ia Kuz'min
+      changes:
+        - createIndex:
+            indexName: idx_employee_salon
+            tableName: employee
+            columns:
+              - column:
+                  name: salon_id
+      rollback:
+        - dropIndex:
+            indexName: idx_employee_salon
+            tableName: employee
+

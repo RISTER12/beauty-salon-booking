@@ -1,0 +1,102 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-revenue-report-table
+      author: Il'ia Kuz'min
+      preConditions:
+        - not:
+            tableExists:
+              tableName: revenue_report
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            tableName: revenue_report
+            remarks: "Отчеты по выручке"
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_revenue_report
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: report_type_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: period_start_date
+                  type: DATE
+              - column:
+                  constraints:
+                    nullable: false
+                  name: period_end_date
+                  type: DATE
+              - column:
+                  constraints:
+                    nullable: false
+                  name: generated_date
+                  type: DATE
+                  remarks: "Дата генерации отчёта"
+              - column:
+                  name: salon_id
+                  type: BIGINT
+                  remarks: "Если salon_id = NULL, то отчёт сразу по всем салонам"
+              - column:
+                  name: employee_id
+                  type: BIGINT
+                  remarks: "Если employee_id = NULL, то отчёт сразу по всем сотрудникам"
+              - column:
+                  name: total_revenue
+                  type: DECIMAL
+                  remarks: "Общая выручка"
+              - column:
+                  name: net_revenue
+                  type: DECIMAL
+              - column:
+                  name: total_appointments
+                  type: BIGINT
+                  remarks: "Общее количество записей"
+              - column:
+                  name: completed_appointments
+                  type: BIGINT
+              - column:
+                  name: cancelled_appointments
+                  type: BIGINT
+              - column:
+                  name: new_clients
+                  type: BIGINT
+                  remarks: "Количество новых клиентов"
+              - column:
+                  name: returning_clients
+                  type: BIGINT
+              - column:
+                  name: average_check
+                  type: DECIMAL
+                  remarks: "Средний чек"
+              - column:
+                  name: average_rating
+                  type: DECIMAL
+                  remarks: "Средний рейтинг"
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: created_at
+                  type: TIMESTAMP WITH TIME ZONE
+                  defaultValueComputed: "CURRENT_TIMESTAMP"
+              - column:
+                  constraints:
+                    nullable: false
+                  name: updated_at
+                  type: TIMESTAMP WITH TIME ZONE
+                  defaultValueComputed: "CURRENT_TIMESTAMP"
+      rollback:
+        - dropTable:
+            tableName: revenue_report

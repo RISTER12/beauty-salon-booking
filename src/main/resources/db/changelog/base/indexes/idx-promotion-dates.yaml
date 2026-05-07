@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: idx-promotion-dates
+      author: Il'ia Kuz'min
+      changes:
+        - createIndex:
+            indexName: idx_promotion_dates
+            tableName: promotion
+            columns:
+              - column:
+                  name: start_date
+              - column:
+                  name: end_date
+      rollback:
+        - dropIndex:
+            indexName: idx_promotion_dates
+            tableName: promotion

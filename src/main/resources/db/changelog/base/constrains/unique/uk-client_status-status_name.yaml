@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: uk-client_status-status_name
+      author: Il'ia Kuz'min
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: status_name
+            constraintName: UK_CLIENT_STATUS_STATUS_NAME
+            tableName: client_status
+      rollback:
+        - dropUniqueConstraint:
+            constraintName: UK_CLIENT_STATUS_STATUS_NAME
+            tableName: client_status

@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: idx-appointment-dates
+      author: Il'ia Kuz'min
+      changes:
+        - createIndex:
+            indexName: idx_appointment_dates
+            tableName: appointment
+            columns:
+              - column:
+                  name: start_time
+              - column:
+                  name: end_time
+      rollback:
+        - dropIndex:
+            indexName: idx_appointment_dates
+            tableName: appointment

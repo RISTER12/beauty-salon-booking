@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: load-employee-data
+      author: Il'ia Kuz'min
+      changes:
+        - loadData:
+            tableName: employee
+            file: ../csv/employee.csv
+            relativeToChangelogFile: true

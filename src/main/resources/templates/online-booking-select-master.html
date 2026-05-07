@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head xmlns:th="http://www.thymeleaf.org">
+    <meta charset="UTF-8">
+    <title>Выбор специалиста</title>
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/online-booking-menu-pages.css">
+</head>
+<body>
+<div class="wrapper">
+    <div class="center">
+        <form action="/booking" method="get">
+            <input type="hidden" name="serviceIds" th:each="id : ${serviceIds}" th:value="${id}" />
+            <header>
+                <a th:href="@{/booking(serviceIds=${serviceIds}, employeeId=${employeeId})}" class="width-100">
+                    <div class="arrow">←</div>
+                    <img src="../images/small-image.jpg" alt="">
+                    <div>
+                        <div id="mainInfo">SEKTA X TEXH V</div>
+                        <div id="address">улица Покровка, 44</div>
+                    </div>
+                </a>
+            </header>
+            <main>
+                <h1>Выбрать специалиста</h1>
+                <div class="string">
+                    <label>
+                        <img src="../images/small-image.jpg">
+                        <div class="center-part" id="someone">
+                            <div class="name">Любой специалист</div>
+                        </div>
+                        <input type="radio" name="employeeId" th:checked="${employeeId == null or employeeId == 0}" value="0">
+                    </label>
+                </div>
+                <div class="string" th:each="emp : ${employees}">
+                    <label>
+                        <img src="../images/small-image.jpg">
+                        <div class="center-part">
+                            <div class="name" th:text="${emp.firstName} + ' ' + ${emp.lastName}">Имя Фамилия</div>
+                            <div class="professional">Мастер</div>
+                            <div class="review">30 отзывов</div>
+                        </div>
+                        <input type="radio" name="employeeId" th:checked="${employeeId == emp.id}" th:value="${emp.id}">
+                    </label>
+                </div>
+            </main>
+            <footer>
+                <div id="go">
+                    <button type="submit">Выбрать услугу</button>
+                </div>
+            </footer>
+        </form>
+    </div>
+</div>
+</body>
+</html>

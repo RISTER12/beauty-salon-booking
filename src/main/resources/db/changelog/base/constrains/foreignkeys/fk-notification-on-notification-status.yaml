@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: fk-notification-on-notification-status
+      author: Il'ia Kuz'min
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: notification_status_id
+            baseTableName: notification
+            constraintName: FK_NOTIFICATION_ON_NOTIFICATION_STATUS
+            referencedColumnNames: id
+            referencedTableName: notification_status
+            onUpdate: CASCADE
+            onDelete: RESTRICT
+      rollback:
+          - dropForeignKeyConstraint:
+                constraintName: FK_NOTIFICATION_ON_NOTIFICATION_STATUS
+                tableName: notification

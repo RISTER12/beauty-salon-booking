@@ -1,0 +1,16 @@
+databaseChangeLog:
+  - changeSet:
+      id: idx-promotion-active
+      author: Il'ia Kuz'min
+      changes:
+        - createIndex:
+            indexName: idx_promotion_active
+            tableName: promotion
+            columns:
+              - column:
+                  name: is_active
+            where: is_active = true
+      rollback:
+        - dropIndex:
+            indexName: idx_promotion_active
+            tableName: promotion

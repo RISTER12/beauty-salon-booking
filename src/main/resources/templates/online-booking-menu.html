@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Онлайн запись</title>
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/online-booking-menu.css">
+</head>
+<body>
+<div class="wrapper">
+    <div class="center">
+        <header>
+            <div id="profile">
+                <a href="/">
+                    <img src="../images/small-image.jpg">
+                </a>
+            </div>
+
+            <div id="aboutSalon">
+                <a id="mainInfo" href="/">SEKTA X TEXH V</a>
+                <div id="address">улица Покровка, 44</div>
+            </div>
+        </header>
+        <main>
+
+            <div class="string" th:if="${employee == null}">
+                <a th:unless="${employeeId == 0}"
+                   th:href="@{/booking/select-master(slotId=${slotId}, employeeId=${employeeId}, serviceIds=${serviceIds})}">
+                    <img src="../images/small-image.jpg">
+                    <span>Выбрать специалиста</span>
+                    <div class="end-line">></div>
+                </a>
+
+                <a th:if="${employeeId == 0}"
+                   th:href="@{/booking/select-master(slotId=${slotId}, employeeId=${employeeId}, serviceIds=${serviceIds})}">
+                    <img src="../images/small-image.jpg">
+                    <span>Любой специалист</span>
+                    <div class="end-line">></div>
+                </a>
+            </div>
+
+            <div class="string" th:unless="${employee == null}">
+                <a th:unless="${employeeId == 0}"
+                   th:href="@{/booking/select-master(slotId=${slotId}, employeeId=${employeeId}, serviceIds=${serviceIds})}">
+                    <img src="../images/small-image.jpg">
+                    <span th:text="${employee.firstName} + ' ' + ${employee.lastName}">Имя Фамилия</span>
+
+                    <div class="end-line">></div>
+                </a>
+            </div>
+
+
+            <div class="string" th:if="${slotId == null}">
+                <a th:if="${employee != 0}"
+                   th:href="@{/booking/select-date-time(employeeId=${employeeId}, serviceIds=${serviceIds})}">
+                    <img src="../images/small-image.jpg">
+                    <span>Выбрать дату и время</span>
+                    <div class="end-line">></div>
+                </a>
+
+                <a th:unless="${employee != 0}" th:href="@{/booking/select-date-time(serviceIds=${serviceIds})}">
+                    <img src="../images/small-image.jpg">
+                    <span>Выбрать дату и время</span>
+                    <div class="end-line">></div>
+                </a>
+            </div>
+
+            <div class="string" th:unless="${slotId == null}">
+                <a th:if="${employee != 0}"
+                   th:href="@{/booking/select-date-time(employeeId=${employeeId}, serviceIds=${serviceIds})}">
+                    <img src="../images/small-image.jpg">
+                    <span th:text="${timeslot.startTime + ' ' + timeslot.slotDate}">Время Дата</span>
+                    <div class="end-line">></div>
+                </a>
+
+                <a th:unless="${employee != 0}" th:href="@{/booking/select-date-time(serviceIds=${serviceIds})}">
+                    <img src="../images/small-image.jpg">
+                    <span th:text="${timeslot.startTime + ' ' + timeslot.slotDate}">Время Дата</span>
+                    <div class="end-line">></div>
+                </a>
+            </div>
+
+
+            <div th:if="${serviceList != null && !serviceList.isEmpty()}" id="list">
+                <h2 >Выбранные услуги:</h2>
+                <div class="string"  th:each="service : ${serviceList}">
+                    <img src="../images/small-image.jpg">
+                    <span th:text="${service.getName()}">Название</span>
+                </div>
+            </div>
+
+            <div class="string">
+                <a th:if="${serviceIds == null}"
+                   th:href="@{/booking/select-service(employeeId=${employeeId}, slotId=${slotId})}">
+                    <img src="../images/small-image.jpg">
+                    <span>Выбрать услуги</span>
+                    <div class="end-line">></div>
+                </a>
+                <a th:unless="${serviceIds == null}"
+                   th:href="@{/booking/select-service(employeeId=${employeeId}, slotId=${slotId})}">
+                    <img src="../images/small-image.jpg">
+                    <span>Добавить услуги</span>
+                    <div class="end-line">+</div>
+                </a>
+
+            </div>
+        </main>
+    </div>
+</div>
+</body>
+</html>

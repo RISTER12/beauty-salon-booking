@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: fk-client-on-gender
+      author: Il'ia Kuz'min
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: gender_id
+            baseTableName: client
+            constraintName: FK_CLIENT_ON_GENDER
+            referencedColumnNames: id
+            referencedTableName: gender
+            onUpdate: CASCADE
+            onDelete: RESTRICT
+      rollback:
+          - dropForeignKeyConstraint:
+                constraintName: FK_CLIENT_ON_GENDER
+                tableName: client

@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: fk-payment-on-appointment
+      author: Il'ia Kuz'min
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: appointment_id
+            baseTableName: payment
+            constraintName: FK_PAYMENT_ON_APPOINTMENT
+            referencedColumnNames: id
+            referencedTableName: appointment
+            onUpdate: RESTRICT
+            onDelete: RESTRICT
+      rollback:
+          - dropForeignKeyConstraint:
+                constraintName: FK_PAYMENT_ON_APPOINTMENT
+                tableName: payment

@@ -1,0 +1,83 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-timeslot-table
+      author: Il'ia Kuz'min
+      preConditions:
+        - not:
+            tableExists:
+              tableName: timeslot
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            tableName: timeslot
+            remarks: "Временные слоты для записи"
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_timeslot
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: employee_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: salon_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: slot_date
+                  type: DATE
+              - column:
+                  constraints:
+                    nullable: false
+                  name: start_time
+                  type: time
+              - column:
+                  constraints:
+                    nullable: false
+                  name: end_time
+                  type: time
+              - column:
+                  constraints:
+                    nullable: false
+                  name: duration_minutes
+                  type: bigint
+                  defaultValue: '30'
+              - column:
+                  constraints:
+                    nullable: false
+                  name: status_id
+                  type: BIGINT
+              - column:
+                  name: appointment_id
+                  type: BIGINT
+                  remarks: "К какой записи относится этот временной слот"
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: created_at
+                  type: TIMESTAMP WITH TIME ZONE
+                  defaultValueComputed: "CURRENT_TIMESTAMP"
+              - column:
+                  constraints:
+                    nullable: false
+                  name: updated_at
+                  type: TIMESTAMP WITH TIME ZONE
+                  defaultValueComputed: "CURRENT_TIMESTAMP"
+      rollback:
+        - dropTable:
+            tableName: timeslot

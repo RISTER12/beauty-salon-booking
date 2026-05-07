@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Панель админа</title>
+    <link rel="stylesheet" th:href="@{/css/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/admin-panel.css}">
+</head>
+<body>
+<div class="wrapper center">
+    <div id="container">
+        <aside class="menu">
+            <a href="/admin-panel/employees"
+               class="width-100"
+               th:classappend="${section == 'employees'} ? 'active' : ''">
+                Сотрудники</a>
+            <a href="/admin-panel/salons"
+               class="width-100"
+               th:classappend="${section == 'salons'} ? 'active' : ''">
+                Салоны</a>
+            <a href="/admin-panel/services"
+               class="width-100"
+               th:classappend="${section == 'services'} ? 'active' : ''">
+                Услуги</a>
+        </aside>
+        <main>
+            <div th:if="${section == 'employees'}">
+                <header>
+                    <div class="menu">
+                        <a href=""
+                           th:classappend="${subsection == 'search'} ? 'active' : ''">
+                            Найти</a>
+                        <a href="/admin-panel/employees/editMode"
+                           th:unless="${subsection == 'editMode'}"
+                        th:classappend="${subsection == 'editMode'} ? 'active' : ''">
+                            Режим редактирования</a>
+                        <a href="/admin-panel/employees"
+                           th:if="${subsection == 'editMode'}">
+                            Режим чтения</a>
+                    </div>
+                </header>
+
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Фамилия</th>
+                        <th>Имя</th>
+                        <th>Отчество</th>
+                        <th th:if="${subsection == 'editMode'}">
+                            <a href="/admin-panel/employees/editMode/add"
+                            >Добавить</a>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:if="${add == 'true'}">
+                        <td colspan="3">
+                            <form th:action="@{/admin-panel/employees/save}"
+                                  th:id="'update-form'"
+                                  method="post"
+                                  style="display: grid;
+                 grid-template-columns: 1fr 1fr 1fr;
+                 gap: 10px;
+                 align-items: center;">
+                                <input type="text"
+                                       name="lastName"
+                                placeholder="Фамилия">
+                                <input type="text"
+                                       name="firstName"
+                                placeholder="Имя">
+                                <input type="text"
+                                       name="middleName"
+                                placeholder="Отчество">
+                            </form>
+                        </td>
+                        <td>
+                            <button th:form="'update-form'"
+                                    type="submit"
+                                    th:style="'display: inline'">Сохранить</button>
+                        </td>
+                        <td>
+                            <a href="/admin-panel/employees/editMode">Отменить</a>
+                        </td>
+                    </tr>
+                    <tr th:each="emp : ${employees}">
+                        <td th:unless="${editId == emp.id}" th:text="${emp.lastName}"></td>
+                        <td th:unless="${editId == emp.id}" th:text="${emp.firstName}"></td>
+                        <td th:unless="${editId == emp.id}" th:text="${emp.middleName}"></td>
+                        <!--Ячейки таблиц отображаемые в режиме редактирования-->
+                        <td th:if="${editId == emp.id}" colspan="3">
+                            <form th:action="@{/admin-panel/employees/editMode/{id}(id=${emp.id})}"
+                                  th:id="'update-form'"
+                                  method="post"
+                                  style="display: grid;
+                 grid-template-columns: 1fr 1fr 1fr auto auto;
+                 gap: 10px;
+                 align-items: center;">
+                                <input type="text"
+                                       name="lastName"
+                                       th:value="${emp.lastName}">
+                                <input type="text"
+                                       name="firstName"
+                                       th:value="${emp.firstName}">
+                                <input type="text"
+                                       name="middleName"
+                                       th:value="${emp.middleName}">
+
+                            </form>
+                        </td>
+                        <td th:if="${editId == emp.id} and ${subsection == 'editMode'}">
+                            <button th:form="'update-form'"
+                                    type="submit"
+                                    th:style="'display: inline'">Сохранить</button>
+                        </td>
+
+                        <td th:unless="${editId == emp.id}"
+                        th:if="${subsection == 'editMode'}">
+                            <form th:action="@{/admin-panel/employees/editMode/{id}(id=${emp.id})}"
+                                  method="get"
+                                  th:style="'display: inline;'">
+                                <button type="submit">Изменить</button>
+                            </form>
+                        </td>
+
+                        <td th:if="${subsection == 'editMode'}" th:unless="${editId == emp.id}">
+                            <form th:action="@{/admin-panel/employees/delete/{id}(id=${emp.id})}"
+                                  method="post"
+                                  th:style="'display: inline;'"
+                                  onsubmit="return confirm('Удалить сотрудника?');">
+                                <button type="submit">Удалить</button>
+                            </form>
+                        </td>
+
+                        <td th:if="${editId == emp.id}">
+                            <a href="/admin-panel/employees/editMode">Отменить</a>
+                        </td>
+
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div th:if="${subsection == 'save'}">
+                    <form th:action="@{/admin-panel/employees/save}" th:object="${employeeDto}" th:method="post">
+                        <label>
+                            <span>Введите имя</span>
+                            <input th:type="text" placeholder="Имя" th:field="*{firstName}">
+                        </label>
+                        <label>
+                            <span>Введите фамилию</span>
+                            <input th:type="text" placeholder="Фамилия" th:field="*{lastName}">
+                        </label>
+                        <label>
+                            <span>Введите отчество</span>
+                            <input th:type="text" placeholder="Отчество" th:field="*{middleName}">
+                        </label>
+                        <button type="submit">Добавить пользователя</button>
+                    </form>
+                </div>
+            </div>
+
+            <!--                <form th:action="@{/admin-panel/employees-statuses}" th:object="${employeeStatusDto}" th:method="post">-->
+            <!--                    <input th:type="text" placeholder="Имя" th:field="*{statusName}">-->
+            <!--                    <button type="submit">Сохранить статус</button>-->
+            <!--                </form>-->
+
+
+            <div th:if="${section == 'salons'}">
+                Салоны
+            </div>
+            <div th:if="${section == 'services'}">
+                Услуги
+            </div>
+            <div th:if="${section == null}">
+                <h1>Добро пожаловать в админ-панель</h1>
+                <p>Выберите раздел слева</p>
+            </div>
+        </main>
+    </div>
+    <footer></footer>
+</div>
+</body>
+</html>

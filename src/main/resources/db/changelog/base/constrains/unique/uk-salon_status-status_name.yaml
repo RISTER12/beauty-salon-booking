@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: uk-salon_status-status_name
+      author: Il'ia Kuz'min
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: status_name
+            constraintName: UK_SALON_STATUS_STATUS_NAME
+            tableName: salon_status
+      rollback:
+        - dropUniqueConstraint:
+            constraintName: UK_SALON_STATUS_STATUS_NAME
+            tableName: salon_status

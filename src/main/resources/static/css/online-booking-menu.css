@@ -1,0 +1,118 @@
+@media (min-width: 600px) {
+    .center {
+        width: 600px;
+    }
+
+    header {
+        height: 380px;
+    }
+}
+
+body {
+    background-color: rgb(20, 20, 20);;
+}
+* {
+    scrollbar-gutter: stable;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.center {
+    flex: 1;
+    margin: 0 auto;
+    background-color: rgb(38, 38, 38);
+}
+
+header {
+    background-image: url("../images/booking-background.jpg");
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+#list {
+    display: block;
+}
+main h2 {
+    padding: 20px;
+    color: white;
+    font: 20px Arial;
+}
+
+#profile {
+    width: 40px;
+    position: sticky;
+    align-self: flex-end;
+    margin: 10px;
+}
+
+#profile a img {
+    position: fixed;
+    height: 40px;
+    border-radius: 50%;
+}
+
+#aboutSalon {
+    box-sizing: border-box;
+    border-radius: 20px 20px 0 0;
+    padding: 10px;
+    background-color: rgb(38, 38, 38);
+    text-align: left;
+    user-select: none;
+}
+
+#aboutSalon #mainInfo {
+    /*background-color: rgb(38, 38, 38);*/
+    color: white;
+    font: 20px Arial;
+    text-decoration: none;
+}
+
+#aboutSalon #address {
+    color: darkgray;
+    font: 16px Arial;
+}
+
+main {
+    padding: 10px;
+    flex: 1;
+}
+
+main * {
+    display: flex;
+    flex-direction: row;
+}
+
+.string {
+    width: 100%;
+    justify-content: space-between;
+    height: 40px;
+    margin-bottom: 20px;
+
+}
+
+.string a {
+    justify-content: space-between;
+    width: 100%;
+    color: white;
+    padding: 0;
+    text-decoration: none;
+}
+
+
+.string .end-line, .string span {
+    color: white;
+    padding: 10px;
+}
+
+.string span {
+    width: 100%;
+    text-align: left;
+}
+
+.string img {
+    border-radius: 50%;
+}

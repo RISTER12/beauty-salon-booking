@@ -1,0 +1,26 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-promotion-service-table
+      author: Il'ia Kuz'min
+      preConditions:
+        - not:
+            tableExists:
+              tableName: promotion_service
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            tableName: promotion_service
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                  name: promotion_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: service_id
+                  type: BIGINT
+      rollback:
+        - dropTable:
+            tableName: promotion_service

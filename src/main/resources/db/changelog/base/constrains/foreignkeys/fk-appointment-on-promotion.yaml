@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: fk-appointment-on-promotion
+      author: Il'ia Kuz'min
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: promotion_id
+            baseTableName: appointment
+            constraintName: FK_APPOINTMENT_ON_PROMOTION
+            referencedColumnNames: id
+            referencedTableName: promotion
+            onUpdate: RESTRICT
+            onDelete: SET NULL
+      rollback:
+          - dropForeignKeyConstraint:
+                constraintName: FK_APPOINTMENT_ON_PROMOTION
+                tableName: appointment
