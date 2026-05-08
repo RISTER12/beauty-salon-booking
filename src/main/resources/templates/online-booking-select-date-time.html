@@ -6,7 +6,6 @@
     <link rel="stylesheet" href="../css/reset.css">
     <link rel="stylesheet" href="../css/online-booking-menu-pages.css">
     <style>
-        /* Дополнительные стили для ясности */
         .arrow {
             display: flex;
             flex-direction: column;
@@ -35,8 +34,7 @@
         <form action="/booking" method="get">
 
             <header>
-                //todo понять почему тут employee, а не employeeId
-                <a th:href="@{/booking(serviceIds=${serviceIds}, employee=${employeeId})}" class="width-100">
+                <a th:href="@{/booking(serviceIds=${serviceIds}, employeeId=${employeeId})}" class="width-100">
                     <div class="arrow">←</div>
                     <img src="../images/small-image.jpg" alt="">
                     <div>
