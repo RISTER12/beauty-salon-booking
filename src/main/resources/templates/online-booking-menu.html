@@ -50,7 +50,6 @@
                 </a>
             </div>
 
-
             <div class="string" th:if="${slotId == null}">
                 <a th:if="${employee != 0}"
                    th:href="@{/booking/select-date-time(employeeId=${employeeId}, serviceIds=${serviceIds})}">
@@ -105,6 +104,20 @@
                 </a>
 
             </div>
+<!--            th:if="${employeeId != null && slotId != null && serviceIds != null}"-->
+            <form class="client-data" action="/booking" method="post" th:object="${clientDto}" th:if="${employeeId != null && slotId != null && serviceIds != null}">
+                <label>
+                    <span>Имя</span>
+                    <input placeholder="Имя" required>
+                </label>
+
+                <label>
+                    <span>Телефон</span>
+                    <span>+7</span>
+                    <input type="tel" th:field="*{name}" pattern="(?\d{3}\)?\s?\d{3}[-]?\d{2}[-]?\d{2}" placeholder="(XXX) XXX-XX-XX" required minlength="10" maxlength="15">
+                </label>
+                <button type="submit" th:field="*{number}" th:text="Записаться"></button>
+            </form>
         </main>
     </div>
 </div>

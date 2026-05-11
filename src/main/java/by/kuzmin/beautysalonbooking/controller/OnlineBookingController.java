@@ -1,5 +1,6 @@
 package by.kuzmin.beautysalonbooking.controller;
 
+import by.kuzmin.beautysalonbooking.dto.ClientScheduleDto;
 import by.kuzmin.beautysalonbooking.dto.CreateEmployeeResponseDto;
 
 import by.kuzmin.beautysalonbooking.dto.TimeslotDto;
@@ -8,10 +9,8 @@ import by.kuzmin.beautysalonbooking.service.ServiceService;
 import by.kuzmin.beautysalonbooking.service.TimeslotService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -45,6 +44,12 @@ public class OnlineBookingController {
             model.addAttribute("serviceIds", serviceIds);
             model.addAttribute("serviceList", serviceService.findAllByIds(serviceIds)) ;
         }
+        return "online-booking-menu";
+    }
+
+    @PostMapping
+    public String clientBooking(@ModelAttribute ClientScheduleDto client) {
+
         return "online-booking-menu";
     }
 }

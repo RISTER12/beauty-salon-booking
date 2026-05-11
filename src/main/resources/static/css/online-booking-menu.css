@@ -9,10 +9,11 @@
 }
 
 body {
-    background-color: rgb(20, 20, 20);;
+    background-color: rgb(20, 20, 20);
 }
 * {
     scrollbar-gutter: stable;
+    color: white;
 }
 
 .wrapper {
@@ -115,4 +116,108 @@ main * {
 
 .string img {
     border-radius: 50%;
+}
+
+.client-data {
+    display: block;
+    text-align: center;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 24px;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+.client-data label {
+    display: block;
+    margin-bottom: 20px;
+    font-weight: 500;
+    color: #1f2937;
+}
+
+.client-data label span:first-child {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+}
+
+.client-data label span + span {
+    display: inline-block;
+    margin-right: 4px;
+    font-size: 16px;
+    color: #6b7280;
+}
+
+.client-data input {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 16px;
+    border: 1px solid #d1d5db;
+    border-radius: 12px;
+    background-color: #fff;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+    font-family: inherit;
+    color: black;
+}
+
+.client-data input:focus {
+    outline: none;
+    border-color: #f97316;
+}
+
+.client-data input::placeholder {
+    color: #9ca3af;
+    font-size: 14px;
+}
+
+.client-data label:has(input[type="tel"]) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px;
+}
+
+.client-data label:has(input[type="tel"]) span:first-child {
+    width: 100%;
+}
+
+.client-data label:has(input[type="tel"]) input {
+    flex: 1;
+    min-width: 180px;
+}
+
+.client-data button[type="submit"] {
+    width: 100%;
+    padding: 14px;
+    background: #f97316;
+    border: none;
+    border-radius: 40px;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.1s ease;
+    font-family: inherit;
+    margin-top: 8px;
+}
+
+.client-data button[type="submit"]:hover {
+    background: #ea580c;
+}
+
+.client-data button[type="submit"]:active {
+    transform: scale(0.98);
+}
+
+.client-data input:valid {
+    border-color: #22c55e;
+}
+
+.client-data input:invalid:not(:placeholder-shown) {
+    border-color: #ef4444;
 }
