@@ -49,4 +49,8 @@ public class ServiceService {
                 .map(serviceMapper::toDto)
                 .toList();
     }
+
+    public List<ServiceEntity> getRecommendedServices(Long clientId) {
+        return List.of();
+    }
 }

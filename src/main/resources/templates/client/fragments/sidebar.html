@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="sidebar" class="sidebar">
+    <div class="sidebar-header">
+        <h3>Мой кабинет</h3>
+    </div>
+
+    <nav class="sidebar-nav">
+        <a href="/client/dashboard" class="nav-link" th:classappend="${currentPage == 'dashboard'} ? 'active' : ''">
+            <span class="icon">📊</span>
+            <span>Дашборд</span>
+        </a>
+
+        <a href="/client/profile" class="nav-link" th:classappend="${currentPage == 'profile'} ? 'active' : ''">
+            <span class="icon">👤</span>
+            <span>Мой профиль</span>
+        </a>
+
+        <a href="/client/appointments" class="nav-link" th:classappend="${currentPage == 'appointments'} ? 'active' : ''">
+            <span class="icon">📅</span>
+            <span>Мои записи</span>
+            <span class="badge" th:text="${pendingCount}" th:if="${pendingCount > 0}"></span>
+        </a>
+
+        <a href="/client/favorites" class="nav-link" th:classappend="${currentPage == 'favorites'} ? 'active' : ''">
+            <span class="icon">❤️</span>
+            <span>Избранное</span>
+        </a>
+
+        <a href="/client/reviews" class="nav-link" th:classappend="${currentPage == 'reviews'} ? 'active' : ''">
+            <span class="icon">⭐</span>
+            <span>Мои отзывы</span>
+        </a>
+
+        <a href="/client/notifications" class="nav-link" th:classappend="${currentPage == 'notifications'} ? 'active' : ''">
+            <span class="icon">🔔</span>
+            <span>Уведомления</span>
+            <span class="badge" th:text="${unreadCount}" th:if="${unreadCount > 0}"></span>
+        </a>
+    </nav>
+
+    <div class="sidebar-footer">
+        <form method="post" action="/logout">
+            <button type="submit" class="logout-btn">
+                <span class="icon">🚪</span>
+                <span>Выйти</span>
+            </button>
+        </form>
+    </div>
+</div>
+</html>

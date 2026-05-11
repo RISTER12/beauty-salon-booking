@@ -103,6 +103,12 @@ databaseChangeLog:
                   type: BOOLEAN
                   remarks: "Верифицирован ли пользователь"
               - column:
+                  name: loyalty_points
+                  type: INT
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+              - column:
                   name: created_by
                   type: VARCHAR(255)
               - column:

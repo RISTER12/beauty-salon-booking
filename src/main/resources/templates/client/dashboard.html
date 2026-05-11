@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личный кабинет - Салон красоты</title>
+    <link rel="stylesheet" th:href="@{/css/client.css}">
+</head>
+<body>
+
+<div class="client-layout">
+    <!-- Боковое меню -->
+    <div th:replace="~{client/fragments/sidebar :: sidebar}"></div>
+
+    <!-- Основной контент -->
+    <main class="client-content">
+        <!-- Шапка -->
+        <div class="content-header">
+            <h1>Добро пожаловать, <span th:text="${client.name}">Имя</span>!</h1>
+            <p class="welcome-text">
+                Рады видеть вас в нашем салоне.
+                <span th:if="${lastVisit != null}">
+                    Последний визит: <strong th:text="${#temporals.format(lastVisit, 'dd MMMM yyyy')}"></strong>
+                </span>
+            </p>
+        </div>
+
+        <!-- Статистика -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value" th:text="${totalVisits}">0</div>
+                <div class="stat-label">Всего визитов</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" th:text="${totalSpent}">0</div>
+                <div class="stat-label">Потрачено (₽)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" th:text="${loyaltyPoints}">0</div>
+                <div class="stat-label">Бонусных баллов</div>
+            </div>
+        </div>
+
+        <!-- Ближайшие записи -->
+        <div class="section">
+            <div class="section-header">
+                <h2>📅 Ближайшие записи</h2>
+                <a href="/client/appointments" class="link">Все записи →</a>
+            </div>
+
+            <div th:if="${upcomingAppointments.isEmpty()}" class="empty-state">
+                <p>У вас нет предстоящих записей</p>
+                <a href="/booking" class="btn-primary">Записаться сейчас</a>
+            </div>
+
+            <div class="appointments-list" th:unless="${upcomingAppointments.isEmpty()}">
+                <div th:each="app : ${upcomingAppointments}" class="appointment-card">
+                    <div class="appointment-date">
+                        <div class="day" th:text="${#temporals.format(app.date, 'dd')}">15</div>
+                        <div class="month" th:text="${#temporals.format(app.date, 'MMM')}">Май</div>
+                    </div>
+                    <div class="appointment-info">
+                        <div class="service-name" th:text="${app.service.name}">Стрижка</div>
+                        <div class="appointment-details">
+                            <span class="time">🕐 <span th:text="${app.time}">14:00</span></span>
+                            <span class="master">✂️ <span th:text="${app.employee.name}">Анна</span></span>
+                        </div>
+                        <div class="appointment-address" th:text="${app.salon.address.city} + ', ' + ${app.salon.address.street}">
+                            Москва, Тверская 1
+                        </div>
+                    </div>
+                    <div class="appointment-actions">
+                        <button class="btn-cancel" th:data-id="${app.id}" onclick="cancelAppointment(this)">
+                            Отменить
+                        </button>
+                        <button class="btn-reschedule" th:data-id="${app.id}" onclick="rescheduleAppointment(this)">
+                            Перенести
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Быстрые действия -->
+        <div class="section">
+            <h2>🚀 Быстрые действия</h2>
+            <div class="quick-actions">
+                <a href="/booking" class="quick-action-card">
+                    <div class="action-icon">✂️</div>
+                    <div class="action-title">Новая запись</div>
+                    <div class="action-desc">Записаться на услугу</div>
+                </a>
+                <a href="/client/favorites" class="quick-action-card">
+                    <div class="action-icon">❤️</div>
+                    <div class="action-title">Избранное</div>
+                    <div class="action-desc">Любимые услуги и мастера</div>
+                </a>
+                <a href="/client/profile" class="quick-action-card">
+                    <div class="action-icon">⚙️</div>
+                    <div class="action-title">Настройки</div>
+                    <div class="action-desc">Изменить данные профиля</div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Рекомендации -->
+        <div class="section" th:if="${not recommendedServices.isEmpty()}">
+            <div class="section-header">
+                <h2>💡 Вам может понравиться</h2>
+            </div>
+            <div class="services-scroll">
+                <div th:each="service : ${recommendedServices}" class="service-card">
+                    <h4 th:text="${service.name}">Услуга</h4>
+                    <p th:text="${service.description ?: 'Краткое описание услуги'}"></p>
+                    <div class="service-price" th:text="${service.price} + ' ₽'">1500 ₽</div>
+                    <a th:href="'/booking?serviceId=' + ${service.id}" class="btn-sm">Записаться</a>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+    function cancelAppointment(button) {
+        const appointmentId = button.getAttribute('data-id');
+        if (confirm('Вы уверены, что хотите отменить запись?')) {
+            fetch('/client/appointments/' + appointmentId + '/cancel', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            }).then(response => {
+                if (response.ok) {
+                    location.reload();
+                } else {
+                    alert('Не удалось отменить запись');
+                }
+            });
+        }
+    }
+
+    function rescheduleAppointment(button) {
+        const appointmentId = button.getAttribute('data-id');
+        window.location.href = '/booking/reschedule?appointmentId=' + appointmentId;
+    }
+</script>
+
+</body>
+</html>

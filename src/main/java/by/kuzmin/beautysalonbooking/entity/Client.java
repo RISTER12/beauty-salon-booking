@@ -92,6 +92,9 @@ public class Client extends BaseEntity {
     @Column(name = "is_verified", nullable = false)
     private Boolean isVerified;
 
+    @Column(name = "loyalty_points", nullable = false)
+    private Integer loyaltyPoints = 0;
+
     @OneToMany(mappedBy = "client")
     private List<Notification> notifications;
 
