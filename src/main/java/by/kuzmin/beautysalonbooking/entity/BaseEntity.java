@@ -23,7 +23,8 @@ public class BaseEntity implements Serializable {
     private String createdBy;
     private String updatedBy;
 
-    @Column(name = "created_at", updatable = false, nullable = false, columnDefinition = "TIMESTAMP WITH TIME ZONE")
+    @Column(name = "created_at", updatable = false, nullable = false, columnDefinition = "TIMESTAMP WITH TIME ZONE",
+    insertable = false)
     private OffsetDateTime createdAt;
 
     @UpdateTimestamp

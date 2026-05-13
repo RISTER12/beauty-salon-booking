@@ -91,7 +91,8 @@ public class Client extends BaseEntity {
     private boolean isSubscribedToNewsletter = false;
     @Column(name = "is_verified", nullable = false)
     private Boolean isVerified;
-
+    @Column(name = "phone", unique = true)
+    private String phone;
     @Column(name = "loyalty_points", nullable = false)
     private Integer loyaltyPoints = 0;
 

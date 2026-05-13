@@ -15,6 +15,8 @@ import java.util.Optional;
 @Repository
 public interface ClientRepository extends JpaRepository<Client, Long> {
 
+    Optional<Client> findByPhone(String phone);
+
     @Query("SELECT COUNT(a) FROM Appointment a WHERE a.client.id = :clientId")
     long countAppointmentsByClientId(@Param("clientId") Long clientId);
 

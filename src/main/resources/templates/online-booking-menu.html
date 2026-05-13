@@ -104,19 +104,24 @@
                 </a>
 
             </div>
-<!--            th:if="${employeeId != null && slotId != null && serviceIds != null}"-->
+
             <form class="client-data" action="/booking" method="post" th:object="${clientDto}" th:if="${employeeId != null && slotId != null && serviceIds != null}">
                 <label>
                     <span>Имя</span>
-                    <input placeholder="Имя" required>
+                    <input type="text" th:field="*{name}" placeholder="Имя" required>
                 </label>
 
                 <label>
                     <span>Телефон</span>
                     <span>+7</span>
-                    <input type="tel" th:field="*{name}" pattern="(?\d{3}\)?\s?\d{3}[-]?\d{2}[-]?\d{2}" placeholder="(XXX) XXX-XX-XX" required minlength="10" maxlength="15">
+                    <input type="tel" th:field="*{phone}" pattern="\+7\s?\(?\d{3}\)?\s?\d{3}[-]?\d{2}[-]?\d{2}" placeholder="(XXX) XXX-XX-XX" required>
                 </label>
-                <button type="submit" th:field="*{number}" th:text="Записаться"></button>
+
+                <input type="hidden" name="employeeId" th:value="${employeeId}">
+                <input type="hidden" name="slotId" th:value="${slotId}">
+                <input type="hidden" name="serviceIds" th:each="id : ${serviceIds}" th:value="${id}">
+
+                <button type="submit">Записаться</button>
             </form>
         </main>
     </div>

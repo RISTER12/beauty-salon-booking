@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: load-appointment-status-data
+      author: Il'ia Kuz'min
+      changes:
+        - loadData:
+            tableName: appointment_status
+            file: ../csv/appointment-status.csv
+            relativeToChangelogFile: true

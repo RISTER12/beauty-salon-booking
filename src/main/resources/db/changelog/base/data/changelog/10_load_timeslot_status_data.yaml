@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: load-timeslot-status-data
+      author: Il'ia Kuz'min
+      changes:
+        - loadData:
+            tableName: timeslot_status
+            file: ../csv/timeslot-status.csv
+            relativeToChangelogFile: true
