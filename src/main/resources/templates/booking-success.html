@@ -4,30 +4,220 @@
     <meta charset="UTF-8">
     <title>Запись создана</title>
     <link rel="stylesheet" href="../css/reset.css">
-    <link rel="stylesheet" href="../css/online-booking-menu.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .wrapper {
+            width: 100%;
+            padding: 20px;
+        }
+
+        .center {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* Карточка успеха */
+        .success-card {
+            background: white;
+            border-radius: 24px;
+            padding: 40px 32px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Иконка успеха */
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            animation: scaleIn 0.4s ease-out 0.3s both;
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0);
+            }
+            to {
+                transform: scale(1);
+            }
+        }
+
+        .success-icon svg {
+            width: 48px;
+            height: 48px;
+        }
+
+        /* Заголовок */
+        .success-card h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 12px;
+        }
+
+        /* Текст */
+        .success-card p {
+            font-size: 16px;
+            color: #555;
+            line-height: 1.5;
+            margin-bottom: 8px;
+        }
+
+        .success-card p:last-of-type {
+            margin-bottom: 24px;
+        }
+
+        /* Ссылка на личный кабинет */
+        .dashboard-link {
+            display: inline-block;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .dashboard-link:hover {
+            border-bottom-color: #667eea;
+        }
+
+        /* Кнопка */
+        .btn-primary {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            padding: 14px 32px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 16px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        /* Шапка салона */
+        .salon-header {
+            background: white;
+            border-radius: 16px;
+            padding: 16px 20px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .salon-header img {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            object-fit: cover;
+        }
+
+        .salon-header #mainInfo {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1a1a2e;
+            text-decoration: none;
+        }
+
+        .salon-header #address {
+            font-size: 14px;
+            color: #777;
+            margin-top: 4px;
+        }
+
+        /* Адаптив */
+        @media (max-width: 480px) {
+            .success-card {
+                padding: 32px 24px;
+            }
+
+            .success-card h1 {
+                font-size: 24px;
+            }
+
+            .success-icon {
+                width: 64px;
+                height: 64px;
+            }
+
+            .success-icon svg {
+                width: 36px;
+                height: 36px;
+            }
+        }
+    </style>
 </head>
 <body>
 <div class="wrapper">
     <div class="center">
-        <header>
-            <div id="profile">
-                <a href="/">
-                    <img src="../images/small-image.jpg">
-                </a>
-            </div>
-            <div id="aboutSalon">
+        <!-- Шапка салона -->
+        <div class="salon-header">
+            <a href="/" style="flex-shrink: 0;">
+                <img src="../images/small-image.jpg" alt="Логотип">
+            </a>
+            <div>
                 <a id="mainInfo" href="/">SEKTA X TEXH V</a>
                 <div id="address">улица Покровка, 44</div>
             </div>
-        </header>
-        <main>
-            <div class="success-message">
-                <h1>✓ Запись успешно создана!</h1>
-                <p>Мы отправили уведомление на указанный номер телефона.</p>
-                <p>Вы можете отслеживать свои записи в <a href="/client/dashboard">личном кабинете</a>.</p>
-                <a href="/" class="btn-primary">На главную</a>
+        </div>
+
+        <!-- Карточка успеха -->
+        <div class="success-card">
+            <div class="success-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
             </div>
-        </main>
+            <h1>✓ Запись успешно создана!</h1>
+            <p>Мы отправили уведомление на указанный номер телефона.</p>
+            <p>
+                Вы можете отслеживать свои записи в
+                <a href="/client/dashboard" class="dashboard-link">личном кабинете</a>.
+            </p>
+            <a href="/" class="btn-primary">На главную</a>
+        </div>
     </div>
 </div>
 </body>

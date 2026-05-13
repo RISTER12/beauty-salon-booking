@@ -56,16 +56,16 @@
             <div class="appointments-list" th:unless="${upcomingAppointments.isEmpty()}">
                 <div th:each="app : ${upcomingAppointments}" class="appointment-card">
                     <div class="appointment-date">
-                        <div class="day" th:text="${#temporals.format(app.date, 'dd')}">15</div>
-                        <div class="month" th:text="${#temporals.format(app.date, 'MMM')}">Май</div>
+                        <div class="day" th:text="${#temporals.format(app.dateTime, 'dd')}">15</div>
+                        <div class="month" th:text="${#temporals.format(app.dateTime, 'MMM')}">Май</div>
                     </div>
                     <div class="appointment-info">
-                        <div class="service-name" th:text="${app.service.name}">Стрижка</div>
+                        <div class="service-name" th:text="${app.serviceName}">Стрижка</div>
                         <div class="appointment-details">
-                            <span class="time">🕐 <span th:text="${app.time}">14:00</span></span>
-                            <span class="master">✂️ <span th:text="${app.employee.name}">Анна</span></span>
+                            <span class="time">🕐 <span th:text="${app.dateTime}">14:00</span></span>
+                            <span class="master">✂️ <span th:text="${app.employeeName}">Анна</span></span>
                         </div>
-                        <div class="appointment-address" th:text="${app.salon.address.city} + ', ' + ${app.salon.address.street}">
+                        <div class="appointment-address" th:text="${app.salonAddress}">
                             Москва, Тверская 1
                         </div>
                     </div>
