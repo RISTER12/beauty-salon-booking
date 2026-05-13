@@ -70,10 +70,10 @@
                         </div>
                     </div>
                     <div class="appointment-actions">
-                        <button class="btn-cancel" th:data-id="${app.id}" onclick="cancelAppointment(this)">
+                        <button class="btn-cancel" th:onclick="'cancelAppointment(' + ${app.id} + ')'">
                             Отменить
                         </button>
-                        <button class="btn-reschedule" th:data-id="${app.id}" onclick="rescheduleAppointment(this)">
+                        <button class="btn-reschedule" th:onclick="'rescheduleAppointment(' + ${app.id} + ')'">
                             Перенести
                         </button>
                     </div>
@@ -121,8 +121,7 @@
 </div>
 
 <script>
-    function cancelAppointment(button) {
-        const appointmentId = button.getAttribute('data-id');
+    function cancelAppointment(appointmentId) {
         if (confirm('Вы уверены, что хотите отменить запись?')) {
             fetch('/client/appointments/' + appointmentId + '/cancel', {
                 method: 'POST',
@@ -131,17 +130,13 @@
                 }
             }).then(response => {
                 if (response.ok) {
+                    alert('Запись успешно отменена');
                     location.reload();
                 } else {
                     alert('Не удалось отменить запись');
                 }
             });
         }
-    }
-
-    function rescheduleAppointment(button) {
-        const appointmentId = button.getAttribute('data-id');
-        window.location.href = '/booking/reschedule?appointmentId=' + appointmentId;
     }
 </script>
 

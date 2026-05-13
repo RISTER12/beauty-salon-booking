@@ -102,4 +102,25 @@ public class BookingService {
     private String generateReferralCode() {
         return "REF" + System.currentTimeMillis();
     }
+
+
+    @Transactional
+    public void cancelAppointment(Long appointmentId, String reason, Long roleId) {
+        // Находим запись
+        Appointment appointment = appointmentRepository.findById(appointmentId)
+                .orElseThrow(() -> new RuntimeException("Запись не найдена с id: " + appointmentId));
+
+        // Получаем статус "CANCELLED"
+        AppointmentStatus cancelledStatus = appointmentStatusRepository.findByStatusName("CANCELLED")
+                .orElseThrow(() -> new RuntimeException("Статус CANCELLED не найден в базе"));
+
+        // Обновляем запись
+        appointment.setAppointmentStatus(cancelledStatus);
+        appointment.setCancellationReason(reason != null ? reason : "Отменено клиентом");
+        appointment.setCancelledAt(OffsetDateTime.now());
+
+        // Сохраняем изменения
+        appointmentRepository.save(appointment);
+    }
+
 }

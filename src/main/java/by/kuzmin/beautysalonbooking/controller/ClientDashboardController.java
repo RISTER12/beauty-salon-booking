@@ -4,9 +4,11 @@ import by.kuzmin.beautysalonbooking.dto.AppointmentDto;
 import by.kuzmin.beautysalonbooking.dto.ClientProfileDto;
 import by.kuzmin.beautysalonbooking.dto.ClientUpdateDto;
 import by.kuzmin.beautysalonbooking.service.AppointmentService;
+import by.kuzmin.beautysalonbooking.service.BookingService;
 import by.kuzmin.beautysalonbooking.service.ClientService;
 import by.kuzmin.beautysalonbooking.service.ServiceService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +27,7 @@ public class ClientDashboardController {
     private final ClientService clientService;
     private final AppointmentService appointmentService;
     private final ServiceService serviceService;
+    private final BookingService bookingService;
 
     // Временное решение: храним clientId в сессии
     // В реальном приложении после логина сюда сохраняется ID клиента
@@ -69,19 +72,26 @@ public class ClientDashboardController {
     }
 
     @PostMapping("/profile/update")
-    public String updateProfile(@ModelAttribute ClientUpdateDto updateDto, HttpSession session) {
-        Long clientId = getClientId(session);
-        clientService.updateClientProfile(clientId, updateDto);
-        return "redirect:/client/profile?success=true";
+    @ResponseBody
+    public ResponseEntity<?> updateProfile(@RequestBody ClientUpdateDto updateDto, HttpSession session) {
+        try {
+            Long clientId = getClientId(session);
+            ClientProfileDto updated = clientService.updateClientProfile(clientId, updateDto);
+            return ResponseEntity.ok(updated);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PostMapping("/appointments/{id}/cancel")
     @ResponseBody
-    public String cancelAppointment(@PathVariable Long id,
-                                    @RequestParam(required = false) String reason,
-                                    @RequestParam(required = false) Long roleId) {
-        appointmentService.cancelAppointment(id, reason, roleId);
-        return "ok";
+    public ResponseEntity<?> cancelAppointment(@PathVariable Long id) {
+        try {
+            bookingService.cancelAppointment(id, "Отменено клиентом", null);
+            return ResponseEntity.ok().body("{\"success\": true}");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("{\"error\": \"" + e.getMessage() + "\"}");
+        }
     }
 
     @GetMapping("/appointments")
@@ -105,5 +115,12 @@ public class ClientDashboardController {
             return 1L;
         }
         return clientId;
+    }
+
+    @GetMapping("/profile/data")
+    @ResponseBody
+    public ClientProfileDto getProfileData(HttpSession session) {
+        Long clientId = getClientId(session);
+        return clientService.getClientProfile(clientId);
     }
 }

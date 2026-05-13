@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мой профиль - Салон красоты</title>
+    <link rel="stylesheet" th:href="@{/css/client.css}">
+    <style>
+        .profile-form {
+            max-width: 500px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #1e293b;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 16px;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: #f97316;
+            box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+        }
+        .btn-save {
+            background: #f97316;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+        }
+        .btn-save:hover {
+            background: #ea580c;
+        }
+        .success-message {
+            background: #dcfce7;
+            color: #166534;
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        .info-text {
+            font-size: 14px;
+            color: #64748b;
+            margin-top: 4px;
+        }
+        .readonly-field {
+            background: #f1f5f9;
+            color: #64748b;
+        }
+    </style>
+</head>
+<body>
+
+<div class="client-layout">
+    <!-- Боковое меню -->
+    <div th:replace="~{client/fragments/sidebar :: sidebar}"></div>
+
+    <!-- Основной контент -->
+    <main class="client-content">
+        <div class="content-header">
+            <h1>Мой профиль</h1>
+            <p class="welcome-text">Управляйте своими персональными данными</p>
+        </div>
+
+        <div class="section">
+            <div class="success-message" id="successMessage">
+                ✅ Профиль успешно обновлён!
+            </div>
+
+            <form id="profileForm" class="profile-form">
+                <div class="form-group">
+                    <label>Имя и фамилия</label>
+                    <input type="text" id="name" name="name" th:value="${client.name}" required>
+                    <div class="info-text">Ваше имя, которое будут видеть мастера</div>
+                </div>
+
+                <div class="form-group">
+                    <label>Телефон</label>
+                    <input type="tel" id="phone" name="phone" th:value="${client.phone}" readonly class="readonly-field">
+                    <div class="info-text">Телефон нельзя изменить, так как он используется для входа</div>
+                </div>
+
+                <div class="form-group">
+                    <label>Email (необязательно)</label>
+                    <input type="email" id="email" name="email" th:value="${client.email}">
+                    <div class="info-text">На этот email будут приходить уведомления о записях</div>
+                </div>
+
+                <div class="form-group">
+                    <label>Дата рождения</label>
+                    <input type="date" id="birthDate" name="birthDate" th:value="${client.birthDate}">
+                    <div class="info-text">Мы поздравим вас с днём рождения 🎂</div>
+                </div>
+
+                <button type="submit" class="btn-save">Сохранить изменения</button>
+            </form>
+        </div>
+
+        <!-- Дополнительная информация -->
+        <div class="section">
+            <h2>📊 Статистика аккаунта</h2>
+            <div style="display: flex; gap: 24px; margin-top: 16px;">
+                <div>
+                    <div style="font-size: 28px; font-weight: 700; color: #f97316;" th:text="${totalVisits}">0</div>
+                    <div style="color: #64748b;">Всего визитов</div>
+                </div>
+                <div>
+                    <div style="font-size: 28px; font-weight: 700; color: #f97316;" th:text="${totalSpent}">0</div>
+                    <div style="color: #64748b;">Потрачено (₽)</div>
+                </div>
+                <div>
+                    <div style="font-size: 28px; font-weight: 700; color: #f97316;" th:text="${client.createdAt != null ? #temporals.format(client.createdAt, 'dd.MM.yyyy') : '-'}">-</div>
+                    <div style="color: #64748b;">Дата регистрации</div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+    document.getElementById('profileForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const formData = {
+            name: document.getElementById('name').value,
+            phone: document.getElementById('phone').value,
+            email: document.getElementById('email').value,
+            birthDate: document.getElementById('birthDate').value
+        };
+
+        try {
+            const response = await fetch('/client/profile/update', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+
+            if (response.ok) {
+                const successMsg = document.getElementById('successMessage');
+                successMsg.style.display = 'block';
+                setTimeout(() => {
+                    successMsg.style.display = 'none';
+                }, 3000);
+            } else {
+                alert('Ошибка при сохранении профиля');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Произошла ошибка при сохранении');
+        }
+    });
+</script>
+
+</body>
+</html>

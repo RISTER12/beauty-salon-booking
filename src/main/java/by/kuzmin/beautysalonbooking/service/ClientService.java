@@ -35,7 +35,23 @@ public class ClientService {
     @Transactional
     public ClientProfileDto updateClientProfile(Long clientId, ClientUpdateDto updateDto) {
         Client client = getClientEntity(clientId);
-        clientMapper.updateEntityFromDto(updateDto, client);
+
+        // Обновляем только те поля, которые пришли не null
+        if (updateDto.getName() != null) {
+            String[] nameParts = updateDto.getName().split(" ", 2);
+            client.setFirstName(nameParts[0]);
+            if (nameParts.length > 1) {
+                client.setLastName(nameParts[1]);
+            }
+        }
+        if (updateDto.getEmail() != null) {
+            client.setEmail(updateDto.getEmail());
+        }
+        if (updateDto.getBirthDate() != null) {
+            client.setBirthDate(updateDto.getBirthDate());
+        }
+        // Телефон обычно не обновляем
+
         Client savedClient = clientRepository.save(client);
         return clientMapper.toProfileDto(savedClient);
     }

@@ -12,18 +12,30 @@ import java.util.List;
 @Repository
 public interface AppointmentRepository extends JpaRepository<Appointment, Long> {
 
-    // ✅ Базовые методы (должны работать)
+    //Базовые методы (должны работать)
     List<Appointment> findByClientId(Long clientId);
 
-    // ✅ Сортировка по startTime
+    //Сортировка по startTime
     List<Appointment> findByClientIdOrderByStartTimeAsc(Long clientId);
 
-    // ✅ С фильтром по времени (GreaterThan)
+
+    @Query("SELECT a FROM Appointment a " +
+            "WHERE a.client.id = :clientId " +
+            "AND a.startTime > :now " +
+            "AND a.appointmentStatus.statusName != 'CANCELLED' " +
+            "ORDER BY a.startTime ASC")
+    List<Appointment> findUpcomingActiveByClientId(
+            @Param("clientId") Long clientId,
+            @Param("now") OffsetDateTime now
+    );
+
+    //С фильтром по времени (GreaterThan)
     List<Appointment> findByClientIdAndStartTimeGreaterThanOrderByStartTimeAsc(Long clientId, OffsetDateTime startTime);
 
-    // ✅ Подсчёт (используем @Query для сложных случаев)
+    //Подсчёт (используем @Query для сложных случаев)
     @Query("SELECT COUNT(a) FROM Appointment a WHERE a.client.id = :clientId AND a.appointmentStatus.statusName = :status AND a.startTime > :now")
     long countPending(@Param("clientId") Long clientId, @Param("status") String status, @Param("now") OffsetDateTime now);
-    // ✅ Для истории (менее текущего времени)
+
+    //Для истории (менее текущего времени)
     List<Appointment> findByClientIdAndStartTimeLessThanOrderByStartTimeDesc(Long clientId, OffsetDateTime startTime);
 }

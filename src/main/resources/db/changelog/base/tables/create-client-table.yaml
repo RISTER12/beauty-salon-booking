@@ -114,6 +114,11 @@ databaseChangeLog:
                   constraints:
                     unique: true
               - column:
+                  name: email
+                  type: VARCHAR(255)
+                  constraints:
+                    unique: true
+              - column:
                   name: created_by
                   type: VARCHAR(255)
               - column:

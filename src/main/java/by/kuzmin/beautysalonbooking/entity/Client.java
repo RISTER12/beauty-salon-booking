@@ -93,6 +93,8 @@ public class Client extends BaseEntity {
     private Boolean isVerified;
     @Column(name = "phone", unique = true)
     private String phone;
+    @Column(name = "email", unique = true)
+    private String email;
     @Column(name = "loyalty_points", nullable = false)
     private Integer loyaltyPoints = 0;
 

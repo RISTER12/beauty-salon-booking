@@ -21,29 +21,14 @@ public class AppointmentService {
 
     @Transactional(readOnly = true)
     public List<AppointmentDto> getUpcomingAppointments(Long clientId, Long salonId) {
-        // ✅ Исправлено: используем правильный метод с GreaterThan и OffsetDateTime
         OffsetDateTime now = OffsetDateTime.now();
 
         List<Appointment> appointments = appointmentRepository
-                .findByClientIdAndStartTimeGreaterThanOrderByStartTimeAsc(clientId, now);
+                .findUpcomingActiveByClientId(clientId, now);
 
         return appointments.stream()
                 .map(appointmentMapper::toDto)
                 .collect(Collectors.toList());
-    }
-
-    @Transactional
-    public void cancelAppointment(Long appointmentId, String cancellationReason, Long cancellationRoleId) {
-        Appointment appointment = appointmentRepository.findById(appointmentId)
-                .orElseThrow(() -> new RuntimeException("Запись не найдена"));
-
-        appointment.setCancellationReason(cancellationReason);
-        appointment.setCancelledAt(OffsetDateTime.now());
-
-        // Если есть статус "CANCELLED" — установите его
-        // appointment.setAppointmentStatus(cancelledStatus);
-
-        appointmentRepository.save(appointment);
     }
 
     // В AppointmentService
