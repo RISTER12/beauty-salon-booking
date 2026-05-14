@@ -122,3 +122,17 @@
 .status-confirmed { background: #17a2b8; color: white; }
 .status-completed { background: #28a745; color: white; }
 .status-cancelled { background: #dc3545; color: white; }
+
+.btn-today {
+    background: #f1f5f9;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.btn-today:hover {
+    background: #e2e8f0;
+}

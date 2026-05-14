@@ -42,26 +42,6 @@ public class EmployeeDashboardController {
         return "employee/dashboard";
     }
 
-    @GetMapping("/schedule")
-    public String schedule(Model model, HttpSession session,
-                           @RequestParam(required = false) Integer year,
-                           @RequestParam(required = false) Integer month) {
-        Long employeeId = getEmployeeId(session);
-
-        LocalDate currentDate = LocalDate.now();
-        int currentYear = year != null ? year : currentDate.getYear();
-        int currentMonth = month != null ? month : currentDate.getMonthValue();
-
-        List<EmployeeAppointmentDto> appointments = scheduleService.getAppointmentsByMonth(employeeId, currentYear, currentMonth);
-
-        model.addAttribute("appointments", appointments);
-        model.addAttribute("currentYear", currentYear);
-        model.addAttribute("currentMonth", currentMonth);
-        model.addAttribute("currentPage", "schedule");
-
-        return "employee/schedule";
-    }
-
     @GetMapping("/appointment/{id}")
     public String appointmentDetail(@PathVariable Long id, Model model, HttpSession session) {
         Long employeeId = getEmployeeId(session);
@@ -90,5 +70,49 @@ public class EmployeeDashboardController {
             return 1L; // временное решение
         }
         return employeeId;
+    }
+
+    @GetMapping("/schedule")
+    public String schedule(Model model, HttpSession session,
+                           @RequestParam(required = false) Integer year,
+                           @RequestParam(required = false) Integer month) {
+        Long employeeId = getEmployeeId(session);
+
+        LocalDate currentDate = LocalDate.now();
+        int currentYear = year != null ? year : currentDate.getYear();
+        int currentMonth = month != null ? month : currentDate.getMonthValue();
+
+        List<EmployeeAppointmentDto> appointments = scheduleService.getAppointmentsByMonth(employeeId, currentYear, currentMonth);
+
+        model.addAttribute("appointments", appointments);
+        model.addAttribute("currentYear", currentYear);
+        model.addAttribute("currentMonth", currentMonth);
+        model.addAttribute("currentPage", "schedule");
+
+        return "employee/schedule";
+    }
+
+    @GetMapping("/schedule/date")
+    @ResponseBody
+    public ResponseEntity<List<EmployeeAppointmentDto>> getAppointmentsByDate(
+            @RequestParam String date,
+            HttpSession session) {
+        Long employeeId = getEmployeeId(session);
+        LocalDate selectedDate = LocalDate.parse(date);
+
+        List<EmployeeAppointmentDto> appointments = scheduleService.getAppointmentsByDate(employeeId, selectedDate);
+        return ResponseEntity.ok(appointments);
+    }
+
+    @GetMapping("/schedule/month-data")
+    @ResponseBody
+    public ResponseEntity<List<EmployeeAppointmentDto>> getMonthData(
+            @RequestParam int year,
+            @RequestParam int month,
+            HttpSession session) {
+        Long employeeId = getEmployeeId(session);
+
+        List<EmployeeAppointmentDto> appointments = scheduleService.getAppointmentsByMonth(employeeId, year, month);
+        return ResponseEntity.ok(appointments);
     }
 }

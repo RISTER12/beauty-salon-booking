@@ -1,10 +1,458 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Расписание - Салон красоты</title>
+    <link rel="stylesheet" th:href="@{/css/employee.css}">
+    <style>
+        .calendar-container {
+            background: white;
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .calendar-nav {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .calendar-nav button {
+            background: #f1f5f9;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            transition: all 0.2s;
+        }
+
+        .calendar-nav button:hover {
+            background: #e2e8f0;
+        }
+
+        .current-month {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1e293b;
+            min-width: 180px;
+            text-align: center;
+        }
+
+        .weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            text-align: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #e2e8f0;
+            margin-bottom: 8px;
+        }
+
+        .weekday {
+            font-weight: 600;
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+        }
+
+        .calendar-day {
+            min-height: 90px;
+            padding: 8px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: #f8fafc;
+            position: relative;
+        }
+
+        .calendar-day:hover {
+            background: #e2e8f0;
+        }
+
+        .calendar-day.selected {
+            background: #fef3c7;
+            border: 2px solid #f97316;
+        }
+
+        .calendar-day.today {
+            border: 2px solid #f97316;
+        }
+
+        .day-number {
+            font-weight: 500;
+            color: #1e293b;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        .day-badge {
+            background: #f97316;
+            color: white;
+            font-size: 11px;
+            padding: 2px 6px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-left: 6px;
+        }
+
+        .appointment-preview {
+            font-size: 11px;
+            padding: 4px;
+            background: white;
+            border-radius: 6px;
+            margin-top: 4px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            color: #475569;
+        }
+
+        .calendar-day.unavailable {
+            opacity: 0.5;
+            pointer-events: none;
+            cursor: not-allowed;
+        }
+
+        /* Список записей */
+        .appointments-container {
+            background: white;
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .appointments-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .appointments-header h2 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1e293b;
+            margin: 0;
+        }
+
+        .selected-date-info {
+            color: #f97316;
+            font-weight: 500;
+        }
+
+        .slots-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .time-slot {
+            background: #f1f5f9;
+            padding: 10px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+            font-weight: 500;
+            color: #1e293b;
+            border: 1px solid transparent;
+        }
+
+        .time-slot:hover {
+            background: #e2e8f0;
+        }
+
+        .time-slot.selected {
+            background: #f97316;
+            color: white;
+            border-color: #f97316;
+        }
+
+        .no-slots-message {
+            text-align: center;
+            padding: 40px;
+            color: #94a3b8;
+        }
+
+        .no-slots-message svg {
+            margin-bottom: 16px;
+        }
+
+        .appointment-detail-link {
+            display: block;
+            margin-top: 8px;
+            font-size: 12px;
+            color: #f97316;
+            text-decoration: none;
+        }
+
+        .appointment-detail-link:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
-$END$
+
+<div class="employee-layout">
+    <div th:replace="~{employee/fragments/sidebar :: sidebar}"></div>
+
+    <main class="employee-content">
+        <div class="content-header">
+            <h1>Расписание</h1>
+            <p class="welcome-text">Управляйте своими записями</p>
+        </div>
+
+        <!-- Календарь -->
+        <div class="calendar-container">
+            <div class="calendar-header">
+                <div class="calendar-nav">
+                    <button class="prev-month" id="prevMonthBtn">←</button>
+                    <button class="next-month" id="nextMonthBtn">→</button>
+                </div>
+                <div class="current-month" id="currentMonth"></div>
+                <button id="todayBtn" style="background: #f1f5f9; border: none; padding: 8px 16px; border-radius: 30px; cursor: pointer;">Сегодня</button>
+            </div>
+            <div class="weekdays">
+                <div class="weekday">Пн</div>
+                <div class="weekday">Вт</div>
+                <div class="weekday">Ср</div>
+                <div class="weekday">Чт</div>
+                <div class="weekday">Пт</div>
+                <div class="weekday">Сб</div>
+                <div class="weekday">Вс</div>
+            </div>
+            <div class="calendar-grid" id="calendarGrid"></div>
+        </div>
+
+        <!-- Слоты и записи на выбранную дату -->
+        <div class="appointments-container">
+            <div class="appointments-header">
+                <h2>📋 <span id="selectedDateLabel">Выберите дату</span></h2>
+            </div>
+            <div id="slotsContainer">
+                <div class="no-slots-message">
+                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" stroke-width="1.5">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                    <p>Выберите дату в календаре</p>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+    // ==================== ЭЛЕМЕНТЫ DOM ====================
+    const calendarGrid = document.getElementById('calendarGrid');
+    const currentMonthSpan = document.getElementById('currentMonth');
+    const selectedDateSpan = document.getElementById('selectedDateLabel');
+    const slotsContainer = document.getElementById('slotsContainer');
+
+    // ==================== КОНСТАНТЫ ====================
+    const MONTH_NAMES = [
+        'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
+        'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'
+    ];
+    const MONTH_NAMES_GENITIVE = [
+        'января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
+        'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'
+    ];
+
+    // ==================== СОСТОЯНИЕ ====================
+    let currentDate = new Date();
+    let selectedDate = null;
+    let appointmentsCache = {};
+
+    // ==================== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ====================
+    const formatDateKey = (year, month, day) => `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+
+    const formatDisplayDate = (dateStr) => {
+        const [year, month, day] = dateStr.split('-');
+        return `${parseInt(day)} ${MONTH_NAMES_GENITIVE[parseInt(month) - 1]} ${year}`;
+    };
+
+    // ==================== ЗАГРУЗКА ДАННЫХ МЕСЯЦА ====================
+    const loadMonthData = async (year, month) => {
+        try {
+            const response = await fetch(`/employee/schedule/month-data?year=${year}&month=${month + 1}`);
+            const appointments = await response.json();
+
+            // Группируем по дате
+            const grouped = {};
+            appointments.forEach(app => {
+                const date = app.date;
+                if (!grouped[date]) grouped[date] = [];
+                grouped[date].push(app);
+            });
+
+            renderCalendar(year, month, grouped);
+        } catch (error) {
+            console.error('Error loading month data:', error);
+        }
+    };
+
+    // ==================== ЗАГРУЗКА ЗАПИСЕЙ НА ДАТУ ====================
+    const loadAppointmentsForDate = async (dateStr) => {
+        try {
+            const response = await fetch(`/employee/schedule/date?date=${dateStr}`);
+            const appointments = await response.json();
+
+            if (!appointments || appointments.length === 0) {
+                slotsContainer.innerHTML = `
+                    <div class="no-slots-message">
+                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" stroke-width="1.5">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                        </svg>
+                        <p>Нет записей на ${formatDisplayDate(dateStr)}</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Отображаем записи как слоты
+            slotsContainer.innerHTML = `
+                <div class="slots-container">
+                    ${appointments.map(app => `
+                        <a href="/employee/appointment/${app.id}" class="time-slot" style="display: flex; flex-direction: column; align-items: center; text-decoration: none;">
+                            <strong>${app.startTime} - ${app.endTime}</strong>
+                            <span style="font-size: 12px;">${app.clientName}</span>
+                        </a>
+                    `).join('')}
+                </div>
+            `;
+        } catch (error) {
+            console.error('Error loading appointments:', error);
+        }
+    };
+
+    // ==================== РЕНДЕРИНГ КАЛЕНДАРЯ ====================
+    const renderCalendar = (year, month, appointmentsByDate) => {
+        calendarGrid.innerHTML = '';
+        currentMonthSpan.textContent = `${MONTH_NAMES[month]} ${year}`;
+
+        const firstDay = new Date(year, month, 1);
+        const lastDay = new Date(year, month + 1, 0);
+        const daysInMonth = lastDay.getDate();
+
+        let firstDayOfWeek = firstDay.getDay();
+        if (firstDayOfWeek === 0) firstDayOfWeek = 7;
+
+        // Пустые ячейки перед первым днём
+        for (let i = 1; i < firstDayOfWeek; i++) {
+            calendarGrid.appendChild(createEmptyDay());
+        }
+
+        const today = new Date();
+        const todayDateStr = formatDateKey(today.getFullYear(), today.getMonth(), today.getDate());
+
+        for (let day = 1; day <= daysInMonth; day++) {
+            const dateKey = formatDateKey(year, month, day);
+            const dayAppointments = appointmentsByDate[dateKey] || [];
+            const isToday = dateKey === todayDateStr;
+            const isSelected = selectedDate === dateKey;
+
+            const dayElement = createDayElement(day, year, month, dayAppointments.length);
+            if (isToday) dayElement.classList.add('today');
+            if (isSelected) dayElement.classList.add('selected');
+            if (dayAppointments.length === 0) dayElement.classList.add('unavailable');
+
+            dayElement.addEventListener('click', () => selectDate(dateKey, year, month, day));
+
+            calendarGrid.appendChild(dayElement);
+        }
+    };
+
+    const createEmptyDay = () => {
+        const empty = document.createElement('div');
+        empty.className = 'calendar-day empty';
+        empty.style.background = 'transparent';
+        empty.style.cursor = 'default';
+        empty.style.minHeight = '0';
+        return empty;
+    };
+
+    const createDayElement = (day, year, month, appointmentCount) => {
+        const el = document.createElement('div');
+        el.className = 'calendar-day';
+        el.innerHTML = `
+            <div class="day-number">
+                ${day}
+                ${appointmentCount > 0 ? `<span class="day-badge">${appointmentCount}</span>` : ''}
+            </div>
+        `;
+        return el;
+    };
+
+    // ==================== ВЫБОР ДАТЫ ====================
+    const selectDate = async (dateKey, year, month, day) => {
+        // Обновляем выделение в календаре
+        document.querySelectorAll('.calendar-day').forEach(el => el.classList.remove('selected'));
+        const selectedEl = Array.from(document.querySelectorAll('.calendar-day')).find(el => {
+            const dayNum = el.querySelector('.day-number')?.childNodes[0]?.nodeValue?.trim();
+            return dayNum && parseInt(dayNum) === day;
+        });
+        if (selectedEl) selectedEl.classList.add('selected');
+
+        selectedDate = dateKey;
+        selectedDateSpan.textContent = formatDisplayDate(dateKey);
+
+        await loadAppointmentsForDate(dateKey);
+    };
+
+    // ==================== ПЕРЕКЛЮЧЕНИЕ МЕСЯЦЕВ ====================
+    const changeMonth = (direction) => {
+        if (direction === 'prev') {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+        } else {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+        }
+        loadMonthData(currentDate.getFullYear(), currentDate.getMonth());
+    };
+
+    const goToToday = () => {
+        currentDate = new Date();
+        loadMonthData(currentDate.getFullYear(), currentDate.getMonth());
+
+        const today = new Date();
+        const todayKey = formatDateKey(today.getFullYear(), today.getMonth(), today.getDate());
+        selectDate(todayKey, today.getFullYear(), today.getMonth(), today.getDate());
+    };
+
+    // ==================== ИНИЦИАЛИЗАЦИЯ ====================
+    document.getElementById('prevMonthBtn').addEventListener('click', () => changeMonth('prev'));
+    document.getElementById('nextMonthBtn').addEventListener('click', () => changeMonth('next'));
+    document.getElementById('todayBtn').addEventListener('click', goToToday);
+
+    // Загрузка текущего месяца
+    loadMonthData(currentDate.getFullYear(), currentDate.getMonth());
+</script>
+
 </body>
 </html>
