@@ -1,14 +1,14 @@
 package by.kuzmin.beautysalonbooking.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
+@ToString
+@Builder
 public class MonthRequest {
     private int year;
     private int month;

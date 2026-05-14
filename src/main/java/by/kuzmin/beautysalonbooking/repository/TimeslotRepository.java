@@ -71,4 +71,10 @@ public interface TimeslotRepository extends JpaRepository<Timeslot, Long> {
             @Param("freeStatusId") Long freeStatusId);
 
     Timeslot findById(long id);
+
+    List<Timeslot> findByEmployeeIdAndSlotDate(Long employeeId, LocalDate date);
+
+    List<Timeslot> findByEmployeeIdAndSlotDateGreaterThanEqual(Long employeeId, LocalDate date);
+
+    List<Timeslot> findByEmployeeIdAndSlotDateBetween(Long employeeId, LocalDate startDate, LocalDate endDate);
 }

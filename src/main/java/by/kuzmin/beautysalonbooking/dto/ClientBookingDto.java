@@ -11,6 +11,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
+@ToString
+@Builder
 public class ClientBookingDto {
     private String name;
     private String phone;

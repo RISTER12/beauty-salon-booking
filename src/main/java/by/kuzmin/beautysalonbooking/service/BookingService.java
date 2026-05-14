@@ -74,7 +74,8 @@ public class BookingService {
         TimeslotStatus bookedStatus = timeslotStatusRepository.findById(2L)  // 2L = ID статуса "занят"
                 .orElseThrow(() -> new RuntimeException("Статус временного слота не найден"));
 
-        timeslot.setTimeslotStatus(bookedStatus);  // ✅ вместо setStatusId
+        timeslot.setAppointment(appointment);
+        timeslot.setTimeslotStatus(bookedStatus);
         timeslotRepository.save(timeslot);
     }
 

@@ -1,12 +1,17 @@
 package by.kuzmin.beautysalonbooking.dto;
 
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
+
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
+@ToString
 @Builder
 public class ClientProfileDto {
     private Long id;

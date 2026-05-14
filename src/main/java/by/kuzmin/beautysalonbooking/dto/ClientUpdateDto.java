@@ -1,10 +1,15 @@
 package by.kuzmin.beautysalonbooking.dto;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
+
 import java.time.LocalDate;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
+@ToString
 @Builder
 public class ClientUpdateDto {
     private String name;

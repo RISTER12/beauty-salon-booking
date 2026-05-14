@@ -13,6 +13,7 @@ import java.time.LocalTime;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class ScheduleDto {
         private LocalDate startDate;
         private Long workingDaysCount;

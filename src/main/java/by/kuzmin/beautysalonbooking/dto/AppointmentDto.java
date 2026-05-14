@@ -1,12 +1,16 @@
 package by.kuzmin.beautysalonbooking.dto;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
+@ToString
 @Builder
 public class AppointmentDto {
     private Long id;
@@ -16,7 +20,7 @@ public class AppointmentDto {
     private BigDecimal servicePrice;
     private String employeeName;
     private String salonAddress;
-    private BigDecimal  finalAmount;      // новое поле из сущности
+    private BigDecimal finalAmount;      // новое поле из сущности
     private String clientNote;        // можно добавить, если нужно
     private String employeeNote;      // можно добавить, если нужно
 }

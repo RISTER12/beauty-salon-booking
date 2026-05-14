@@ -1,0 +1,124 @@
+/* Основные стили для кабинета мастера */
+.employee-layout {
+    display: flex;
+    min-height: 100vh;
+    background: #f5f6f8;
+}
+
+.sidebar {
+    width: 260px;
+    background: #1a1a2e;
+    color: white;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-header {
+    padding: 24px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.sidebar-nav {
+    flex: 1;
+    padding: 20px 0;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 24px;
+    color: #aaa;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.nav-link:hover, .nav-link.active {
+    background: rgba(255,255,255,0.1);
+    color: white;
+}
+
+.employee-content {
+    flex: 1;
+    padding: 24px 32px;
+    overflow-y: auto;
+}
+
+.content-header h1 {
+    font-size: 28px;
+    margin-bottom: 8px;
+}
+
+.section {
+    background: white;
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.appointment-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    margin-bottom: 12px;
+}
+
+.appointment-card.compact {
+    padding: 12px;
+}
+
+.appointment-time .time {
+    font-weight: 600;
+    color: #333;
+}
+
+.client-name {
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.client-phone, .services {
+    font-size: 14px;
+    color: #666;
+}
+
+.btn-detail, .btn-link {
+    background: #4a90e2;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.btn-complete {
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.status {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+}
+
+.status-pending { background: #ffc107; color: #333; }
+.status-confirmed { background: #17a2b8; color: white; }
+.status-completed { background: #28a745; color: white; }
+.status-cancelled { background: #dc3545; color: white; }

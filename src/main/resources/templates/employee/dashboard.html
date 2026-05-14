@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личный кабинет мастера</title>
+    <link rel="stylesheet" th:href="@{/css/employee.css}">
+</head>
+<body>
+
+<div class="employee-layout">
+    <!-- Боковое меню -->
+    <div th:replace="~{employee/fragments/sidebar :: sidebar}"></div>
+
+    <!-- Основной контент -->
+    <main class="employee-content">
+        <div class="content-header">
+            <h1>Добро пожаловать!</h1>
+            <p class="date" th:text="${#temporals.format(today, 'dd MMMM yyyy')}"></p>
+        </div>
+
+        <!-- Сегодняшние записи -->
+        <div class="section">
+            <div class="section-header">
+                <h2>📅 Записи на сегодня</h2>
+            </div>
+
+            <div th:if="${todayAppointments.isEmpty()}" class="empty-state">
+                <p>На сегодня записей нет</p>
+            </div>
+
+            <div class="appointments-list" th:unless="${todayAppointments.isEmpty()}">
+                <div th:each="app : ${todayAppointments}" class="appointment-card">
+                    <div class="appointment-time">
+                        <span class="time" th:text="${app.startTime} + ' - ' + ${app.endTime}">10:00 - 11:00</span>
+                    </div>
+                    <div class="appointment-info">
+                        <div class="client-name" th:text="${app.clientName}">Иван Петров</div>
+                        <div class="client-phone" th:text="${app.clientPhone}">+7 (XXX) XXX-XX-XX</div>
+                        <div class="services" th:text="${#strings.arrayJoin(app.serviceNames, ', ')}">Стрижка, Укладка</div>
+                    </div>
+                    <div class="appointment-actions">
+                        <a th:href="@{/employee/appointment/{id}(id=${app.id})}" class="btn-detail">Подробнее</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Предстоящие записи -->
+        <div class="section">
+            <div class="section-header">
+                <h2>📋 Ближайшие записи</h2>
+                <a href="/employee/schedule" class="link">Все записи →</a>
+            </div>
+
+            <div th:if="${upcomingAppointments.isEmpty()}" class="empty-state">
+                <p>Нет предстоящих записей</p>
+            </div>
+
+            <div class="appointments-list" th:unless="${upcomingAppointments.isEmpty()}">
+                <div th:each="app : ${upcomingAppointments}" class="appointment-card compact">
+                    <div class="appointment-date">
+                        <div class="day" th:text="${#temporals.format(app.date, 'dd')}">15</div>
+                        <div class="month" th:text="${#temporals.format(app.date, 'MMM')}">Май</div>
+                    </div>
+                    <div class="appointment-info">
+                        <div class="client-name" th:text="${app.clientName}">Иван Петров</div>
+                        <div class="appointment-time" th:text="${app.startTime} + ' - ' + ${app.endTime}">10:00 - 11:00</div>
+                    </div>
+                    <a th:href="@{/employee/appointment/{id}(id=${app.id})}" class="btn-link">→</a>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+</body>
+</html>

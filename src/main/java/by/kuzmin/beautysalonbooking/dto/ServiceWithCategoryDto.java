@@ -10,6 +10,7 @@ import java.util.List;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class ServiceWithCategoryDto {
     private ServiceCategoryResponseDto serviceCategoryResponseDto;
     private List<ServiceResponseDto> serviceResponseDto;

@@ -11,6 +11,7 @@ import java.time.LocalTime;
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode
+@Builder
 public class TimeslotDto {
     private Long id;
     private Long employeeId;

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="sidebar" class="sidebar">
+  <div class="sidebar-header">
+    <h3>Кабинет мастера</h3>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a href="/employee/dashboard" class="nav-link" th:classappend="${currentPage == 'dashboard'} ? 'active' : ''">
+      <span class="icon">📊</span>
+      <span>Дашборд</span>
+    </a>
+
+    <a href="/employee/schedule" class="nav-link" th:classappend="${currentPage == 'schedule'} ? 'active' : ''">
+      <span class="icon">📅</span>
+      <span>Расписание</span>
+    </a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <a href="/" class="nav-link">
+      <span class="icon">🚪</span>
+      <span>Выйти</span>
+    </a>
+  </div>
+</div>
+</html>

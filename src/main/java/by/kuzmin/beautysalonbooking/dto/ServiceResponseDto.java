@@ -9,6 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode
+@Builder
 public class ServiceResponseDto {
     private Long categoryId;
     private Long id;

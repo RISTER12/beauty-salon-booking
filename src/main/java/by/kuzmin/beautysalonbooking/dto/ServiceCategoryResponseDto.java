@@ -8,6 +8,7 @@ import lombok.*;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class ServiceCategoryResponseDto {
     private Long id;
     private String categoryName;

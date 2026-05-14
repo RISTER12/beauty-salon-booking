@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Детали записи</title>
+    <link rel="stylesheet" th:href="@{/css/employee.css}">
+    <style>
+        .detail-card {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .detail-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 24px 32px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .detail-header .back-link {
+            color: white;
+            text-decoration: none;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            transition: all 0.2s;
+        }
+
+        .detail-header .back-link:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateX(-3px);
+        }
+
+        .detail-header h1 {
+            font-size: 24px;
+            margin: 0;
+            font-weight: 600;
+        }
+
+        .detail-body {
+            padding: 32px;
+        }
+
+        .info-row {
+            display: flex;
+            align-items: flex-start;
+            padding: 20px 0;
+            border-bottom: 1px solid #eef2f6;
+        }
+
+        .info-icon {
+            width: 48px;
+            font-size: 28px;
+            flex-shrink: 0;
+        }
+
+        .info-content {
+            flex: 1;
+        }
+
+        .info-label {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #94a3b8;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .info-value {
+            font-size: 18px;
+            font-weight: 500;
+            color: #1e293b;
+        }
+
+        .services-list {
+            list-style: none;
+            padding: 0;
+            margin: 8px 0 0;
+        }
+
+        .services-list li {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px dashed #e2e8f0;
+        }
+
+        .services-list li:last-child {
+            border-bottom: none;
+        }
+
+        .service-name {
+            color: #1e293b;
+        }
+
+        .service-price {
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 2px solid #e2e8f0;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 14px;
+            border-radius: 100px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .status-badge.pending {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .status-badge.pending::before {
+            content: "⏳";
+            margin-right: 6px;
+        }
+
+        .status-badge.confirmed {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .status-badge.confirmed::before {
+            content: "✓";
+            margin-right: 6px;
+        }
+
+        .status-badge.completed {
+            background: #d1fae5;
+            color: #059669;
+        }
+
+        .status-badge.completed::before {
+            content: "✔";
+            margin-right: 6px;
+        }
+
+        .status-badge.cancelled {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .status-badge.cancelled::before {
+            content: "✗";
+            margin-right: 6px;
+        }
+
+        .detail-actions {
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid #eef2f6;
+            text-align: center;
+        }
+
+        .btn-complete {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-complete:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-complete:active {
+            transform: translateY(0);
+        }
+
+        .empty-note {
+            color: #94a3b8;
+            font-style: italic;
+        }
+
+        @media (max-width: 640px) {
+            .detail-body {
+                padding: 20px;
+            }
+
+            .info-value {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="employee-layout">
+    <div th:replace="~{employee/fragments/sidebar :: sidebar}"></div>
+
+    <main class="employee-content">
+        <div class="detail-card">
+            <div class="detail-header">
+                <a href="/employee/dashboard" class="back-link">←</a>
+                <h1>Детали записи</h1>
+            </div>
+
+            <div class="detail-body">
+                <!-- Дата и время -->
+                <div class="info-row">
+                    <div class="info-icon">📅</div>
+                    <div class="info-content">
+                        <div class="info-label">ДАТА И ВРЕМЯ</div>
+                        <div class="info-value">
+                            <span th:text="${#temporals.format(appointment.date, 'dd MMMM yyyy')}"></span>
+                            <span style="color: #64748b; margin: 0 8px">•</span>
+                            <span th:text="${appointment.startTime} + ' — ' + ${appointment.endTime}"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Клиент -->
+                <div class="info-row">
+                    <div class="info-icon">👤</div>
+                    <div class="info-content">
+                        <div class="info-label">КЛИЕНТ</div>
+                        <div class="info-value" th:text="${appointment.clientName}">Иван Петров</div>
+                        <div class="info-value" style="font-size: 14px; color: #64748b; margin-top: 4px;" th:text="${appointment.clientPhone}">+7 (XXX) XXX-XX-XX</div>
+                    </div>
+                </div>
+
+                <!-- Услуги -->
+                <div class="info-row">
+                    <div class="info-icon">✂️</div>
+                    <div class="info-content">
+                        <div class="info-label">УСЛУГИ</div>
+                        <ul class="services-list">
+                            <li th:each="service : ${appointment.serviceNames}">
+                                <span class="service-name" th:text="${service}"></span>
+                            </li>
+                        </ul>
+                        <div class="total-row">
+                            <span>Итого</span>
+                            <span th:text="${appointment.totalAmount} + ' ₽'"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Заметка клиента -->
+                <div class="info-row" th:if="${appointment.clientNote != null and appointment.clientNote != ''}">
+                    <div class="info-icon">📝</div>
+                    <div class="info-content">
+                        <div class="info-label">ЗАМЕТКА КЛИЕНТА</div>
+                        <div class="info-value" th:text="${appointment.clientNote}"></div>
+                    </div>
+                </div>
+
+                <!-- Статус -->
+                <div class="info-row">
+                    <div class="info-icon">📌</div>
+                    <div class="info-content">
+                        <div class="info-label">СТАТУС</div>
+                        <div>
+                            <span class="status-badge" th:classappend="${appointment.status?.toLowerCase()}" th:text="${appointment.status}">
+                                PENDING
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Действия -->
+                <div class="detail-actions" th:if="${appointment.status == 'PENDING' or appointment.status == 'CONFIRMED'}">
+                    <button class="btn-complete" th:onclick="'completeAppointment(' + ${appointment.id} + ')'">
+                        ✓ Отметить как выполненный
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+    function completeAppointment(appointmentId) {
+        if (confirm('Отметить запись как выполненную?')) {
+            fetch('/employee/appointment/' + appointmentId + '/complete', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            }).then(response => {
+                if (response.ok) {
+                    alert('Запись отмечена как выполненная');
+                    location.reload();
+                } else {
+                    alert('Не удалось отметить запись');
+                }
+            });
+        }
+    }
+</script>
+
+</body>
+</html>
