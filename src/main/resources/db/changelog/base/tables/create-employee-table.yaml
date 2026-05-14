@@ -83,6 +83,9 @@ databaseChangeLog:
                   name: is_visible_on_website
                   type: BOOLEAN
               - column:
+                  name: is_active
+                  type: BOOLEAN
+              - column:
                   name: created_by
                   type: VARCHAR(255)
               - column:

@@ -1,4 +1,6 @@
 status_name
-Работает
-Не работает
-В отпуске
+ACTIVE
+INACTIVE
+VACATION
+SICK_LEAVE
+DISMISSED

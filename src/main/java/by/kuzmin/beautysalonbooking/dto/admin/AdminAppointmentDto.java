@@ -1,12 +1,17 @@
 package by.kuzmin.beautysalonbooking.dto.admin;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
+@ToString
 @Builder
 public class AdminAppointmentDto {
     private Long id;

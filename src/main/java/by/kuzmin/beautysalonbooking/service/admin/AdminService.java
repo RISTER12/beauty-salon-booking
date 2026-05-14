@@ -1,14 +1,13 @@
 package by.kuzmin.beautysalonbooking.service.admin;
 
-import by.kuzmin.beautysalonbooking.dto.admin.AdminAppointmentDto;
-import by.kuzmin.beautysalonbooking.dto.admin.EmployeeWorkloadDto;
-import by.kuzmin.beautysalonbooking.dto.admin.ServiceStatDto;
+import by.kuzmin.beautysalonbooking.dto.admin.*;
 import by.kuzmin.beautysalonbooking.entity.*;
 import by.kuzmin.beautysalonbooking.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
@@ -25,6 +24,8 @@ public class AdminService {
     private final ServiceRepository serviceRepository;
     private final TimeslotRepository timeslotRepository;
     private final ClientRepository clientRepository;
+    private final SalonRepository salonRepository;
+    private final EmployeeStatusRepository employeeStatusRepository;
 
     // Получаем фиксированный ZoneOffset (например, UTC+4 для Москвы)
     private static final ZoneOffset DEFAULT_OFFSET = ZoneOffset.ofHours(4);
@@ -159,5 +160,154 @@ public class AdminService {
             }
         }
         return "Не назначен";
+    }
+
+
+    @Transactional(readOnly = true)
+    public List<EmployeeResponseDto> getAllEmployees() {
+        List<Employee> employees = employeeRepository.findByIsActiveTrue();
+        return employees.stream()
+                .map(this::toEmployeeResponseDto)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public EmployeeResponseDto getEmployeeById(Long id) {
+        Employee employee = employeeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Мастер не найден с id: " + id));
+        return toEmployeeResponseDto(employee);
+    }
+
+    @Transactional
+    public EmployeeResponseDto createEmployee(EmployeeRequestDto dto) {
+        Employee employee = new Employee();
+
+        // Основные поля
+        employee.setFirstName(dto.getFirstName());
+        employee.setLastName(dto.getLastName());
+        employee.setMiddleName(dto.getMiddleName());
+        employee.setJobTitle(dto.getJobTitle());
+        employee.setExperienceYears(dto.getExperienceYears() != null ? dto.getExperienceYears() : 0L);
+
+        // Обязательные поля с значениями по умолчанию
+        employee.setVisibleOnWebsite(dto.getIsVisibleOnWebsite() != null ? dto.getIsVisibleOnWebsite() : true);
+        employee.setActive(true);  // is_active = true
+
+        // Рейтинг по умолчанию
+        if (dto.getAverageRating() != null) {
+            employee.setAverageRating(dto.getAverageRating());
+        } else {
+            employee.setAverageRating(BigDecimal.ZERO);
+        }
+
+        // Установка статуса (если не указан, берём статус "ACTIVE" с id=1)
+        if (dto.getStatusId() != null) {
+            EmployeeStatus status = employeeStatusRepository.findById(dto.getStatusId())
+                    .orElseThrow(() -> new RuntimeException("Статус не найден"));
+            employee.setEmployeeStatus(status);
+        } else {
+            // Статус по умолчанию (предполагаем, что есть статус с id=1)
+            EmployeeStatus defaultStatus = employeeStatusRepository.findById(1L)
+                    .orElseThrow(() -> new RuntimeException("Статус по умолчанию не найден"));
+            employee.setEmployeeStatus(defaultStatus);
+        }
+
+        // Установка салона (если указан)
+        if (dto.getSalonId() != null) {
+            Salon salon = salonRepository.findById(dto.getSalonId())
+                    .orElseThrow(() -> new RuntimeException("Салон не найден"));
+            employee.setSalon(salon);
+        }
+
+        // Установка услуг (если указаны)
+        if (dto.getServiceIds() != null && !dto.getServiceIds().isEmpty()) {
+            List<ServiceEntity> services = serviceRepository.findAllById(dto.getServiceIds());
+            employee.setServiceList(services);
+        }
+
+        Employee saved = employeeRepository.save(employee);
+        return toEmployeeResponseDto(saved);
+    }
+
+    @Transactional
+    public EmployeeResponseDto updateEmployee(Long id, EmployeeRequestDto dto) {
+        Employee employee = employeeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Мастер не найден с id: " + id));
+
+        updateEmployeeFromDto(employee, dto);
+
+        Employee saved = employeeRepository.save(employee);
+        return toEmployeeResponseDto(saved);
+    }
+
+    @Transactional
+    public void deleteEmployee(Long id) {
+        Employee employee = employeeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Мастер не найден с id: " + id));
+
+        employee.setActive(false);
+        employeeRepository.save(employee);
+    }
+
+    private void updateEmployeeFromDto(Employee employee, EmployeeRequestDto dto) {
+        employee.setFirstName(dto.getFirstName());
+        employee.setLastName(dto.getLastName());
+        employee.setMiddleName(dto.getMiddleName());
+        employee.setJobTitle(dto.getJobTitle());
+        employee.setExperienceYears(dto.getExperienceYears());
+        employee.setCertificationList(dto.getCertificationList());
+        employee.setAwardList(dto.getAwardList());
+        employee.setPhotoUrl(dto.getPhotoUrl());
+        employee.setPortfolioPhotosUrlList(dto.getPortfolioPhotosUrlList());
+        employee.setPortfolioVideoUrlList(dto.getPortfolioVideoUrlList());
+        employee.setAverageRating(dto.getAverageRating());
+        employee.setVisibleOnWebsite(dto.getIsVisibleOnWebsite());
+
+        // Установка салона
+        if (dto.getSalonId() != null) {
+            Salon salon = salonRepository.findById(dto.getSalonId())
+                    .orElseThrow(() -> new RuntimeException("Салон не найден"));
+            employee.setSalon(salon);
+        }
+
+        // Установка услуг
+        if (dto.getServiceIds() != null && !dto.getServiceIds().isEmpty()) {
+            List<ServiceEntity> services = serviceRepository.findAllById(dto.getServiceIds());
+            employee.setServiceList(services);
+        }
+    }
+
+    private EmployeeResponseDto toEmployeeResponseDto(Employee employee) {
+        return EmployeeResponseDto.builder()
+                .id(employee.getId())
+                .firstName(employee.getFirstName())
+                .lastName(employee.getLastName())
+                .middleName(employee.getMiddleName())
+                .fullName(getEmployeeFullName(employee))
+                .salonName(employee.getSalon() != null ? employee.getSalon().getSalonName() : null)
+                .jobTitle(employee.getJobTitle())
+                .experienceYears(employee.getExperienceYears())
+                .certificationList(employee.getCertificationList())
+                .awardList(employee.getAwardList())
+                .photoUrl(employee.getPhotoUrl())
+                .status(employee.getEmployeeStatus() != null ? employee.getEmployeeStatus().getStatusName() : "ACTIVE")
+                .averageRating(employee.getAverageRating())
+                .isVisibleOnWebsite(employee.isVisibleOnWebsite())
+                .serviceNames(employee.getServiceList() != null ?
+                        employee.getServiceList().stream()
+                                .map(ServiceEntity::getName)
+                                .collect(Collectors.toList()) :
+                        List.of())
+                .build();
+    }
+
+    private String getEmployeeFullName(Employee employee) {
+        StringBuilder name = new StringBuilder();
+        name.append(employee.getFirstName());
+        if (employee.getMiddleName() != null && !employee.getMiddleName().isBlank()) {
+            name.append(" ").append(employee.getMiddleName());
+        }
+        name.append(" ").append(employee.getLastName());
+        return name.toString();
     }
 }

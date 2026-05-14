@@ -1,10 +1,14 @@
 package by.kuzmin.beautysalonbooking.dto.admin;
 
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
+@ToString
 @Builder
 public class EmployeeWorkloadDto {
     private Long employeeId;

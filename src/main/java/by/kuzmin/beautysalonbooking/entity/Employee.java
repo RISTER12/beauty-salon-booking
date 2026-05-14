@@ -69,6 +69,9 @@ public class Employee extends BaseEntity {
     @OneToMany(mappedBy = "employee")
     private List<Timeslot> timeslotList;
 
+    @Column(name = "is_active", nullable = false)
+    private boolean isActive = true;
+
     @ManyToMany
     @JoinTable(
             name = "employee_service",

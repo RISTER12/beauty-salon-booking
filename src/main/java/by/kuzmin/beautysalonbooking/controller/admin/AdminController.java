@@ -1,8 +1,6 @@
 package by.kuzmin.beautysalonbooking.controller.admin;
 
-import by.kuzmin.beautysalonbooking.dto.admin.AdminAppointmentDto;
-import by.kuzmin.beautysalonbooking.dto.admin.EmployeeWorkloadDto;
-import by.kuzmin.beautysalonbooking.dto.admin.ServiceStatDto;
+import by.kuzmin.beautysalonbooking.dto.admin.*;
 import by.kuzmin.beautysalonbooking.service.admin.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -89,5 +87,59 @@ public class AdminController {
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate start,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate end) {
         return ResponseEntity.ok(adminService.getServiceStats(start, end));
+    }
+
+    @GetMapping("/employees")
+    public String employees(Model model, HttpSession session) {
+        if (session.getAttribute("isAdmin") == null) {
+            return "redirect:/admin/set-admin";
+        }
+        model.addAttribute("currentPage", "employees");
+        return "admin/employees";
+    }
+
+    @GetMapping("/api/employees")
+    @ResponseBody
+    public ResponseEntity<List<EmployeeResponseDto>> getEmployees() {
+        return ResponseEntity.ok(adminService.getAllEmployees());
+    }
+
+    @GetMapping("/api/employees/{id}")
+    @ResponseBody
+    public ResponseEntity<EmployeeResponseDto> getEmployee(@PathVariable Long id) {
+        return ResponseEntity.ok(adminService.getEmployeeById(id));
+    }
+
+    @PostMapping("/api/employees")
+    @ResponseBody
+    public ResponseEntity<EmployeeResponseDto> createEmployee(@RequestBody EmployeeRequestDto dto) {
+        try {
+            EmployeeResponseDto created = adminService.createEmployee(dto);
+            return ResponseEntity.ok(created);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @PutMapping("/api/employees/{id}")
+    @ResponseBody
+    public ResponseEntity<EmployeeResponseDto> updateEmployee(@PathVariable Long id, @RequestBody EmployeeRequestDto dto) {
+        try {
+            EmployeeResponseDto updated = adminService.updateEmployee(id, dto);
+            return ResponseEntity.ok(updated);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @DeleteMapping("/api/employees/{id}")
+    @ResponseBody
+    public ResponseEntity<Void> deleteEmployee(@PathVariable Long id) {
+        try {
+            adminService.deleteEmployee(id);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 }

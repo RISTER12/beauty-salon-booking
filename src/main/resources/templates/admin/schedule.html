@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Расписание - Администратор</title>
+  <link rel="stylesheet" th:href="@{/css/admin.css}">
+  <style>
+    .schedule-container {
+      background: white;
+      border-radius: 20px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .filter-bar {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 24px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .filter-bar input {
+      padding: 10px 16px;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      font-size: 14px;
+    }
+
+    .filter-bar button {
+      background: #f97316;
+      color: white;
+      border: none;
+      padding: 10px 24px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    .appointments-table {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    .appointments-table table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .appointments-table th {
+      background: #f8fafc;
+      padding: 12px;
+      text-align: left;
+      font-weight: 600;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .appointments-table td {
+      padding: 12px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .btn-cancel {
+      background: #ef4444;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+
+<div class="admin-layout">
+  <div th:replace="~{admin/fragments/sidebar :: sidebar}"></div>
+
+  <main class="admin-content">
+    <div class="content-header">
+      <h1>Расписание</h1>
+      <p class="welcome-text">Просмотр всех записей</p>
+    </div>
+
+    <div class="schedule-container">
+      <div class="filter-bar">
+        <input type="date" id="startDate" th:value="${selectedDate}">
+        <input type="date" id="endDate" th:value="${selectedDate}">
+        <button id="applyFilter">Применить</button>
+        <button id="todayBtn">Сегодня</button>
+      </div>
+
+      <div class="appointments-table" id="appointmentsContainer">
+        <div class="empty-state">Выберите дату для просмотра</div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+  let currentStartDate = document.getElementById('startDate').value || new Date().toISOString().split('T')[0];
+  let currentEndDate = document.getElementById('endDate').value || currentStartDate;
+
+  async function loadAppointments() {
+    try {
+      const start = document.getElementById('startDate').value;
+      const end = document.getElementById('endDate').value;
+
+      if (!start || !end) return;
+
+      const response = await fetch(`/admin/schedule/range?start=${start}&end=${end}`);
+      const appointments = await response.json();
+
+      const container = document.getElementById('appointmentsContainer');
+
+      if (!appointments || appointments.length === 0) {
+        container.innerHTML = '<div class="empty-state">Нет записей на выбранную дату</div>';
+        return;
+      }
+
+      container.innerHTML = `
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Дата</th>
+                            <th>Время</th>
+                            <th>Клиент</th>
+                            <th>Телефон</th>
+                            <th>Мастер</th>
+                            <th>Услуги</th>
+                            <th>Сумма</th>
+                            <th>Статус</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${appointments.map(app => `
+                            <tr>
+                                <td>${app.date}</td>
+                                <td>${app.startTime} - ${app.endTime}</td>
+                                <td>${app.clientName}</td>
+                                <td>${app.clientPhone || '-'}</td>
+                                <td>${app.employeeName || '-'}</td>
+                                <td>${app.serviceNames.slice(0, 2).join(', ')}${app.serviceNames.length > 2 ? '...' : ''}</td>
+                                <td>${app.totalAmount} ₽</td>
+                                <td><span class="status-badge status-${app.status?.toLowerCase()}">${app.status}</span></td>
+                                <td>
+                                    <button class="btn-cancel" onclick="cancelAppointment(${app.id})">Отменить</button>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+    } catch (e) {
+      console.error('Error loading appointments:', e);
+      document.getElementById('appointmentsContainer').innerHTML = '<div class="empty-state">Ошибка загрузки данных</div>';
+    }
+  }
+
+  async function cancelAppointment(id) {
+    const reason = prompt('Введите причину отмены:');
+    if (!reason) return;
+
+    try {
+      const response = await fetch(`/admin/appointments/${id}/cancel?reason=${encodeURIComponent(reason)}`, {
+        method: 'POST'
+      });
+
+      if (response.ok) {
+        alert('Запись отменена');
+        loadAppointments();
+      } else {
+        alert('Ошибка при отмене записи');
+      }
+    } catch (e) {
+      console.error('Error canceling appointment:', e);
+      alert('Ошибка при отмене записи');
+    }
+  }
+
+  document.getElementById('applyFilter').addEventListener('click', () => loadAppointments());
+  document.getElementById('todayBtn').addEventListener('click', () => {
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('startDate').value = today;
+    document.getElementById('endDate').value = today;
+    loadAppointments();
+  });
+
+  // Загружаем записи на сегодня
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('startDate').value = today;
+  document.getElementById('endDate').value = today;
+  loadAppointments();
+</script>
+
+</body>
+</html>
