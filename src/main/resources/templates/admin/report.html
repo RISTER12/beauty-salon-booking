@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Отчёт о загрузке мастеров</title>
+  <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+<body>
+
+<div class="admin-layout">
+  <div th:replace="~{admin/fragments/sidebar :: sidebar}"></div>
+
+  <main class="admin-content">
+    <div class="content-header">
+      <h1>Отчёт о загрузке мастеров</h1>
+      <p class="welcome-text" th:text="'Период: ' + ${startDate} + ' — ' + ${endDate}"></p>
+    </div>
+
+    <div class="report-container">
+      <div class="filter-bar">
+        <input type="date" id="startDate" th:value="${startDate}">
+        <input type="date" id="endDate" th:value="${endDate}">
+        <button id="applyFilter">Применить</button>
+        <button id="exportExcel">Excel</button>
+      </div>
+
+      <div class="workload-chart" style="margin: 20px 0;">
+        <canvas id="workloadChart" width="800" height="300"></canvas>
+      </div>
+
+      <table class="data-table">
+        <thead>
+        <tr><th>Мастер</th><th>Кол-во записей</th><th>Часы работы</th><th>Выручка</th><th>Загруженность</th></tr>
+        </thead>
+        <tbody id="workloadTableBody">
+        <tr><td colspan="5">Загрузка...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  let workloadChart = null;
+
+  async function loadWorkload() {
+    let start = document.getElementById('startDate').value;
+    let end = document.getElementById('endDate').value;
+
+    if (!start || !end) return;
+
+    try {
+      const response = await fetch(`/admin/workload?start=${start}&end=${end}`);
+      const data = await response.json();
+
+      const tbody = document.getElementById('workloadTableBody');
+      if (data.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5">Нет данных</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = data.map(emp => `
+                <tr>
+                    <td>${emp.employeeName}</td>
+                    <td>${emp.totalAppointments}</td>
+                    <td>${emp.totalHours} ч</td>
+                    <td>${emp.totalEarnings} ₽</td>
+                    <td>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${emp.occupancyRate}%"></div>
+                            <span>${emp.occupancyRate}%</span>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+
+      if (workloadChart) workloadChart.destroy();
+
+      const ctx = document.getElementById('workloadChart').getContext('2d');
+      workloadChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: data.map(emp => emp.employeeName),
+          datasets: [
+            {
+              label: 'Загруженность (%)',
+              data: data.map(emp => emp.occupancyRate),
+              backgroundColor: '#f97316',
+              borderRadius: 8
+            },
+            {
+              label: 'Часы работы',
+              data: data.map(emp => emp.totalHours),
+              backgroundColor: '#667eea',
+              borderRadius: 8
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: { display: true, text: 'Значение' }
+            }
+          }
+        }
+      });
+    } catch (e) {
+      console.error('Error loading workload:', e);
+    }
+  }
+
+  document.getElementById('applyFilter').addEventListener('click', () => {
+    const start = document.getElementById('startDate').value;
+    const end = document.getElementById('endDate').value;
+    if (start && end) {
+      window.location.href = `/admin/report?start=${start}&end=${end}`;
+    }
+  });
+
+  document.getElementById('exportExcel').addEventListener('click', () => {
+    const start = document.getElementById('startDate').value;
+    const end = document.getElementById('endDate').value;
+    window.location.href = `/admin/report/export?start=${start}&end=${end}`;
+  });
+
+  loadWorkload();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="sidebar" class="sidebar">
+  <div class="sidebar-header">
+    <h3>Панель администратора</h3>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a href="/admin/dashboard" class="nav-link" th:classappend="${currentPage == 'dashboard'} ? 'active' : ''">
+      <span class="icon">📊</span>
+      <span>Дашборд</span>
+    </a>
+
+    <a href="/admin/schedule" class="nav-link" th:classappend="${currentPage == 'schedule'} ? 'active' : ''">
+      <span class="icon">📅</span>
+      <span>Расписание</span>
+    </a>
+
+    <a href="/admin/services" class="nav-link" th:classappend="${currentPage == 'services'} ? 'active' : ''">
+      <span class="icon">✂️</span>
+      <span>Услуги</span>
+    </a>
+
+    <a href="/admin/employees" class="nav-link" th:classappend="${currentPage == 'employees'} ? 'active' : ''">
+      <span class="icon">👤</span>
+      <span>Мастера</span>
+    </a>
+
+    <a href="/admin/report" class="nav-link" th:classappend="${currentPage == 'report'} ? 'active' : ''">
+      <span class="icon">📈</span>
+      <span>Отчёты</span>
+    </a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <a href="/" class="nav-link">
+      <span class="icon">🚪</span>
+      <span>Выход</span>
+    </a>
+  </div>
+</div>
+</html>

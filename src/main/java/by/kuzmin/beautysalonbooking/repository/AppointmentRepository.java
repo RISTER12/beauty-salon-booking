@@ -38,4 +38,17 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
 
     //Для истории (менее текущего времени)
     List<Appointment> findByClientIdAndStartTimeLessThanOrderByStartTimeDesc(Long clientId, OffsetDateTime startTime);
+
+    // AppointmentRepository.java
+    @Query("SELECT a FROM Appointment a WHERE a.startTime BETWEEN :start AND :end ORDER BY a.startTime ASC")
+    List<Appointment> findByStartTimeBetweenOrderByStartTimeAsc(@Param("start") OffsetDateTime start, @Param("end") OffsetDateTime end);
+
+    @Query("SELECT a FROM Appointment a JOIN a.timeslotList t WHERE t.employee.id = :employeeId AND a.startTime BETWEEN :start AND :end")
+    List<Appointment> findByEmployeeIdAndStartTimeBetween(@Param("employeeId") Long employeeId, @Param("start") OffsetDateTime start, @Param("end") OffsetDateTime end);
+
+    @Query("SELECT COUNT(a) FROM Appointment a JOIN a.serviceList s WHERE s.id = :serviceId AND a.startTime BETWEEN :start AND :end")
+    int countByServiceIdAndStartTimeBetween(@Param("serviceId") Long serviceId, @Param("start") OffsetDateTime start, @Param("end") OffsetDateTime end);
+
+    @Query("SELECT SUM(a.finalAmount) FROM Appointment a JOIN a.serviceList s WHERE s.id = :serviceId AND a.startTime BETWEEN :start AND :end")
+    double sumRevenueByServiceIdAndStartTimeBetween(@Param("serviceId") Long serviceId, @Param("start") OffsetDateTime start, @Param("end") OffsetDateTime end);
 }

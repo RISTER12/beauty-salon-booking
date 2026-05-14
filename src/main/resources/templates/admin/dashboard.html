@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Панель администратора</title>
+  <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+<body>
+
+<div class="admin-layout">
+  <div th:replace="~{admin/fragments/sidebar :: sidebar}"></div>
+
+  <main class="admin-content">
+    <div class="content-header">
+      <h1>Панель управления</h1>
+      <p class="welcome-text">Добро пожаловать в панель администратора</p>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon">📅</div>
+        <div class="stat-info">
+          <div class="stat-value" id="todayAppointments">-</div>
+          <div class="stat-label">Записей на сегодня</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">👥</div>
+        <div class="stat-info">
+          <div class="stat-value" id="totalEmployees">-</div>
+          <div class="stat-label">Мастеров</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">💰</div>
+        <div class="stat-info">
+          <div class="stat-value" id="monthRevenue">-</div>
+          <div class="stat-label">Выручка за месяц</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">⭐</div>
+        <div class="stat-info">
+          <div class="stat-value" id="avgRating">-</div>
+          <div class="stat-label">Средний рейтинг</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-actions">
+      <a href="/admin/schedule" class="quick-card">
+        <div class="icon">📋</div>
+        <div class="title">Просмотр расписания</div>
+        <div class="desc">Просмотр полного расписания на любую дату</div>
+      </a>
+      <a href="/admin/services" class="quick-card">
+        <div class="icon">✂️</div>
+        <div class="title">Управление услугами</div>
+        <div class="desc">Добавление, редактирование и удаление услуг</div>
+      </a>
+      <a href="/admin/employees" class="quick-card">
+        <div class="icon">👤</div>
+        <div class="title">Управление мастерами</div>
+        <div class="desc">Добавление, редактирование и удаление мастеров</div>
+      </a>
+      <a href="#" class="quick-card" id="reportBtn">
+        <div class="icon">📊</div>
+        <div class="title">Отчёт о загрузке</div>
+        <div class="desc">Просмотр отчёта о загрузке мастеров</div>
+      </a>
+    </div>
+  </main>
+</div>
+
+<script>
+  // Загрузка статистики
+  async function loadStats() {
+    try {
+      const today = new Date().toISOString().split('T')[0];
+      const response = await fetch(`/admin/schedule/range?start=${today}&end=${today}`);
+      const appointments = await response.json();
+      document.getElementById('todayAppointments').textContent = appointments.length;
+    } catch (e) {
+      console.error('Error loading stats:', e);
+    }
+  }
+
+  loadStats();
+
+  document.getElementById('reportBtn').addEventListener('click', (e) => {
+    e.preventDefault();
+    const start = prompt('Введите начальную дату (ГГГГ-ММ-ДД):', new Date().toISOString().split('T')[0]);
+    const end = prompt('Введите конечную дату (ГГГГ-ММ-ДД):', new Date().toISOString().split('T')[0]);
+    if (start && end) {
+      window.location.href = `/admin/report?start=${start}&end=${end}`;
+    }
+  });
+</script>
+
+</body>
+</html>
