@@ -25,6 +25,17 @@ databaseChangeLog:
                   name: category_name
                   type: VARCHAR(255)
               - column:
+                  name: description
+                  type: TEXT
+                  constraints:
+                    nullable: true
+              - column:
+                  name: is_active
+                  type: BOOLEAN
+                  defaultValueBoolean: true
+                  constraints:
+                    nullable: false
+              - column:
                   name: created_by
                   type: VARCHAR(255)
               - column:

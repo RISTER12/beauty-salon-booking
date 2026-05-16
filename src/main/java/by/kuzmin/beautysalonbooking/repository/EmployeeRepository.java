@@ -12,4 +12,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     List<Employee> findAllByOrderByFirstNameAsc();
 
     List<Employee> findByIsActiveTrue();
+
+    List<Employee> findBySalonIdAndIsActiveTrue(Long salonId);
 }

@@ -21,4 +21,10 @@ public class ServiceCategory extends BaseEntity {
     private Long id;
     @Column(name = "category_name", nullable = false, unique = true)
     private String categoryName;
+
+    @Column(name = "description")
+    private String description;
+
+    @Column(name = "is_active", nullable = false)
+    private boolean isActive = true;
 }

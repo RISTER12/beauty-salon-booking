@@ -26,6 +26,7 @@ public class AdminService {
     private final ClientRepository clientRepository;
     private final SalonRepository salonRepository;
     private final EmployeeStatusRepository employeeStatusRepository;
+    private final ServiceCategoryRepository serviceCategoryRepository;
 
     // Получаем фиксированный ZoneOffset (например, UTC+4 для Москвы)
     private static final ZoneOffset DEFAULT_OFFSET = ZoneOffset.ofHours(4);
@@ -310,4 +311,206 @@ public class AdminService {
         name.append(" ").append(employee.getLastName());
         return name.toString();
     }
+
+    @Transactional(readOnly = true)
+    public List<ServiceResponseDto> getAllServices() {
+        List<ServiceEntity> services = serviceRepository.findAll();
+        return services.stream()
+                .map(this::toServiceResponseDto)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public ServiceResponseDto getServiceById(Long id) {
+        ServiceEntity service = serviceRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Услуга не найдена с id: " + id));
+        return toServiceResponseDto(service);
+    }
+
+    @Transactional
+    public ServiceResponseDto createService(ServiceRequestDto dto) {
+        ServiceEntity service = new ServiceEntity();
+        updateServiceFromDto(service, dto);
+
+        ServiceEntity saved = serviceRepository.save(service);
+        return toServiceResponseDto(saved);
+    }
+
+    @Transactional
+    public ServiceResponseDto updateService(Long id, ServiceRequestDto dto) {
+        ServiceEntity service = serviceRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Услуга не найдена с id: " + id));
+
+        updateServiceFromDto(service, dto);
+
+        ServiceEntity saved = serviceRepository.save(service);
+        return toServiceResponseDto(saved);
+    }
+
+    @Transactional
+    public void deleteService(Long id) {
+        ServiceEntity service = serviceRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Услуга не найдена с id: " + id));
+        serviceRepository.delete(service);
+    }
+
+    private void updateServiceFromDto(ServiceEntity service, ServiceRequestDto dto) {
+        service.setName(dto.getName());
+        service.setShortName(dto.getShortName());
+        service.setDescription(dto.getDescription());
+        service.setShortDescription(dto.getShortDescription());
+        service.setPrice(dto.getPrice());
+        service.setPhotoUrlList(dto.getPhotoUrlList());
+
+        // Установка категории
+        if (dto.getCategoryId() != null) {
+            ServiceCategory category = serviceCategoryRepository.findById(dto.getCategoryId())
+                    .orElseThrow(() -> new RuntimeException("Категория не найдена"));
+            service.setServiceCategory(category);
+        }
+
+        // Установка салона
+        if (dto.getSalonId() != null) {
+            Salon salon = salonRepository.findById(dto.getSalonId())
+                    .orElseThrow(() -> new RuntimeException("Салон не найден"));
+            service.setSalon(salon);
+        }
+
+        // Установка сотрудников
+        if (dto.getEmployeeIds() != null && !dto.getEmployeeIds().isEmpty()) {
+            List<Employee> employees = employeeRepository.findAllById(dto.getEmployeeIds());
+            service.setEmployeeList(employees);
+        }
+    }
+
+    private ServiceResponseDto toServiceResponseDto(ServiceEntity service) {
+        return ServiceResponseDto.builder()
+                .id(service.getId())
+                .name(service.getName())
+                .shortName(service.getShortName())
+                .description(service.getDescription())
+                .shortDescription(service.getShortDescription())
+                .price(service.getPrice())
+                .categoryName(service.getServiceCategory() != null ?
+                        service.getServiceCategory().getCategoryName() : null)
+                .salonName(service.getSalon() != null ? service.getSalon().getSalonName() : null)
+                .photoUrlList(service.getPhotoUrlList())
+                .employeeNames(service.getEmployeeList() != null ?
+                        service.getEmployeeList().stream()
+                                .map(e -> e.getFirstName() + " " + e.getLastName())
+                                .collect(Collectors.toList()) : List.of())
+                .isActive(true)
+                .build();
+    }
+
+    @Transactional(readOnly = true)
+    public List<ServiceCategoryDto> getAllCategories() {
+        List<ServiceCategory> categories = serviceCategoryRepository.findAll();
+        return categories.stream()
+                .map(this::toCategoryDto)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public ServiceCategoryDto getCategoryById(Long id) {
+        ServiceCategory category = serviceCategoryRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Категория не найдена с id: " + id));
+        return toCategoryDto(category);
+    }
+
+    @Transactional
+    public ServiceCategoryDto createCategory(ServiceCategoryDto dto) {
+        ServiceCategory category = new ServiceCategory();
+        category.setCategoryName(dto.getCategoryName());
+        category.setDescription(dto.getDescription());
+        category.setActive(true);
+
+        ServiceCategory saved = serviceCategoryRepository.save(category);
+        return toCategoryDto(saved);
+    }
+
+    @Transactional
+    public ServiceCategoryDto updateCategory(Long id, ServiceCategoryDto dto) {
+        ServiceCategory category = serviceCategoryRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Категория не найдена с id: " + id));
+
+        category.setCategoryName(dto.getCategoryName());
+        category.setDescription(dto.getDescription());
+
+        ServiceCategory saved = serviceCategoryRepository.save(category);
+        return toCategoryDto(saved);
+    }
+
+    @Transactional
+    public void deleteCategory(Long id) {
+        ServiceCategory category = serviceCategoryRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Категория не найдена с id: " + id));
+        category.setActive(false);  // мягкое удаление
+        serviceCategoryRepository.save(category);
+    }
+
+    private ServiceCategoryDto toCategoryDto(ServiceCategory category) {
+        return ServiceCategoryDto.builder()
+                .id(category.getId())
+                .categoryName(category.getCategoryName())
+                .description(category.getDescription())
+                .isActive(category.isActive())
+                .build();
+    }
+
+    @Transactional(readOnly = true)
+    public List<ServiceResponseDto> getServicesBySalon(Long salonId) {
+        List<ServiceEntity> services;
+        if (salonId == null) {
+            services = serviceRepository.findAll();  // все салоны
+        } else {
+            services = serviceRepository.findBySalonId(salonId);
+        }
+        return services.stream()
+                .map(this::toServiceResponseDto)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<EmployeeResponseDto> getEmployeesBySalon(Long salonId) {
+        List<Employee> employees;
+        if (salonId == null) {
+            employees = employeeRepository.findByIsActiveTrue();
+        } else {
+            employees = employeeRepository.findBySalonIdAndIsActiveTrue(salonId);
+        }
+        System.out.println("Found employees for salon " + salonId + ": " + employees.size());
+        return employees.stream()
+                .map(this::toEmployeeResponseDto)
+                .collect(Collectors.toList());
+    }
+
+    public SalonDto toSalonDto(Salon salon) {
+        return SalonDto.builder()
+                .id(salon.getId())
+                .salonName(salon.getSalonName())
+                .address(salon.getAddress() != null ?
+                        salon.getAddress().getCity() + ", " + salon.getAddress().getStreet() : null)
+                .build();
+    }
+
+    @Transactional(readOnly = true)
+    public SalonDto getCurrentSalon(Long salonId) {
+        if (salonId == null) {
+            return null;
+        }
+        Salon salon = salonRepository.findById(salonId)
+                .orElseThrow(() -> new RuntimeException("Салон не найден с id: " + salonId));
+        return toSalonDto(salon);
+    }
+
+    @Transactional(readOnly = true)
+    public List<SalonDto> getAllSalons() {
+        List<Salon> salons = salonRepository.findAll();
+        return salons.stream()
+                .map(this::toSalonDto)
+                .collect(Collectors.toList());
+    }
+
+
 }

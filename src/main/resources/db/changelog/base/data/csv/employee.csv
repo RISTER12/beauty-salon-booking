@@ -1,2 +1,2 @@
-salon_id,first_name,last_name,job_title,experience_years,status_id,is_visible_on_website
-1,Оксана,Самойлова,Парикмахер,1,1,true
+salon_id,first_name,last_name,job_title,experience_years,status_id,is_visible_on_website,is_active
+1,Оксана,Самойлова,Парикмахер,1,1,true,true

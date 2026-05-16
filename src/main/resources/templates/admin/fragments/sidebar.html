@@ -1,9 +1,25 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <div th:fragment="sidebar" class="sidebar">
-  <div class="sidebar-header">
-    <h3>Панель администратора</h3>
+  <div class="salon-selector" style="margin-top: 15px;">
+    <label style="font-size: 12px; color: #94a3b8;">Текущий салон</label>
+    <select id="salonSelector" style="width: 100%; padding: 8px; margin-top: 5px; border-radius: 8px; background: #334155; color: white; border: none;">
+      <option value="0" th:selected="${currentSalonId == null}">-- Все салоны --</option>
+      <option th:each="salon : ${salons}" th:value="${salon.id}" th:text="${salon.salonName}" th:selected="${salon.id == currentSalonId}"></option>
+    </select>
   </div>
+
+  <script>
+    document.getElementById('salonSelector').addEventListener('change', function() {
+      const salonId = this.value;
+      const currentPath = window.location.pathname;
+      if (salonId === '0') {
+        window.location.href = '/admin/select-salon?salonId=0&redirect=' + encodeURIComponent(currentPath);
+      } else {
+        window.location.href = '/admin/select-salon?salonId=' + salonId + '&redirect=' + encodeURIComponent(currentPath);
+      }
+    });
+  </script>
 
   <nav class="sidebar-nav">
     <a href="/admin/dashboard" class="nav-link" th:classappend="${currentPage == 'dashboard'} ? 'active' : ''">
@@ -39,4 +55,63 @@
     </a>
   </div>
 </div>
+
+<script>
+  // Ждём полной загрузки DOM
+  document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM загружен, загружаем салоны...');
+
+    fetch('/admin/api/salons')
+            .then(response => {
+              if (!response.ok) throw new Error('HTTP ' + response.status);
+              return response.json();
+            })
+            .then(salons => {
+              console.log('Салоны получены:', salons);
+              const selector = document.getElementById('salonSelector');
+              if (!selector) {
+                console.error('Элемент salonSelector не найден!');
+                return;
+              }
+
+              if (!salons || salons.length === 0) {
+                selector.innerHTML = '<option value="">Нет салонов</option>';
+                return;
+              }
+
+              selector.innerHTML = '<option value="">-- Все салоны --</option>';
+              salons.forEach(salon => {
+                const option = document.createElement('option');
+                option.value = salon.id;
+                option.text = salon.salonName;
+                selector.appendChild(option);
+              });
+
+              // Загружаем текущий выбранный салон
+              return fetch('/admin/api/current-salon');
+            })
+            .then(response => response.json())
+            .then(current => {
+              console.log('Текущий салон:', current);
+              const selector = document.getElementById('salonSelector');
+              if (selector && current && current.id) {
+                selector.value = current.id;
+              }
+            })
+            .catch(error => {
+              console.error('Salons loading error:', error);
+              const selector = document.getElementById('salonSelector');
+              if (selector) {
+                selector.innerHTML = '<option value="">Ошибка загрузки</option>';
+              }
+            });
+  });
+
+  // Обработчик изменения выбора
+  document.addEventListener('change', function(e) {
+    if (e.target && e.target.id === 'salonSelector' && e.target.value) {
+      window.location.href = '/admin/select-salon?salonId=' + e.target.value;
+    }
+  });
+</script>
 </html>

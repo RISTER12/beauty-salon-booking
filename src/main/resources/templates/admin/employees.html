@@ -217,34 +217,55 @@
 <script>
   let currentEmployeeId = null;
 
+  // Добавьте эту функцию в начало
+  async function getCurrentSalon() {
+    try {
+      const response = await fetch('/admin/api/current-salon');
+      const data = await response.json();
+      return data && data.id ? data : null;
+    } catch (e) {
+      console.error('Error getting current salon:', e);
+      return null;
+    }
+  }
+
   async function loadEmployees() {
     try {
-      const response = await fetch('/admin/api/employees');
+      const currentSalon = await getCurrentSalon();
+      let url = '/admin/api/employees';
+      if (currentSalon && currentSalon.id) {
+        url = `/admin/api/employees/by-salon?salonId=${currentSalon.id}`;
+      }
+
+      console.log('Загрузка сотрудников по URL:', url);
+
+      const response = await fetch(url);
       const employees = await response.json();
 
+      console.log('Загружены сотрудники:', employees);
+
       const tbody = document.getElementById('employeesTableBody');
-      if (employees.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="8" style="text-align: center;">Нет мастеров</td></tr>';
+      if (!employees || employees.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align: center;">Нет мастеров в выбранном салоне</td></tr>';
         return;
       }
 
       tbody.innerHTML = employees.map(emp => `
-                <tr>
-                    <td>${emp.id}</td>
-                    <td><img src="${emp.photoUrl || '/images/default-avatar.png'}" class="employee-photo" onerror="this.src='/images/default-avatar.png'"></td>
-                    <td>${emp.fullName}</td>
-                    <td>${emp.jobTitle || '-'}</td>
-                    <td>${emp.experienceYears || 0} лет</td>
-                    <td class="services-list">${emp.serviceNames.slice(0, 3).join(', ')}${emp.serviceNames.length > 3 ? '...' : ''}</td>
-                    <td><span class="status-${emp.status === 'ACTIVE' ? 'active' : 'inactive'}">${emp.status}</span></td>
-                    <td>
-                        <button class="btn-edit" onclick="editEmployee(${emp.id})">Ред.</button>
-                        <button class="btn-delete" onclick="deleteEmployee(${emp.id})">Уд.</button>
-                    </td>
-                </tr>
-            `).join('');
+        <tr>
+            <td>${emp.id}</td>
+            <td>${emp.fullName || emp.firstName + ' ' + emp.lastName}</td>
+            <td>${emp.jobTitle || '-'}</td>
+            <td>${emp.experienceYears || 0} лет</td>
+            <td><span class="status-${emp.status === 'ACTIVE' ? 'active' : 'inactive'}">${emp.status || 'ACTIVE'}</span></td>
+            <td>
+              <button class="btn-edit" onclick="editEmployee(${emp.id})">Ред.</button>
+              <button class="btn-delete" onclick="deleteEmployee(${emp.id})">Уд.</button>
+            </td>
+         </>
+      `).join('');
     } catch (e) {
       console.error('Error loading employees:', e);
+      document.getElementById('employeesTableBody').innerHTML = '<tr><td colspan="8" style="text-align: center;">Ошибка загрузки</td></tr>';
     }
   }
 
@@ -276,7 +297,7 @@
         const response = await fetch(`/admin/api/employees/${id}`, { method: 'DELETE' });
         if (response.ok) {
           alert('Мастер удалён');
-          await loadEmployees();  // ✅ Добавьте await
+          await loadEmployees();
         } else {
           alert('Ошибка при удалении');
         }
@@ -341,8 +362,8 @@
     if (event.target === modal) closeModal();
   };
 
+  // Загружаем сотрудников
   loadEmployees();
 </script>
-
 </body>
 </html>
