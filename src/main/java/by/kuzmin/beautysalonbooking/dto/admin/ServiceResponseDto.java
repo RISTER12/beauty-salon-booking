@@ -15,9 +15,7 @@ import java.util.List;
 public class ServiceResponseDto {
     private Long id;
     private String name;
-    private String shortName;
     private String description;
-    private String shortDescription;
     private BigDecimal price;
     private String categoryName;
     private String salonName;

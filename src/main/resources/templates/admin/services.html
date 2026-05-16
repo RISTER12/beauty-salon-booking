@@ -115,25 +115,94 @@
             color: #f97316;
         }
 
-        .category-list {
-            margin-top: 30px;
-            border-top: 1px solid #e2e8f0;
-            padding-top: 20px;
+        .category-select-wrapper {
+            display: flex;
+            gap: 8px;
+            align-items: center;
         }
 
-        .category-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .category-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .category-select {
+            flex: 1;
             padding: 10px;
-            border-bottom: 1px solid #f1f5f9;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+        }
+
+        .category-actions-inline {
+            display: flex;
+            gap: 6px;
+        }
+
+        .btn-add-category-inline,
+        .btn-edit-category-inline,
+        .btn-delete-category-inline {
+            width: 36px;
+            height: 36px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s;
+        }
+
+        .btn-add-category-inline {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-add-category-inline:hover {
+            background: #059669;
+        }
+
+        .btn-edit-category-inline {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .btn-edit-category-inline:hover {
+            background: #2563eb;
+        }
+
+        .btn-delete-category-inline {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-delete-category-inline:hover {
+            background: #dc2626;
+        }
+
+        .category-manage-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            border-bottom: 1px solid #e2e8f0;
+            transition: background 0.2s;
+        }
+
+        .category-manage-item:hover {
+            background: #f8fafc;
+        }
+
+        .category-manage-info {
+            flex: 1;
+        }
+
+        .category-manage-name {
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .category-manage-description {
+            font-size: 12px;
+            color: #64748b;
+            margin-top: 4px;
+        }
+
+        .category-manage-actions {
+            display: flex;
+            gap: 8px;
         }
     </style>
 </head>
@@ -145,12 +214,11 @@
     <main class="admin-content">
         <div class="content-header">
             <h1>Управление услугами</h1>
-            <p class="welcome-text">Добавление, редактирование и удаление услуг и категорий</p>
+            <p class="welcome-text">Добавление, редактирование и удаление услуг</p>
         </div>
 
         <div>
             <button class="btn-add" id="addServiceBtn">+ Добавить услугу</button>
-            <button class="btn-add-category" id="addCategoryBtn">+ Добавить категорию</button>
         </div>
 
         <!-- Список услуг -->
@@ -168,20 +236,9 @@
                 </tr>
                 </thead>
                 <tbody id="servicesTableBody">
-                <tr><td colspan="6" style="text-align: center;">Загрузка...</td></table>
-            </tbody>
+                <tr><td colspan="6" style="text-align: center;">Загрузка...<\/td></tr>
+                </tbody>
             </table>
-        </div>
-
-        <!-- Список категорий -->
-        <div class="category-list">
-            <div class="category-header">
-                <h3>Категории услуг</h3>
-                <button class="btn-add-category" id="addCategoryBtn2" style="font-size: 12px; padding: 5px 10px;">+ Добавить</button>
-            </div>
-            <div id="categoriesList">
-                <div style="text-align: center; padding: 20px;">Загрузка категорий...</div>
-            </div>
         </div>
     </main>
 </div>
@@ -202,17 +259,17 @@
                 <input type="text" id="name" required>
             </div>
 
-            <div class="form-group">
-                <label>Короткое название</label>
-                <input type="text" id="shortName">
-            </div>
-
             <div class="form-row">
                 <div class="form-group">
                     <label>Категория</label>
-                    <select id="categoryId">
+                    <select id="categoryId" class="category-select" style="width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px;">
                         <option value="">Выберите категорию</option>
                     </select>
+                    <div style="display: flex; gap: 8px; margin-top: 10px;">
+                        <button type="button" class="btn-add-category-inline" id="inlineAddCategoryBtn" style="flex: 1; background: #10b981; color: white; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 13px;">+ Новая</button>
+                        <button type="button" class="btn-edit-category-inline" id="inlineEditCategoryBtn" style="flex: 1; background: #3b82f6; color: white; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 13px;">✏️ Редактировать</button>
+                        <button type="button" class="btn-delete-category-inline" id="inlineDeleteCategoryBtn" style="flex: 1; background: #ef4444; color: white; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 13px;">🗑️ Удалить</button>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label>Цена *</label>
@@ -222,12 +279,7 @@
 
             <div class="form-group">
                 <label>Описание</label>
-                <textarea id="description" rows="3"></textarea>
-            </div>
-
-            <div class="form-group">
-                <label>Краткое описание</label>
-                <textarea id="shortDescription" rows="2"></textarea>
+                <textarea id="description" rows="3" placeholder="Полное описание услуги"></textarea>
             </div>
 
             <button type="submit" class="btn-save">Сохранить</button>
@@ -235,25 +287,43 @@
     </div>
 </div>
 
-<!-- Модальное окно для категории -->
-<div id="categoryModal" class="modal">
-    <div class="modal-content">
+<!-- Модальное окно для управления категориями -->
+<div id="categoriesManageModal" class="modal">
+    <div class="modal-content" style="max-width: 600px;">
         <div class="modal-header">
-            <h2 id="categoryModalTitle">Добавить категорию</h2>
-            <button onclick="closeCategoryModal()" style="background: none; border: none; font-size: 24px; cursor: pointer;">&times;</button>
+            <h2>Управление категориями услуг</h2>
+            <button onclick="closeCategoriesManageModal()" style="background: none; border: none; font-size: 24px; cursor: pointer;">&times;</button>
         </div>
 
-        <form id="categoryForm">
-            <input type="hidden" id="categoryEditId">
+        <div style="margin-bottom: 20px;">
+            <button class="btn-add-category" id="addNewCategoryBtn" style="width: 100%;">+ Добавить новую категорию</button>
+        </div>
+
+        <div id="categoriesManageList" style="max-height: 400px; overflow-y: auto;">
+            <div style="text-align: center; padding: 20px;">Загрузка...</div>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно для добавления/редактирования категории -->
+<div id="categorySimpleModal" class="modal">
+    <div class="modal-content" style="max-width: 450px;">
+        <div class="modal-header">
+            <h2 id="categorySimpleModalTitle">Добавить категорию</h2>
+            <button onclick="closeCategorySimpleModal()" style="background: none; border: none; font-size: 24px; cursor: pointer;">&times;</button>
+        </div>
+
+        <form id="categorySimpleForm">
+            <input type="hidden" id="categorySimpleEditId">
 
             <div class="form-group">
                 <label>Название категории *</label>
-                <input type="text" id="categoryName" required>
+                <input type="text" id="categorySimpleName" required>
             </div>
 
             <div class="form-group">
                 <label>Описание</label>
-                <textarea id="categoryDescription" rows="3"></textarea>
+                <textarea id="categorySimpleDescription" rows="2"></textarea>
             </div>
 
             <button type="submit" class="btn-save">Сохранить</button>
@@ -263,6 +333,13 @@
 
 <script>
     let categories = [];
+
+    function escapeHtml(text) {
+        if (!text) return '';
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
 
     async function getCurrentSalon() {
         try {
@@ -275,8 +352,8 @@
         }
     }
 
-    // Загрузка категорий
-    async function loadCategories() {
+    // Загрузка категорий для select
+    async function loadCategoriesForSelect() {
         try {
             const response = await fetch('/admin/api/categories');
             categories = await response.json();
@@ -284,33 +361,14 @@
             const select = document.getElementById('categoryId');
             select.innerHTML = '<option value="">Выберите категорию</option>' +
                 categories.filter(cat => cat.active).map(cat =>
-                    `<option value="${cat.id}">${cat.categoryName}</option>`
+                    `<option value="${cat.id}">${escapeHtml(cat.categoryName)}</option>`
                 ).join('');
-
-            const container = document.getElementById('categoriesList');
-            if (categories.length === 0) {
-                container.innerHTML = '<div style="text-align: center; padding: 20px;">Нет категорий</div>';
-                return;
-            }
-
-            container.innerHTML = categories.map(cat => `
-                <div class="category-item">
-                    <div>
-                        <strong>${cat.categoryName}</strong>
-                        ${cat.description ? `<div style="font-size: 12px; color: #64748b;">${cat.description}</div>` : ''}
-                    </div>
-                    <div>
-                        <button class="btn-edit" onclick="editCategory(${cat.id})">Ред.</button>
-                        <button class="btn-delete" onclick="deleteCategory(${cat.id})">Уд.</button>
-                    </div>
-                </div>
-            `).join('');
         } catch (e) {
             console.error('Error loading categories:', e);
         }
     }
 
-    // Загрузка услуг с учётом салона
+    // Загрузка услуг
     async function loadServices() {
         try {
             const currentSalon = await getCurrentSalon();
@@ -331,10 +389,10 @@
             tbody.innerHTML = services.map(service => `
                 <tr>
                     <td>${service.id}</td>
-                    <td>${service.name}</td>
-                    <td>${service.categoryName || '-'}</td>
+                    <td>${escapeHtml(service.name)}</td>
+                    <td>${escapeHtml(service.categoryName || '-')}</td>
                     <td class="price">${service.price} ₽</td>
-                    <td>${service.salonName || '-'}</td>
+                    <td>${escapeHtml(service.salonName || '-')}</td>
                     <td>
                         <button class="btn-edit" onclick="editService(${service.id})">Ред.</button>
                         <button class="btn-delete" onclick="deleteService(${service.id})">Уд.</button>
@@ -355,10 +413,8 @@
 
             document.getElementById('serviceId').value = service.id;
             document.getElementById('name').value = service.name;
-            document.getElementById('shortName').value = service.shortName || '';
             document.getElementById('price').value = service.price;
             document.getElementById('description').value = service.description || '';
-            document.getElementById('shortDescription').value = service.shortDescription || '';
 
             const categorySelect = document.getElementById('categoryId');
             if (categorySelect && service.categoryId) {
@@ -373,7 +429,7 @@
         }
     }
 
-    // Услуги: удаление
+    // Удаление услуги
     async function deleteService(id) {
         if (confirm('Вы уверены, что хотите удалить эту услугу?')) {
             try {
@@ -391,32 +447,124 @@
         }
     }
 
-    // Категории: редактирование
-    async function editCategory(id) {
+    // Открытие модального окна управления категориями
+    function openCategoriesManageModal() {
+        loadCategoriesManageList();
+        document.getElementById('categoriesManageModal').style.display = 'flex';
+    }
+
+    function closeCategoriesManageModal() {
+        document.getElementById('categoriesManageModal').style.display = 'none';
+    }
+
+    // Загрузка списка категорий для управления
+    async function loadCategoriesManageList() {
+        try {
+            const response = await fetch('/admin/api/categories');
+            const categoriesList = await response.json();
+
+            const container = document.getElementById('categoriesManageList');
+            if (!categoriesList || categoriesList.length === 0) {
+                container.innerHTML = '<div style="text-align: center; padding: 40px;">Нет категорий. Нажмите "+ Добавить"</div>';
+                return;
+            }
+
+            container.innerHTML = categoriesList.map(cat => `
+                <div class="category-manage-item">
+                    <div class="category-manage-info">
+                        <div class="category-manage-name">${escapeHtml(cat.categoryName)}</div>
+                        ${cat.description ? `<div class="category-manage-description">${escapeHtml(cat.description)}</div>` : ''}
+                    </div>
+                    <div class="category-manage-actions">
+                        <button class="btn-edit" onclick="openEditCategoryModal(${cat.id})">✏️ Ред.</button>
+                        <button class="btn-delete" onclick="deleteCategoryFromManage(${cat.id})">🗑️ Уд.</button>
+                    </div>
+                </div>
+            `).join('');
+        } catch (e) {
+            console.error('Error loading categories:', e);
+        }
+    }
+
+    // Открытие модального окна для добавления категории
+    function openAddCategoryModal() {
+        document.getElementById('categorySimpleEditId').value = '';
+        document.getElementById('categorySimpleName').value = '';
+        document.getElementById('categorySimpleDescription').value = '';
+        document.getElementById('categorySimpleModalTitle').textContent = 'Добавить категорию';
+        document.getElementById('categorySimpleModal').style.display = 'flex';
+    }
+
+    // Открытие модального окна для редактирования категории
+    async function openEditCategoryModal(id) {
         try {
             const response = await fetch(`/admin/api/categories/${id}`);
             const category = await response.json();
 
-            document.getElementById('categoryEditId').value = category.id;
-            document.getElementById('categoryName').value = category.categoryName;
-            document.getElementById('categoryDescription').value = category.description || '';
-
-            document.getElementById('categoryModalTitle').textContent = 'Редактировать категорию';
-            document.getElementById('categoryModal').style.display = 'flex';
+            document.getElementById('categorySimpleEditId').value = category.id;
+            document.getElementById('categorySimpleName').value = category.categoryName;
+            document.getElementById('categorySimpleDescription').value = category.description || '';
+            document.getElementById('categorySimpleModalTitle').textContent = 'Редактировать категорию';
+            document.getElementById('categorySimpleModal').style.display = 'flex';
         } catch (e) {
             console.error('Error loading category:', e);
-            alert('Ошибка загрузки данных категории');
+            alert('Ошибка загрузки категории');
         }
     }
 
-    // Категории: удаление
-    async function deleteCategory(id) {
-        if (confirm('Вы уверены, что хотите удалить эту категорию?')) {
+    function closeCategorySimpleModal() {
+        document.getElementById('categorySimpleModal').style.display = 'none';
+    }
+
+    // Сохранение категории
+    async function saveCategorySimple() {
+        const categoryId = document.getElementById('categorySimpleEditId').value;
+        const data = {
+            categoryName: document.getElementById('categorySimpleName').value,
+            description: document.getElementById('categorySimpleDescription').value
+        };
+
+        if (!data.categoryName) {
+            alert('Введите название категории');
+            return;
+        }
+
+        const url = categoryId ? `/admin/api/categories/${categoryId}` : '/admin/api/categories';
+        const method = categoryId ? 'PUT' : 'POST';
+
+        try {
+            const response = await fetch(url, {
+                method: method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            if (response.ok) {
+                alert(categoryId ? 'Категория обновлена' : 'Категория добавлена');
+                closeCategorySimpleModal();
+                loadCategoriesManageList();
+                loadCategoriesForSelect();
+                loadServices();
+            } else {
+                alert('Ошибка при сохранении');
+            }
+        } catch (e) {
+            console.error('Error saving category:', e);
+            alert('Ошибка при сохранении');
+        }
+    }
+
+    // Удаление категории из управления
+    async function deleteCategoryFromManage(id) {
+        const category = categories.find(c => c.id === id);
+        if (confirm(`Вы уверены, что хотите удалить категорию "${category?.categoryName || id}"?`)) {
             try {
                 const response = await fetch(`/admin/api/categories/${id}`, { method: 'DELETE' });
                 if (response.ok) {
                     alert('Категория удалена');
-                    loadCategories();
+                    loadCategoriesManageList();
+                    loadCategoriesForSelect();
+                    loadServices();
                 } else {
                     alert('Ошибка при удалении');
                 }
@@ -427,37 +575,25 @@
         }
     }
 
-    // Открытие модального окна для добавления услуги
-    document.getElementById('addServiceBtn').addEventListener('click', () => {
-        document.getElementById('serviceForm').reset();
-        document.getElementById('serviceId').value = '';
-        document.getElementById('serviceModalTitle').textContent = 'Добавить услугу';
-        document.getElementById('serviceModal').style.display = 'flex';
-    });
-
-    // Открытие модального окна для добавления категории
-    function openCategoryModal() {
-        document.getElementById('categoryForm').reset();
-        document.getElementById('categoryEditId').value = '';
-        document.getElementById('categoryModalTitle').textContent = 'Добавить категорию';
-        document.getElementById('categoryModal').style.display = 'flex';
-    }
-
-    document.getElementById('addCategoryBtn').addEventListener('click', openCategoryModal);
-    document.getElementById('addCategoryBtn2').addEventListener('click', openCategoryModal);
-
     // Сохранение услуги
     document.getElementById('serviceForm').addEventListener('submit', async (e) => {
         e.preventDefault();
 
         const serviceId = document.getElementById('serviceId').value;
+        const currentSalon = await getCurrentSalon();
+        const salonId = currentSalon ? currentSalon.id : null;
+
+        if (!salonId) {
+            alert('Сначала выберите салон в боковом меню');
+            return;
+        }
+
         const data = {
             name: document.getElementById('name').value,
-            shortName: document.getElementById('shortName').value,
             price: parseFloat(document.getElementById('price').value),
             description: document.getElementById('description').value,
-            shortDescription: document.getElementById('shortDescription').value,
-            categoryId: document.getElementById('categoryId').value ? parseInt(document.getElementById('categoryId').value) : null
+            categoryId: document.getElementById('categoryId').value ? parseInt(document.getElementById('categoryId').value) : null,
+            salonId: salonId
         };
 
         const url = serviceId ? `/admin/api/services/${serviceId}` : '/admin/api/services';
@@ -475,43 +611,11 @@
                 closeServiceModal();
                 loadServices();
             } else {
-                alert('Ошибка при сохранении');
+                const error = await response.text();
+                alert('Ошибка при сохранении: ' + error);
             }
         } catch (e) {
             console.error('Error saving service:', e);
-            alert('Ошибка при сохранении');
-        }
-    });
-
-    // Сохранение категории
-    document.getElementById('categoryForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        const categoryId = document.getElementById('categoryEditId').value;
-        const data = {
-            categoryName: document.getElementById('categoryName').value,
-            description: document.getElementById('categoryDescription').value
-        };
-
-        const url = categoryId ? `/admin/api/categories/${categoryId}` : '/admin/api/categories';
-        const method = categoryId ? 'PUT' : 'POST';
-
-        try {
-            const response = await fetch(url, {
-                method: method,
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
-
-            if (response.ok) {
-                alert(categoryId ? 'Категория обновлена' : 'Категория добавлена');
-                closeCategoryModal();
-                loadCategories();
-            } else {
-                alert('Ошибка при сохранении');
-            }
-        } catch (e) {
-            console.error('Error saving category:', e);
             alert('Ошибка при сохранении');
         }
     });
@@ -520,19 +624,42 @@
         document.getElementById('serviceModal').style.display = 'none';
     }
 
-    function closeCategoryModal() {
-        document.getElementById('categoryModal').style.display = 'none';
-    }
+    // Обработчики inline кнопок для категорий
+    document.getElementById('inlineAddCategoryBtn').addEventListener('click', openAddCategoryModal);
+    document.getElementById('inlineEditCategoryBtn').addEventListener('click', async () => {
+        const select = document.getElementById('categoryId');
+        const selectedId = select.value;
+        if (!selectedId) {
+            alert('Сначала выберите категорию');
+            return;
+        }
+        await openEditCategoryModal(parseInt(selectedId));
+    });
+    document.getElementById('inlineDeleteCategoryBtn').addEventListener('click', async () => {
+        const select = document.getElementById('categoryId');
+        const selectedId = select.value;
+        if (!selectedId) {
+            alert('Сначала выберите категорию');
+            return;
+        }
+        await deleteCategoryFromManage(parseInt(selectedId));
+    });
 
-    window.onclick = function(event) {
-        const serviceModal = document.getElementById('serviceModal');
-        const categoryModal = document.getElementById('categoryModal');
-        if (event.target === serviceModal) closeServiceModal();
-        if (event.target === categoryModal) closeCategoryModal();
-    };
+    // Обработчики для модальных окон
+    document.getElementById('addServiceBtn').addEventListener('click', () => {
+        document.getElementById('serviceForm').reset();
+        document.getElementById('serviceId').value = '';
+        document.getElementById('serviceModalTitle').textContent = 'Добавить услугу';
+        document.getElementById('serviceModal').style.display = 'flex';
+    });
+
+    document.getElementById('categorySimpleForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        await saveCategorySimple();
+    });
 
     // Инициализация
-    loadCategories();
+    loadCategoriesForSelect();
     loadServices();
 </script>
 

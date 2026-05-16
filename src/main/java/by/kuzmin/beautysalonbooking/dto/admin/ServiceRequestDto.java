@@ -14,10 +14,8 @@ import java.util.List;
 @AllArgsConstructor
 public class ServiceRequestDto {
     private String name;
-    private String shortName;
-    private String description;
-    private String shortDescription;
     private BigDecimal price;
+    private String description;
     private Long categoryId;
     private Long salonId;
     private List<String> photoUrlList;

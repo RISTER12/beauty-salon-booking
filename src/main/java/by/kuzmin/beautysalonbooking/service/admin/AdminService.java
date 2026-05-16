@@ -201,6 +201,14 @@ public class AdminService {
             employee.setAverageRating(BigDecimal.ZERO);
         }
 
+        if (dto.getSalonId() == null) {
+            throw new RuntimeException("Salon ID is required");
+        }
+
+        Salon salon = salonRepository.findById(dto.getSalonId())
+                .orElseThrow(() -> new RuntimeException("Салон не найден с id: " + dto.getSalonId()));
+        employee.setSalon(salon);
+
         // Установка статуса (если не указан, берём статус "ACTIVE" с id=1)
         if (dto.getStatusId() != null) {
             EmployeeStatus status = employeeStatusRepository.findById(dto.getStatusId())
@@ -215,9 +223,9 @@ public class AdminService {
 
         // Установка салона (если указан)
         if (dto.getSalonId() != null) {
-            Salon salon = salonRepository.findById(dto.getSalonId())
+            Salon salon1 = salonRepository.findById(dto.getSalonId())
                     .orElseThrow(() -> new RuntimeException("Салон не найден"));
-            employee.setSalon(salon);
+            employee.setSalon(salon1);
         }
 
         // Установка услуг (если указаны)
@@ -356,9 +364,7 @@ public class AdminService {
 
     private void updateServiceFromDto(ServiceEntity service, ServiceRequestDto dto) {
         service.setName(dto.getName());
-        service.setShortName(dto.getShortName());
         service.setDescription(dto.getDescription());
-        service.setShortDescription(dto.getShortDescription());
         service.setPrice(dto.getPrice());
         service.setPhotoUrlList(dto.getPhotoUrlList());
 
@@ -387,9 +393,7 @@ public class AdminService {
         return ServiceResponseDto.builder()
                 .id(service.getId())
                 .name(service.getName())
-                .shortName(service.getShortName())
                 .description(service.getDescription())
-                .shortDescription(service.getShortDescription())
                 .price(service.getPrice())
                 .categoryName(service.getServiceCategory() != null ?
                         service.getServiceCategory().getCategoryName() : null)
@@ -454,7 +458,7 @@ public class AdminService {
                 .id(category.getId())
                 .categoryName(category.getCategoryName())
                 .description(category.getDescription())
-                .isActive(category.isActive())
+                .active(category.getActive())
                 .build();
     }
 

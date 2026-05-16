@@ -319,6 +319,16 @@
     e.preventDefault();
 
     const employeeId = document.getElementById('employeeId').value;
+
+    // Получаем текущий выбранный салон
+    const currentSalon = await getCurrentSalon();
+    const salonId = currentSalon ? currentSalon.id : null;
+
+    if (!salonId) {
+      alert('Сначала выберите салон в боковом меню');
+      return;
+    }
+
     const data = {
       firstName: document.getElementById('firstName').value,
       lastName: document.getElementById('lastName').value,
@@ -327,7 +337,8 @@
       experienceYears: parseInt(document.getElementById('experienceYears').value) || 0,
       isVisibleOnWebsite: document.getElementById('visibleOnWebsite').value === 'true',
       averageRating: parseFloat(document.getElementById('averageRating').value) || 0,
-      statusId: 1
+      statusId: 1,
+      salonId: salonId  // ✅ Используем салон из сессии
     };
 
     const url = employeeId ? `/admin/api/employees/${employeeId}` : '/admin/api/employees';

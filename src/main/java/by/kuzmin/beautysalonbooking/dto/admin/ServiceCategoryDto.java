@@ -13,5 +13,5 @@ public class ServiceCategoryDto {
     private Long id;
     private String categoryName;
     private String description;
-    private boolean isActive;
+    private Boolean active;
 }

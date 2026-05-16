@@ -26,5 +26,5 @@ public class ServiceCategory extends BaseEntity {
     private String description;
 
     @Column(name = "is_active", nullable = false)
-    private boolean isActive = true;
+    private Boolean active = true;
 }
