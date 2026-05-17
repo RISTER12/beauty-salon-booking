@@ -349,7 +349,10 @@
             </div>
             <div id="aboutSalon">
                 <a id="mainInfo" href="/">SEKTA X TECH V</a>
-                <div id="address">улица Покровка, 44</div>
+                <div id="address">
+                    <span th:if="${selectedSalon != null}" th:text="${selectedSalon.address}"></span>
+                    <span th:unless="${selectedSalon != null}">улица Покровка, 44</span>
+                </div>
             </div>
         </header>
 

@@ -269,7 +269,9 @@
                     <img src="../images/small-image.jpg" alt="Логотип">
                     <div>
                         <div id="mainInfo">SEKTA X TECH V</div>
-                        <div id="address">улица Покровка, 44</div>
+                        <div id="address" th:text="${selectedSalon != null ? selectedSalon.fullAddress : 'Выберите салон'}">
+                            улица Покровка, 44
+                        </div>
                     </div>
                 </a>
             </header>
@@ -329,11 +331,9 @@
     const anyMasterCard = document.querySelector('.any-master');
 
     function updateSelectedClass() {
-        // Убираем класс selected у всех карточек
         masterCards.forEach(card => card.classList.remove('selected'));
         anyMasterCard.classList.remove('selected');
 
-        // Находим выбранный радио-кнопку
         radioButtons.forEach(radio => {
             if (radio.checked) {
                 const parentCard = radio.closest('.master-card, .any-master');
@@ -348,7 +348,6 @@
         radio.addEventListener('change', updateSelectedClass);
     });
 
-    // Инициализация
     updateSelectedClass();
 </script>
 

@@ -53,9 +53,6 @@
         .arrow {
             font-size: 24px;
             font-weight: 400;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
         }
 
         header img {
@@ -141,6 +138,7 @@
             display: grid;
             grid-template-columns: repeat(7, 1fr);
             gap: 6px;
+            margin-bottom: 24px;
         }
 
         .calendar-day {
@@ -182,35 +180,7 @@
             cursor: default;
         }
 
-        /* Footer */
-        footer {
-            padding: 20px 28px 28px;
-            border-top: 1px solid #e2e8f0;
-        }
-
-        #go {
-            display: none;
-        }
-
-        .btn-confirm {
-            width: 100%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            padding: 14px;
-            border-radius: 40px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .btn-confirm:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
-        }
-
-        /* Time slots (добавляется динамически) */
+        /* Time slots */
         .time-slots-container {
             margin-top: 24px;
             padding-top: 20px;
@@ -258,6 +228,34 @@
             border-radius: 16px;
         }
 
+        /* Footer */
+        footer {
+            padding: 20px 28px 28px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        #go {
+            display: none;
+        }
+
+        .btn-confirm {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 40px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-confirm:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
         /* Loading */
         .loading {
             text-align: center;
@@ -297,7 +295,9 @@
                     <img src="../images/small-image.jpg" alt="Логотип">
                     <div>
                         <div id="mainInfo">SEKTA X TECH V</div>
-                        <div id="address">улица Покровка, 44</div>
+                        <div id="address" th:text="${selectedSalon != null ? selectedSalon.fullAddress : 'Выберите салон'}">
+                            улица Покровка, 44
+                        </div>
                     </div>
                 </a>
             </header>
@@ -339,6 +339,7 @@
     /*<![CDATA[*/
     window.selectedEmployeeId = [[${employeeId}]];
     window.selectedServiceIds = [[${serviceIds}]];
+    window.selectedSalonAddress = [[${selectedSalon != null ? selectedSalon.fullAddress : ''}]];
     /*]]>*/
 </script>
 </body>

@@ -19,4 +19,5 @@ public class ClientBookingDto {
     private Long employeeId;
     private Long slotId;
     private List<Long> serviceIds;
+    private Long salonId;
 }

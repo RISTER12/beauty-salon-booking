@@ -13,6 +13,7 @@ public class SalonDto {
     private Long id;
     private String salonName;
     private String address;
+    private String fullAddress;
     private String phone;
     private String email;
 }

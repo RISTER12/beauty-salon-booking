@@ -236,7 +236,9 @@
                     <img src="../images/small-image.jpg" alt="Логотип">
                     <div>
                         <div id="mainInfo">SEKTA X TECH V</div>
-                        <div id="address">улица Покровка, 44</div>
+                        <div id="address" th:text="${selectedSalon != null ? selectedSalon.fullAddress : 'улица Покровка, 44'}">
+                            улица Покровка, 44
+                        </div>
                     </div>
                 </a>
             </header>

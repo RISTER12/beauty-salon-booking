@@ -490,11 +490,34 @@ public class AdminService {
     }
 
     public SalonDto toSalonDto(Salon salon) {
+        String fullAddress = null;
+        String shortAddress = null;
+
+        if (salon.getAddress() != null) {
+            StringBuilder addr = new StringBuilder();
+            if (salon.getAddress().getCity() != null && !salon.getAddress().getCity().isEmpty()) {
+                addr.append(salon.getAddress().getCity());
+            }
+            if (salon.getAddress().getStreet() != null && !salon.getAddress().getStreet().isEmpty()) {
+                if (addr.length() > 0) addr.append(", ");
+                addr.append(salon.getAddress().getStreet());
+            }
+            if (salon.getAddress().getBuilding() != null && !salon.getAddress().getBuilding().isEmpty()) {
+                if (addr.length() > 0) addr.append(" ");
+                addr.append(salon.getAddress().getBuilding());
+            }
+            fullAddress = addr.toString();
+
+            // Короткий адрес для компактного отображения
+            shortAddress = (salon.getAddress().getStreet() != null ? salon.getAddress().getStreet() : "") +
+                    " " + (salon.getAddress().getBuilding() != null ? salon.getAddress().getBuilding() : "");
+        }
+
         return SalonDto.builder()
                 .id(salon.getId())
                 .salonName(salon.getSalonName())
-                .address(salon.getAddress() != null ?
-                        salon.getAddress().getCity() + ", " + salon.getAddress().getStreet() : null)
+                .address(shortAddress != null && !shortAddress.isBlank() ? shortAddress : null)
+                .fullAddress(fullAddress)
                 .build();
     }
 

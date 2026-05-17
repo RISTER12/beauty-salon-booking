@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Выбор салона - SEKTA X TECH V</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #1e293b;
+        }
+
+        .wrapper {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .center {
+            max-width: 550px;
+            width: 100%;
+            background: white;
+            border-radius: 32px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            padding: 20px 24px;
+            text-align: center;
+        }
+
+        header img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #667eea;
+            margin-bottom: 12px;
+        }
+
+        #mainInfo {
+            font-size: 20px;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        #address {
+            font-size: 14px;
+            color: #94a3b8;
+        }
+
+        /* Main content */
+        main {
+            padding: 28px;
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        /* Salon cards */
+        .salon-card {
+            background: #f8fafc;
+            border-radius: 20px;
+            margin-bottom: 16px;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .salon-card:hover {
+            background: #f1f5f9;
+            transform: translateY(-2px);
+        }
+
+        .salon-card.selected {
+            border-color: #667eea;
+            background: #e0e7ff;
+        }
+
+        .salon-card label {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 20px;
+            cursor: pointer;
+        }
+
+        .salon-icon {
+            width: 56px;
+            height: 56px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            flex-shrink: 0;
+        }
+
+        .salon-info {
+            flex: 1;
+        }
+
+        .salon-name {
+            font-weight: 700;
+            font-size: 18px;
+            color: #1e293b;
+            margin-bottom: 6px;
+        }
+
+        .salon-address {
+            font-size: 14px;
+            color: #64748b;
+            margin-bottom: 4px;
+        }
+
+        .salon-hours {
+            font-size: 13px;
+            color: #10b981;
+        }
+
+        /* Radio button */
+        .salon-card input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: #667eea;
+            flex-shrink: 0;
+        }
+
+        /* Footer */
+        footer {
+            padding: 20px 28px 28px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .btn-submit {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 40px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: none;
+        }
+
+        .btn-submit.visible {
+            display: block;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        @media (max-width: 480px) {
+            .wrapper {
+                padding: 20px;
+            }
+            main {
+                padding: 20px;
+            }
+            .salon-card label {
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="wrapper">
+    <div class="center">
+        <form action="/booking/select-salon" method="post" id="salonForm">
+            <header>
+                <img src="../images/small-image.jpg" alt="Логотип">
+                <div>
+                    <div id="mainInfo">SEKTA X TECH V</div>
+                    <div id="address">Сеть салонов красоты</div>
+                </div>
+            </header>
+
+            <main>
+                <h1>Выберите салон</h1>
+
+                <div th:each="salon : ${salons}" class="salon-card">
+                    <label>
+                        <div class="salon-icon">💇‍♀️</div>
+                        <div class="salon-info">
+                            <div class="salon-name" th:text="${salon.salonName}">Название салона</div>
+                            <div class="salon-address" th:text="${salon.address != null ? salon.address : 'Адрес уточняется'}">📍 Адрес</div>
+                            <div class="salon-hours">🕐 10:00 - 22:00</div>
+                        </div>
+                        <input type="radio" name="salonId" th:value="${salon.id}">
+                    </label>
+                </div>
+            </main>
+
+            <footer>
+                <button type="submit" class="btn-submit" id="submitBtn">Выбрать салон →</button>
+            </footer>
+        </form>
+    </div>
+</div>
+
+<script>
+    const radioButtons = document.querySelectorAll('input[name="salonId"]');
+    const submitBtn = document.getElementById('submitBtn');
+
+    function updateSelection() {
+        let hasSelected = false;
+
+        radioButtons.forEach(radio => {
+            const card = radio.closest('.salon-card');
+            if (radio.checked) {
+                card.classList.add('selected');
+                hasSelected = true;
+            } else {
+                card.classList.remove('selected');
+            }
+        });
+
+        if (hasSelected) {
+            submitBtn.classList.add('visible');
+        } else {
+            submitBtn.classList.remove('visible');
+        }
+    }
+
+    radioButtons.forEach(radio => {
+        radio.addEventListener('change', updateSelection);
+    });
+
+    updateSelection();
+</script>
+
+</body>
+</html>

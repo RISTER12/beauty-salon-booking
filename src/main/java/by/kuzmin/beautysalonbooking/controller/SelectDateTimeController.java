@@ -3,8 +3,11 @@ package by.kuzmin.beautysalonbooking.controller;
 import by.kuzmin.beautysalonbooking.dto.DateSelectionRequest;
 import by.kuzmin.beautysalonbooking.dto.MonthRequest;
 import by.kuzmin.beautysalonbooking.dto.TimeslotDto;
+import by.kuzmin.beautysalonbooking.dto.admin.SalonDto;
 import by.kuzmin.beautysalonbooking.service.TimeslotService;
-import lombok.*;
+import by.kuzmin.beautysalonbooking.service.admin.AdminService;
+import jakarta.servlet.http.HttpSession;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,18 +21,28 @@ import java.util.List;
 @AllArgsConstructor
 public class SelectDateTimeController {
     private TimeslotService timeslotService;
+    private AdminService adminService;
 
     @GetMapping
     public String selectDateTime(@RequestParam(required = false) Long employeeId,
                                  @RequestParam(required = false, name = "serviceIds") List<Long> serviceIds,
+                                 HttpSession session,
                                  Model model) {
+
+        // Получаем выбранный салон из сессии
+        Long salonId = (Long) session.getAttribute("selectedSalonId");
+
+        // Получаем информацию о салоне для отображения в шапке
+        SalonDto selectedSalon = adminService.getCurrentSalon(salonId);
+        model.addAttribute("selectedSalon", selectedSalon);
+
         model.addAttribute("employeeId", employeeId);
         if (serviceIds != null && !serviceIds.isEmpty()) {
             model.addAttribute("serviceIds", serviceIds);
         }
         return "online-booking-select-date-time";
     }
-    //todo Убрать всё что нужно на слой сервиса(почти всё)
+
     @PostMapping
     @ResponseBody
     public ResponseEntity<?> selectDateTime(@RequestBody DateSelectionRequest request) {
@@ -72,5 +85,3 @@ public class SelectDateTimeController {
         return ResponseEntity.ok(timeslots);
     }
 }
-
-

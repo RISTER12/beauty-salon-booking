@@ -12,6 +12,7 @@ import by.kuzmin.beautysalonbooking.repository.EmployeeStatusRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -53,5 +54,17 @@ public class EmployeeService {
         return employeeMapper.toDto(
                 employeeRepository.findById(id).orElseThrow(() -> new RuntimeException("Employee not found"))
         );
+    }
+
+    public List<CreateEmployeeResponseDto> getEmployeesBySalon(Long salonId) {
+        List<Employee> employees;
+        if (salonId == null) {
+            employees = employeeRepository.findByIsActiveTrue();
+        } else {
+            employees = employeeRepository.findBySalonIdAndIsActiveTrue(salonId);
+        }
+        return employees.stream()
+                .map(employeeMapper::toDto)
+                .collect(Collectors.toList());
     }
 }

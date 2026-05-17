@@ -3,10 +3,13 @@ package by.kuzmin.beautysalonbooking.controller;
 import by.kuzmin.beautysalonbooking.dto.ClientBookingDto;
 import by.kuzmin.beautysalonbooking.dto.CreateEmployeeResponseDto;
 import by.kuzmin.beautysalonbooking.dto.TimeslotDto;
+import by.kuzmin.beautysalonbooking.dto.admin.SalonDto;
 import by.kuzmin.beautysalonbooking.service.BookingService;
 import by.kuzmin.beautysalonbooking.service.EmployeeService;
 import by.kuzmin.beautysalonbooking.service.ServiceService;
 import by.kuzmin.beautysalonbooking.service.TimeslotService;
+import by.kuzmin.beautysalonbooking.service.admin.AdminService;
+import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,12 +25,35 @@ public class OnlineBookingController {
     private TimeslotService timeslotService;
     private ServiceService serviceService;
     private BookingService bookingService;
+    private AdminService adminService;
+
+    @GetMapping("/select-salon")
+    public String selectSalon(Model model) {
+        List<SalonDto> salons = adminService.getAllSalons();
+        model.addAttribute("salons", salons);
+        return "online-booking-select-salon";
+    }
+
+    @PostMapping("/select-salon")
+    public String saveSalon(@RequestParam Long salonId, HttpSession session) {
+        session.setAttribute("selectedSalonId", salonId);
+        return "redirect:/booking";
+    }
 
     @GetMapping
     public String booking(@RequestParam(required = false, name = "employeeId") Long employeeId,
                           @RequestParam(required = false, name = "slotId") Long slotId,
                           @RequestParam(required = false, name = "serviceIds") List<Long> serviceIds,
+                          HttpSession session,
                           Model model) {
+
+        Long salonId = (Long) session.getAttribute("selectedSalonId");
+        if (salonId == null) {
+            return "redirect:/booking/select-salon";
+        }
+
+        SalonDto selectedSalon = adminService.getCurrentSalon(salonId);
+        model.addAttribute("selectedSalon", selectedSalon);
 
         if (slotId != null) {
             TimeslotDto timeslotDto = timeslotService.findById(slotId);
@@ -48,7 +74,6 @@ public class OnlineBookingController {
             model.addAttribute("serviceList", serviceService.findAllByIds(serviceIds));
         }
 
-        // Добавляем DTO для формы
         model.addAttribute("clientDto", new ClientBookingDto());
 
         return "online-booking-menu";
@@ -58,13 +83,16 @@ public class OnlineBookingController {
     public String createBooking(@ModelAttribute ClientBookingDto bookingDto,
                                 @RequestParam(required = false) Long employeeId,
                                 @RequestParam(required = false) Long slotId,
-                                @RequestParam(required = false) List<Long> serviceIds) {
+                                @RequestParam(required = false) List<Long> serviceIds,
+                                HttpSession session) {
+
+        Long salonId = (Long) session.getAttribute("selectedSalonId");
 
         bookingDto.setEmployeeId(employeeId);
         bookingDto.setSlotId(slotId);
         bookingDto.setServiceIds(serviceIds);
+        bookingDto.setSalonId(salonId);
 
-        // Сохраняем бронирование
         bookingService.createBooking(bookingDto);
 
         return "redirect:/booking/success";

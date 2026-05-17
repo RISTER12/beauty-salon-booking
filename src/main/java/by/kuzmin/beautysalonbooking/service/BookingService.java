@@ -22,63 +22,6 @@ public class BookingService {
     private final AppointmentStatusRepository appointmentStatusRepository;
     private final TimeslotStatusRepository timeslotStatusRepository;
 
-    @Transactional
-    public void createBooking(ClientBookingDto bookingDto) {
-        // 1. Найти или создать клиента
-        Client client = clientRepository.findByPhone(bookingDto.getPhone())
-                .orElseGet(() -> createNewClient(bookingDto));
-
-        // 2. Найти временной слот
-        Timeslot timeslot = timeslotRepository.findById(bookingDto.getSlotId())
-                .orElseThrow(() -> new RuntimeException("Слот не найден"));
-
-        // 3. Найти услуги
-        List<ServiceEntity> services = serviceRepository.findAllById(bookingDto.getServiceIds());
-
-        // 4. Получить статус "Подтверждено" или "Новая"
-        AppointmentStatus status = appointmentStatusRepository.findByStatusName("PENDING")
-                .orElseThrow(() -> new RuntimeException("Статус не найден"));
-
-        // 5. Рассчитать сумму
-        BigDecimal totalAmount = services.stream()
-                .map(ServiceEntity::getPrice)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-        // 6. Создать запись (Appointment)
-        Appointment appointment = new Appointment();
-        appointment.setClient(client);
-
-// Объединяем дату и время
-        OffsetDateTime startDateTime = OffsetDateTime.of(
-                timeslot.getSlotDate(),           // LocalDate
-                timeslot.getStartTime(),          // LocalTime
-                OffsetDateTime.now().getOffset()  // текущий offset
-        );
-        appointment.setStartTime(startDateTime);
-
-        OffsetDateTime endDateTime = OffsetDateTime.of(
-                timeslot.getSlotDate(),
-                timeslot.getEndTime(),
-                OffsetDateTime.now().getOffset()
-        );
-        appointment.setEndTime(endDateTime);
-
-        appointment.setAppointmentStatus(status);
-        appointment.setAmountWithoutDiscount(totalAmount);
-        appointment.setDiscountAmount(BigDecimal.ZERO);
-        appointment.setFinalAmount(totalAmount);
-        // 7. Связать услуги с записью
-        appointment.setServiceList(services);
-        appointmentRepository.save(appointment);
-
-        TimeslotStatus bookedStatus = timeslotStatusRepository.findById(2L)  // 2L = ID статуса "занят"
-                .orElseThrow(() -> new RuntimeException("Статус временного слота не найден"));
-
-        timeslot.setAppointment(appointment);
-        timeslot.setTimeslotStatus(bookedStatus);
-        timeslotRepository.save(timeslot);
-    }
-
     private Client createNewClient(ClientBookingDto bookingDto) {
         Client client = new Client();
 
@@ -122,6 +65,51 @@ public class BookingService {
 
         // Сохраняем изменения
         appointmentRepository.save(appointment);
+    }
+
+    @Transactional
+    public void createBooking(ClientBookingDto bookingDto) {
+        // 1. Найти или создать клиента
+        Client client = createNewClient(bookingDto);
+
+        // 2. Найти временной слот
+        Timeslot timeslot = timeslotRepository.findById(bookingDto.getSlotId())
+                .orElseThrow(() -> new RuntimeException("Слот не найден"));
+
+        // 3. Найти услуги
+        List<ServiceEntity> services = serviceRepository.findAllById(bookingDto.getServiceIds());
+
+        // 4. Получить статус "PENDING"
+        AppointmentStatus status = appointmentStatusRepository.findByStatusName("PENDING")
+                .orElseThrow(() -> new RuntimeException("Статус не найден"));
+
+        // 5. Рассчитать сумму
+        BigDecimal totalAmount = services.stream()
+                .map(ServiceEntity::getPrice)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        // 6. Создать запись (Appointment)
+        Appointment appointment = new Appointment();
+        appointment.setClient(client);
+        appointment.setStartTime(OffsetDateTime.from(timeslot.getStartTime()));
+        appointment.setEndTime(OffsetDateTime.from(timeslot.getEndTime()));
+        appointment.setAppointmentStatus(status);
+        appointment.setAmountWithoutDiscount(totalAmount);
+        appointment.setDiscountAmount(BigDecimal.ZERO);
+        appointment.setFinalAmount(totalAmount);
+
+        // 7. Сохранить запись
+        Appointment savedAppointment = appointmentRepository.save(appointment);
+
+        // 8. Связать услуги
+        savedAppointment.setServiceList(services);
+        appointmentRepository.save(savedAppointment);
+
+        // 9. Обновить статус слота
+        TimeslotStatus bookedStatus = timeslotStatusRepository.findByStatusName("BOOKED")
+                .orElseThrow(() -> new RuntimeException("Статус временного слота не найден"));
+        timeslot.setTimeslotStatus(bookedStatus);
+        timeslotRepository.save(timeslot);
     }
 
 }
