@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEKTA X TECH V - Салон красоты</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- Шапка -->
+<header class="header">
+    <div class="container">
+        <div class="header-content">
+            <div class="logo">
+                <a href="/">
+                    <img th:src="@{/images/logo.svg}" alt="SEKTA X TECH V" class="logo-img">
+                    <span class="logo-text">SEKTA X TECH V</span>
+                </a>
+            </div>
+            <nav class="nav">
+                <a href="#services" class="nav-link">Услуги</a>
+                <a href="#salons" class="nav-link">Салоны</a>
+                <a href="#masters" class="nav-link">Мастера</a>
+                <a href="#reviews" class="nav-link">Отзывы</a>
+                <a href="#contacts" class="nav-link">Контакты</a>
+            </nav>
+            <div class="auth-buttons">
+                <a href="/booking" class="btn btn-primary">Записаться</a>
+                <a href="/client/set-client?clientId=1" class="btn btn-secondary">Личный кабинет</a>
+                <a href="/employee/set-employee?employeeId=1" class="btn btn-outline">Для мастеров</a>
+                <a href="/admin/set-admin" class="btn btn-outline">Админ</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Hero секция -->
+<section class="hero">
+    <div class="container">
+        <div class="hero-content">
+            <h1 class="hero-title">SEKTA X TECH V</h1>
+            <p class="hero-subtitle">Салон красоты премиум-класса в самом сердце города</p>
+            <p class="hero-description">Профессиональный уход, стильные стрижки, модный маникюр и многое другое</p>
+            <div class="hero-buttons">
+                <a href="/booking" class="btn btn-large btn-primary">Записаться онлайн</a>
+                <a href="#services" class="btn btn-large btn-outline-white">Наши услуги</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Услуги -->
+<section id="services" class="services">
+    <div class="container">
+        <div class="section-header">
+            <h2>Наши услуги</h2>
+            <p>Широкий спектр услуг для вашей красоты</p>
+        </div>
+        <div class="services-grid" id="servicesGrid">
+            <div class="service-card-placeholder">Загрузка услуг...</div>
+        </div>
+    </div>
+</section>
+
+<!-- Салоны -->
+<section id="salons" class="salons">
+    <div class="container">
+        <div class="section-header">
+            <h2>Наши салоны</h2>
+            <p>Удобное расположение в центре города</p>
+        </div>
+        <div class="salons-grid" id="salonsGrid">
+            <div class="salon-card-placeholder">Загрузка салонов...</div>
+        </div>
+    </div>
+</section>
+
+<!-- Мастера -->
+<section id="masters" class="masters">
+    <div class="container">
+        <div class="section-header">
+            <h2>Наши мастера</h2>
+            <p>Профессионалы с многолетним опытом</p>
+        </div>
+        <div class="masters-grid" id="mastersGrid">
+            <div class="master-card-placeholder">Загрузка мастеров...</div>
+        </div>
+    </div>
+</section>
+
+<!-- Отзывы -->
+<section id="reviews" class="reviews">
+    <div class="container">
+        <div class="section-header">
+            <h2>Отзывы клиентов</h2>
+            <p>Что говорят о нас</p>
+        </div>
+        <div class="reviews-grid" id="reviewsGrid">
+            <div class="review-card-placeholder">Загрузка отзывов...</div>
+        </div>
+    </div>
+</section>
+
+<!-- Контакты -->
+<section id="contacts" class="contacts">
+    <div class="container">
+        <div class="contacts-content">
+            <div class="contacts-info">
+                <h2>Контакты</h2>
+                <div class="contact-item">
+                    <span class="contact-icon">📍</span>
+                    <span>г. Самара, ул. Покровка, 44</span>
+                </div>
+                <div class="contact-item">
+                    <span class="contact-icon">📞</span>
+                    <span>+7 (800) 555-35-35</span>
+                </div>
+                <div class="contact-item">
+                    <span class="contact-icon">✉️</span>
+                    <span>info@sekta-x-techv.ru</span>
+                </div>
+                <div class="contact-item">
+                    <span class="contact-icon">🕐</span>
+                    <span>Ежедневно: 10:00 - 22:00</span>
+                </div>
+            </div>
+            <div class="contacts-map">
+                <iframe
+                        src="https://yandex.ru/map-widget/v1/?um=constructor%3A1&source=constructor"
+                        width="100%"
+                        height="300"
+                        frameborder="0">
+                </iframe>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Футер -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-logo">
+                <span>SEKTA X TECH V</span>
+                <p>Салон красоты премиум-класса</p>
+            </div>
+            <div class="footer-links">
+                <a href="#services">Услуги</a>
+                <a href="#salons">Салоны</a>
+                <a href="#masters">Мастера</a>
+                <a href="#reviews">Отзывы</a>
+            </div>
+            <div class="footer-social">
+                <a href="#" class="social-link">📷 Instagram</a>
+                <a href="#" class="social-link">📘 VK</a>
+                <a href="#" class="social-link">💬 Telegram</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 SEKTA X TECH V. Все права защищены.</p>
+        </div>
+    </div>
+</footer>
+
+<script>
+    // Загрузка услуг
+    async function loadServices() {
+        try {
+            const response = await fetch('/admin/api/services');
+            const services = await response.json();
+
+            const container = document.getElementById('servicesGrid');
+            if (!services || services.length === 0) {
+                container.innerHTML = '<div class="empty-state">Услуги временно недоступны</div>';
+                return;
+            }
+
+            // Показываем только первые 6 услуг
+            const displayServices = services.slice(0, 6);
+
+            container.innerHTML = displayServices.map(service => `
+                <div class="service-card">
+                    <div class="service-icon">✂️</div>
+                    <h3>${escapeHtml(service.name)}</h3>
+                    <p>${escapeHtml(service.description || 'Краткое описание услуги')}</p>
+                    <div class="service-price">от ${service.price} ₽</div>
+                    <a href="/booking" class="btn btn-small btn-primary">Записаться</a>
+                </div>
+            `).join('');
+        } catch (e) {
+            console.error('Error loading services:', e);
+            document.getElementById('servicesGrid').innerHTML = '<div class="empty-state">Не удалось загрузить услуги</div>';
+        }
+    }
+
+    // Загрузка салонов
+    async function loadSalons() {
+        try {
+            const response = await fetch('/admin/api/salons');
+            const salons = await response.json();
+
+            const container = document.getElementById('salonsGrid');
+            if (!salons || salons.length === 0) {
+                container.innerHTML = '<div class="empty-state">Салоны временно недоступны</div>';
+                return;
+            }
+
+            container.innerHTML = salons.map(salon => `
+                <div class="salon-card">
+                    <div class="salon-icon">💇‍♀️</div>
+                    <h3>${escapeHtml(salon.salonName)}</h3>
+                    <p>📍 ${escapeHtml(salon.address || 'Адрес уточняется')}</p>
+                    <p>📞 ${escapeHtml(salon.phone || '+7 (800) 555-35-35')}</p>
+                    <a href="/booking" class="btn btn-small btn-outline">Записаться</a>
+                </div>
+            `).join('');
+        } catch (e) {
+            console.error('Error loading salons:', e);
+            document.getElementById('salonsGrid').innerHTML = '<div class="empty-state">Не удалось загрузить салоны</div>';
+        }
+    }
+
+    // Загрузка мастеров
+    async function loadMasters() {
+        try {
+            const response = await fetch('/admin/api/employees');
+            const masters = await response.json();
+
+            const container = document.getElementById('mastersGrid');
+            if (!masters || masters.length === 0) {
+                container.innerHTML = '<div class="empty-state">Мастера временно недоступны</div>';
+                return;
+            }
+
+            // Показываем только первых 4 мастеров
+            const displayMasters = masters.slice(0, 4);
+
+            container.innerHTML = displayMasters.map(master => `
+                <div class="master-card">
+                    <div class="master-photo">
+                        ${master.photoUrl ?
+                `<img src="${master.photoUrl}" alt="${escapeHtml(master.fullName)}">` :
+                `<div class="master-avatar">👤</div>`
+            }
+                    </div>
+                    <h3>${escapeHtml(master.fullName || master.firstName + ' ' + master.lastName)}</h3>
+                    <p class="master-specialty">${escapeHtml(master.jobTitle || 'Мастер')}</p>
+                    <div class="master-rating">⭐ ${master.averageRating || '5.0'} / 5.0</div>
+                    <a href="/booking" class="btn btn-small btn-outline">Записаться</a>
+                </div>
+            `).join('');
+        } catch (e) {
+            console.error('Error loading masters:', e);
+            document.getElementById('mastersGrid').innerHTML = '<div class="empty-state">Не удалось загрузить мастеров</div>';
+        }
+    }
+
+    function escapeHtml(text) {
+        if (!text) return '';
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    // Инициализация
+    loadServices();
+    loadSalons();
+    loadMasters();
+</script>
+
+</body>
+</html>

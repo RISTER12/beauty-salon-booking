@@ -1,7 +1,7 @@
 package by.kuzmin.beautysalonbooking.mapper;
 
-import by.kuzmin.beautysalonbooking.dto.ServiceRequestDto;
-import by.kuzmin.beautysalonbooking.dto.ServiceResponseDto;
+import by.kuzmin.beautysalonbooking.dto.admin.ServiceRequestDto;
+import by.kuzmin.beautysalonbooking.dto.admin.ServiceResponseDto;
 import by.kuzmin.beautysalonbooking.entity.ServiceEntity;
 import org.mapstruct.Mapper;
 

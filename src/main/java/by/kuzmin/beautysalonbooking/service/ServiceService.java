@@ -1,7 +1,7 @@
 package by.kuzmin.beautysalonbooking.service;
 
-import by.kuzmin.beautysalonbooking.dto.ServiceResponseDto;
 import by.kuzmin.beautysalonbooking.dto.ServiceWithCategoryDto;
+import by.kuzmin.beautysalonbooking.dto.admin.ServiceResponseDto;
 import by.kuzmin.beautysalonbooking.entity.ServiceCategory;
 import by.kuzmin.beautysalonbooking.entity.ServiceEntity;
 import by.kuzmin.beautysalonbooking.mapper.ServiceCategoryMapper;

@@ -1,56 +1,356 @@
 <!DOCTYPE html>
-<html lang="en">
-<head xmlns:th="http://www.thymeleaf.org">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
     <meta charset="UTF-8">
-    <title>Выбор специалиста</title>
-    <link rel="stylesheet" href="../css/reset.css">
-    <link rel="stylesheet" href="../css/online-booking-menu-pages.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Выбор специалиста - SEKTA X TECH V</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #1e293b;
+        }
+
+        .wrapper {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .center {
+            max-width: 550px;
+            width: 100%;
+            background: white;
+            border-radius: 32px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            padding: 20px 24px;
+        }
+
+        header a {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            text-decoration: none;
+            color: white;
+        }
+
+        .arrow {
+            font-size: 24px;
+            font-weight: 400;
+        }
+
+        header img {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #667eea;
+        }
+
+        #mainInfo {
+            font-size: 18px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 4px;
+        }
+
+        #address {
+            font-size: 12px;
+            color: #94a3b8;
+        }
+
+        /* Main content */
+        main {
+            padding: 28px;
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 24px;
+        }
+
+        /* Master cards */
+        .master-card {
+            background: #f8fafc;
+            border-radius: 20px;
+            margin-bottom: 12px;
+            transition: all 0.2s;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .master-card:hover {
+            background: #f1f5f9;
+            transform: translateX(4px);
+        }
+
+        .master-card.selected {
+            background: #e0e7ff;
+            border: 2px solid #667eea;
+        }
+
+        .master-card label {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 20px;
+            cursor: pointer;
+        }
+
+        .master-avatar {
+            width: 56px;
+            height: 56px;
+            background: #e2e8f0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+
+        .master-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .avatar-placeholder {
+            width: 56px;
+            height: 56px;
+            background: #e2e8f0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: #64748b;
+        }
+
+        .master-info {
+            flex: 1;
+        }
+
+        .master-name {
+            font-weight: 700;
+            font-size: 16px;
+            color: #1e293b;
+            margin-bottom: 4px;
+        }
+
+        .master-specialty {
+            font-size: 13px;
+            color: #64748b;
+            margin-bottom: 6px;
+        }
+
+        .master-rating {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+        }
+
+        .stars {
+            color: #fbbf24;
+            letter-spacing: 2px;
+        }
+
+        .reviews {
+            color: #94a3b8;
+        }
+
+        /* Radio button */
+        .master-card input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: #667eea;
+            flex-shrink: 0;
+        }
+
+        /* Any master card */
+        .any-master {
+            background: #f8fafc;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .any-master.selected {
+            background: #e0e7ff;
+            border: 2px solid #667eea;
+        }
+
+        .any-master label {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 20px;
+            cursor: pointer;
+        }
+
+        .any-master .avatar-placeholder {
+            background: #cbd5e1;
+        }
+
+        .any-master .master-name {
+            font-weight: 600;
+            color: #475569;
+        }
+
+        /* Footer */
+        footer {
+            padding: 20px 28px 28px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .btn-submit {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 40px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .wrapper {
+                padding: 20px;
+            }
+            main {
+                padding: 20px;
+            }
+            .master-card label {
+                padding: 12px 16px;
+            }
+        }
+    </style>
 </head>
 <body>
 <div class="wrapper">
     <div class="center">
         <form action="/booking" method="get">
-            <input type="hidden" name="serviceIds" th:each="id : ${serviceIds}" th:value="${id}" />
+            <input type="hidden" name="serviceIds" th:each="id : ${serviceIds}" th:value="${id}">
+            <input type="hidden" name="slotId" th:value="${slotId}">
+
             <header>
-                <a th:href="@{/booking(serviceIds=${serviceIds}, employeeId=${employeeId})}" class="width-100">
+                <a th:href="@{/booking(serviceIds=${serviceIds}, employeeId=${employeeId}, slotId=${slotId})}">
                     <div class="arrow">←</div>
-                    <img src="../images/small-image.jpg" alt="">
+                    <img src="../images/small-image.jpg" alt="Логотип">
                     <div>
-                        <div id="mainInfo">SEKTA X TEXH V</div>
+                        <div id="mainInfo">SEKTA X TECH V</div>
                         <div id="address">улица Покровка, 44</div>
                     </div>
                 </a>
             </header>
+
             <main>
-                <h1>Выбрать специалиста</h1>
-                <div class="string">
+                <h1>Выберите специалиста</h1>
+
+                <!-- Любой специалист -->
+                <div class="any-master">
                     <label>
-                        <img src="../images/small-image.jpg">
-                        <div class="center-part" id="someone">
-                            <div class="name">Любой специалист</div>
+                        <div class="avatar-placeholder">👤</div>
+                        <div class="master-info">
+                            <div class="master-name">Любой специалист</div>
+                            <div class="master-specialty">Будет назначен автоматически</div>
                         </div>
                         <input type="radio" name="employeeId" th:checked="${employeeId == null or employeeId == 0}" value="0">
                     </label>
                 </div>
-                <div class="string" th:each="emp : ${employees}">
+
+                <!-- Список мастеров -->
+                <div th:each="emp : ${employees}" class="master-card">
                     <label>
-                        <img src="../images/small-image.jpg">
-                        <div class="center-part">
-                            <div class="name" th:text="${emp.firstName} + ' ' + ${emp.lastName}">Имя Фамилия</div>
-                            <div class="professional">Мастер</div>
-                            <div class="review">30 отзывов</div>
+                        <div class="master-avatar">
+                            <img th:src="${emp.photoUrl != null && emp.photoUrl != '' ? emp.photoUrl : '../images/default-avatar.png'}"
+                                 th:alt="${emp.firstName} + ' ' + ${emp.lastName}"
+                                 onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'avatar-placeholder\'>👤</div>';">
+                        </div>
+                        <div class="master-info">
+                            <div class="master-name" th:text="${emp.firstName} + ' ' + ${emp.lastName}">Имя Фамилия</div>
+                            <div class="master-specialty" th:text="${emp.jobTitle != null ? emp.jobTitle : 'Мастер'}">Парикмахер</div>
+                            <div class="master-rating">
+                                <span class="stars">
+                                    <span th:each="i : ${#numbers.sequence(1, 5)}">
+                                        <span th:if="${i <= (emp.averageRating != null ? emp.averageRating : 5)}">★</span>
+                                        <span th:unless="${i <= (emp.averageRating != null ? emp.averageRating : 5)}">☆</span>
+                                    </span>
+                                </span>
+                                <span class="reviews" th:text="'(' + (emp.experienceYears != null ? emp.experienceYears : 0) + ' отзывов)'">(0 отзывов)</span>
+                            </div>
                         </div>
                         <input type="radio" name="employeeId" th:checked="${employeeId == emp.id}" th:value="${emp.id}">
                     </label>
                 </div>
             </main>
+
             <footer>
-                <div id="go">
-                    <button type="submit">Выбрать услугу</button>
-                </div>
+                <button type="submit" class="btn-submit">Выбрать услуги</button>
             </footer>
         </form>
     </div>
 </div>
+
+<script>
+    // Добавляем класс selected при выборе мастера
+    const radioButtons = document.querySelectorAll('input[type="radio"]');
+    const masterCards = document.querySelectorAll('.master-card');
+    const anyMasterCard = document.querySelector('.any-master');
+
+    function updateSelectedClass() {
+        // Убираем класс selected у всех карточек
+        masterCards.forEach(card => card.classList.remove('selected'));
+        anyMasterCard.classList.remove('selected');
+
+        // Находим выбранный радио-кнопку
+        radioButtons.forEach(radio => {
+            if (radio.checked) {
+                const parentCard = radio.closest('.master-card, .any-master');
+                if (parentCard) {
+                    parentCard.classList.add('selected');
+                }
+            }
+        });
+    }
+
+    radioButtons.forEach(radio => {
+        radio.addEventListener('change', updateSelectedClass);
+    });
+
+    // Инициализация
+    updateSelectedClass();
+</script>
+
 </body>
 </html>

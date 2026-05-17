@@ -1,11 +1,342 @@
 <!DOCTYPE html>
-<html lang="en"
+<html lang="ru"
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Онлайн запись</title>
-    <link rel="stylesheet" href="../css/reset.css">
-    <link rel="stylesheet" href="../css/online-booking-menu.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Онлайн запись - SEKTA X TECH V</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #1e293b;
+        }
+
+        .wrapper {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .center {
+            max-width: 550px;
+            width: 100%;
+            background: white;
+            border-radius: 32px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            padding: 24px;
+            text-align: center;
+        }
+
+        #profile {
+            margin-bottom: 16px;
+        }
+
+        #profile a {
+            display: inline-block;
+        }
+
+        #profile img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #667eea;
+        }
+
+        #aboutSalon {
+            text-align: center;
+        }
+
+        #mainInfo {
+            font-size: 20px;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        #address {
+            font-size: 14px;
+            color: #94a3b8;
+        }
+
+        /* Main content */
+        main {
+            padding: 28px;
+        }
+
+        /* Step indicator */
+        .step {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 28px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .step-item {
+            text-align: center;
+            flex: 1;
+            font-size: 12px;
+            color: #94a3b8;
+            position: relative;
+        }
+
+        .step-item.active {
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .step-item.completed {
+            color: #10b981;
+        }
+
+        .step-item .step-number {
+            display: inline-block;
+            width: 28px;
+            height: 28px;
+            background: #f1f5f9;
+            border-radius: 50%;
+            line-height: 28px;
+            margin-bottom: 6px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .step-item.active .step-number {
+            background: #667eea;
+            color: white;
+        }
+
+        .step-item.completed .step-number {
+            background: #10b981;
+            color: white;
+        }
+
+        /* Menu items */
+        .menu-item {
+            background: #f8fafc;
+            border-radius: 16px;
+            margin-bottom: 12px;
+            transition: all 0.2s;
+        }
+
+        .menu-item a {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            text-decoration: none;
+            color: #1e293b;
+        }
+
+        .menu-item:hover {
+            background: #f1f5f9;
+            transform: translateX(4px);
+        }
+
+        .menu-item-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .menu-icon {
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .menu-info {
+            flex: 1;
+        }
+
+        .menu-title {
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .menu-subtitle {
+            font-size: 12px;
+            color: #64748b;
+            margin-top: 2px;
+        }
+
+        .arrow {
+            color: #94a3b8;
+            font-size: 20px;
+        }
+
+        /* Selected services list */
+        .selected-services {
+            background: #f0fdf4;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .selected-services h3 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #10b981;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .service-tag {
+            background: white;
+            border-radius: 30px;
+            padding: 8px 16px;
+            margin-bottom: 8px;
+            display: inline-block;
+            font-size: 14px;
+            color: #1e293b;
+            margin-right: 8px;
+        }
+
+        /* Form */
+        .booking-form {
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1e293b;
+            font-size: 14px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        /* Стили для невалидного поля */
+        .form-group input:invalid:not(:placeholder-shown) {
+            border-color: #ef4444;
+        }
+
+        .form-group input:valid:not(:placeholder-shown) {
+            border-color: #10b981;
+        }
+
+        /* Сообщение об ошибке */
+        .error-message {
+            color: #ef4444;
+            font-size: 12px;
+            margin-top: 6px;
+            display: none;
+        }
+
+        .form-group input:invalid:not(:placeholder-shown) + .error-message {
+            display: block;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        .btn-submit {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 40px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 8px;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-add {
+            background: white;
+            border: 1px solid #667eea;
+            color: #667eea;
+        }
+
+        .selected-value {
+            background: #f1f5f9;
+            border-radius: 12px;
+            padding: 12px 16px;
+            font-size: 14px;
+            color: #475569;
+        }
+
+        input[type="hidden"] {
+            display: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .wrapper {
+                padding: 20px;
+            }
+            main {
+                padding: 20px;
+            }
+            .menu-item a {
+                padding: 12px 16px;
+            }
+        }
+    </style>
 </head>
 <body>
 <div class="wrapper">
@@ -13,118 +344,211 @@
         <header>
             <div id="profile">
                 <a href="/">
-                    <img src="../images/small-image.jpg">
+                    <img src="../images/small-image.jpg" alt="Логотип">
                 </a>
             </div>
-
             <div id="aboutSalon">
-                <a id="mainInfo" href="/">SEKTA X TEXH V</a>
+                <a id="mainInfo" href="/">SEKTA X TECH V</a>
                 <div id="address">улица Покровка, 44</div>
             </div>
         </header>
+
         <main>
-
-            <div class="string" th:if="${employee == null}">
-                <a th:unless="${employeeId == 0}"
-                   th:href="@{/booking/select-master(slotId=${slotId}, employeeId=${employeeId}, serviceIds=${serviceIds})}">
-                    <img src="../images/small-image.jpg">
-                    <span>Выбрать специалиста</span>
-                    <div class="end-line">></div>
-                </a>
-
-                <a th:if="${employeeId == 0}"
-                   th:href="@{/booking/select-master(slotId=${slotId}, employeeId=${employeeId}, serviceIds=${serviceIds})}">
-                    <img src="../images/small-image.jpg">
-                    <span>Любой специалист</span>
-                    <div class="end-line">></div>
-                </a>
-            </div>
-
-            <div class="string" th:unless="${employee == null}">
-                <a th:unless="${employeeId == 0}"
-                   th:href="@{/booking/select-master(slotId=${slotId}, employeeId=${employeeId}, serviceIds=${serviceIds})}">
-                    <img src="../images/small-image.jpg">
-                    <span th:text="${employee.firstName} + ' ' + ${employee.lastName}">Имя Фамилия</span>
-
-                    <div class="end-line">></div>
-                </a>
-            </div>
-
-            <div class="string" th:if="${slotId == null}">
-                <a th:if="${employee != 0}"
-                   th:href="@{/booking/select-date-time(employeeId=${employeeId}, serviceIds=${serviceIds})}">
-                    <img src="../images/small-image.jpg">
-                    <span>Выбрать дату и время</span>
-                    <div class="end-line">></div>
-                </a>
-
-                <a th:unless="${employee != 0}" th:href="@{/booking/select-date-time(serviceIds=${serviceIds})}">
-                    <img src="../images/small-image.jpg">
-                    <span>Выбрать дату и время</span>
-                    <div class="end-line">></div>
-                </a>
-            </div>
-
-            <div class="string" th:unless="${slotId == null}">
-                <a th:if="${employee != 0}"
-                   th:href="@{/booking/select-date-time(employeeId=${employeeId}, serviceIds=${serviceIds})}">
-                    <img src="../images/small-image.jpg">
-                    <span th:text="${timeslot.startTime + ' ' + timeslot.slotDate}">Время Дата</span>
-                    <div class="end-line">></div>
-                </a>
-
-                <a th:unless="${employee != 0}" th:href="@{/booking/select-date-time(serviceIds=${serviceIds})}">
-                    <img src="../images/small-image.jpg">
-                    <span th:text="${timeslot.startTime + ' ' + timeslot.slotDate}">Время Дата</span>
-                    <div class="end-line">></div>
-                </a>
-            </div>
-
-
-            <div th:if="${serviceList != null && !serviceList.isEmpty()}" id="list">
-                <h2 >Выбранные услуги:</h2>
-                <div class="string"  th:each="service : ${serviceList}">
-                    <img src="../images/small-image.jpg">
-                    <span th:text="${service.getName()}">Название</span>
+            <div class="step">
+                <div class="step-item" th:class="${employeeId != null} ? 'completed' : ''">
+                    <div class="step-number" th:text="${employeeId != null} ? '✓' : '1'"></div>
+                    <div>Мастер</div>
+                </div>
+                <div class="step-item" th:class="${slotId != null} ? 'completed' : (${slotId == null && employeeId != null} ? 'active' : '')">
+                    <div class="step-number" th:text="${slotId != null} ? '✓' : '2'"></div>
+                    <div>Дата</div>
+                </div>
+                <div class="step-item" th:class="${serviceIds != null && !serviceIds.isEmpty()} ? 'completed' : (${serviceIds == null && slotId != null} ? 'active' : '')">
+                    <div class="step-number" th:text="${serviceIds != null && !serviceIds.isEmpty()} ? '✓' : '3'"></div>
+                    <div>Услуги</div>
+                </div>
+                <div class="step-item" th:class="${employeeId != null && slotId != null && serviceIds != null && !serviceIds.isEmpty()} ? 'active' : ''">
+                    <div class="step-number">4</div>
+                    <div>Данные</div>
                 </div>
             </div>
 
-            <div class="string">
-                <a th:if="${serviceIds == null}"
-                   th:href="@{/booking/select-service(employeeId=${employeeId}, slotId=${slotId})}">
-                    <img src="../images/small-image.jpg">
-                    <span>Выбрать услуги</span>
-                    <div class="end-line">></div>
+            <!-- Выбор специалиста -->
+            <div class="menu-item" th:if="${employee == null}">
+                <a th:href="@{/booking/select-master(slotId=${slotId}, employeeId=${employeeId}, serviceIds=${serviceIds})}">
+                    <div class="menu-item-left">
+                        <div class="menu-icon">👤</div>
+                        <div class="menu-info">
+                            <div class="menu-title" th:if="${employeeId == 0}">Любой специалист</div>
+                            <div class="menu-title" th:unless="${employeeId == 0}">Выбрать специалиста</div>
+                            <div class="menu-subtitle">Кто будет выполнять услуги</div>
+                        </div>
+                    </div>
+                    <div class="arrow">→</div>
                 </a>
-                <a th:unless="${serviceIds == null}"
-                   th:href="@{/booking/select-service(employeeId=${employeeId}, slotId=${slotId})}">
-                    <img src="../images/small-image.jpg">
-                    <span>Добавить услуги</span>
-                    <div class="end-line">+</div>
-                </a>
-
             </div>
 
-            <form class="client-data" action="/booking" method="post" th:object="${clientDto}" th:if="${employeeId != null && slotId != null && serviceIds != null}">
-                <label>
-                    <span>Имя</span>
-                    <input type="text" th:field="*{name}" placeholder="Имя" required>
-                </label>
+            <div class="menu-item" th:unless="${employee == null}">
+                <a th:href="@{/booking/select-master(slotId=${slotId}, employeeId=${employeeId}, serviceIds=${serviceIds})}">
+                    <div class="menu-item-left">
+                        <div class="menu-icon">👤</div>
+                        <div class="menu-info">
+                            <div class="menu-title" th:text="${employee.firstName} + ' ' + ${employee.lastName}">Имя Фамилия</div>
+                            <div class="menu-subtitle">Выбранный мастер</div>
+                        </div>
+                    </div>
+                    <div class="arrow">→</div>
+                </a>
+            </div>
 
-                <label>
-                    <span>Телефон</span>
-                    <span>+7</span>
-                    <input type="tel" th:field="*{phone}" pattern="\+7\s?\(?\d{3}\)?\s?\d{3}[-]?\d{2}[-]?\d{2}" placeholder="(XXX) XXX-XX-XX" required>
-                </label>
+            <!-- Выбор даты и времени -->
+            <div class="menu-item">
+                <a th:href="@{/booking/select-date-time(employeeId=${employeeId}, serviceIds=${serviceIds})}">
+                    <div class="menu-item-left">
+                        <div class="menu-icon">📅</div>
+                        <div class="menu-info">
+                            <div class="menu-title" th:if="${slotId == null}">Выбрать дату и время</div>
+                            <div class="menu-title" th:unless="${slotId == null}" th:text="${timeslot.startTime + ' ' + timeslot.slotDate}">Время Дата</div>
+                            <div class="menu-subtitle">Когда удобно прийти</div>
+                        </div>
+                    </div>
+                    <div class="arrow">→</div>
+                </a>
+            </div>
 
-                <input type="hidden" name="employeeId" th:value="${employeeId}">
-                <input type="hidden" name="slotId" th:value="${slotId}">
-                <input type="hidden" name="serviceIds" th:each="id : ${serviceIds}" th:value="${id}">
+            <!-- Выбранные услуги -->
+            <div th:if="${serviceList != null && !serviceList.isEmpty()}" class="selected-services">
+                <h3>📋 Выбранные услуги</h3>
+                <div th:each="service : ${serviceList}">
+                    <span class="service-tag" th:text="${service.getName()}">Название услуги</span>
+                </div>
+            </div>
 
-                <button type="submit">Записаться</button>
-            </form>
+            <!-- Выбор услуг -->
+            <div class="menu-item">
+                <a th:href="@{/booking/select-service(employeeId=${employeeId}, slotId=${slotId})}">
+                    <div class="menu-item-left">
+                        <div class="menu-icon">✂️</div>
+                        <div class="menu-info">
+                            <div class="menu-title" th:if="${serviceIds == null}">Выбрать услуги</div>
+                            <div class="menu-title" th:unless="${serviceIds == null}">Добавить услуги</div>
+                            <div class="menu-subtitle">Что будем делать</div>
+                        </div>
+                    </div>
+                    <div class="arrow" th:if="${serviceIds == null}">→</div>
+                    <div class="arrow" th:unless="${serviceIds == null}">+</div>
+                </a>
+            </div>
+
+            <!-- Форма клиента -->
+            <div class="booking-form" th:if="${employeeId != null && slotId != null && serviceIds != null && !serviceIds.isEmpty()}">
+                <form action="/booking" method="post" th:object="${clientDto}" id="bookingForm">
+                    <div class="form-group">
+                        <label>Ваше имя</label>
+                        <input type="text" th:field="*{name}" placeholder="Например: Анна" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Телефон</label>
+                        <input type="tel" th:field="*{phone}"
+                               placeholder="+7 (XXX) XXX-XX-XX"
+                               maxlength="20"
+                               required>
+                        <div class="error-message" id="phoneError">Введите номер в формате +7 (XXX) XXX-XX-XX</div>
+                    </div>
+
+                    <input type="hidden" name="employeeId" th:value="${employeeId}">
+                    <input type="hidden" name="slotId" th:value="${slotId}">
+                    <input type="hidden" th:each="id : ${serviceIds}" name="serviceIds" th:value="${id}">
+
+                    <button type="submit" class="btn-submit" id="submitBtn">Записаться</button>
+                </form>
+            </div>
         </main>
     </div>
 </div>
+
+<script>
+    const phoneInput = document.querySelector('input[type="tel"]');
+    const submitBtn = document.getElementById('submitBtn');
+    const phoneError = document.getElementById('phoneError');
+
+    // Регулярное выражение для проверки телефона
+    const phoneRegex = /^\+7\s?\(?\d{3}\)?\s?\d{3}[-]?\d{2}[-]?\d{2}$/;
+
+    function validatePhone() {
+        const phone = phoneInput.value.trim();
+        const isValid = phoneRegex.test(phone);
+
+        if (!isValid && phone.length > 0) {
+            phoneInput.classList.add('invalid');
+            phoneError.style.display = 'block';
+            phoneInput.style.borderColor = '#ef4444';
+            return false;
+        } else {
+            phoneInput.classList.remove('invalid');
+            phoneError.style.display = 'none';
+            phoneInput.style.borderColor = phone.length > 0 ? '#10b981' : '#e2e8f0';
+            return isValid || phone.length === 0;
+        }
+    }
+
+    function formatPhone(input) {
+        // Удаляем все нецифровые символы, кроме +
+        let value = input.value.replace(/[^\d+]/g, '');
+
+        // Если начинается не с +7, добавляем +7
+        if (value.length > 0 && !value.startsWith('+7')) {
+            if (value.startsWith('7')) {
+                value = '+' + value;
+            } else if (value.startsWith('8')) {
+                value = '+7' + value.substring(1);
+            } else {
+                value = '+7' + value;
+            }
+        }
+
+        // Ограничиваем длину
+        if (value.length > 18) {
+            value = value.substring(0, 18);
+        }
+
+        // Форматируем для отображения
+        let formatted = value;
+        if (value.startsWith('+7')) {
+            let digits = value.substring(2).replace(/\D/g, '');
+            if (digits.length > 0) {
+                formatted = '+7';
+                if (digits.length >= 1) formatted += ' ' + digits.substring(0, 3);
+                if (digits.length >= 4) formatted += ' ' + digits.substring(3, 6);
+                if (digits.length >= 7) formatted += '-' + digits.substring(6, 8);
+                if (digits.length >= 9) formatted += '-' + digits.substring(8, 10);
+            }
+        }
+
+        input.value = formatted;
+        validatePhone();
+    }
+
+    if (phoneInput) {
+        phoneInput.addEventListener('input', function(e) {
+            formatPhone(this);
+        });
+
+        phoneInput.addEventListener('blur', function() {
+            validatePhone();
+        });
+    }
+
+    // Блокировка кнопки отправки при невалидной форме
+    if (form && submitBtn) {
+        form.addEventListener('input', function() {
+            const isValid = validatePhone();
+            const nameFilled = document.querySelector('input[type="text"]').value.trim().length > 0;
+            submitBtn.disabled = !(isValid && nameFilled);
+        });
+    }
+</script>
+
 </body>
 </html>
